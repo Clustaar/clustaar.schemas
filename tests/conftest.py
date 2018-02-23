@@ -1,12 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-    Dummy conftest.py for schemas.
+import os
+import pytest
 
-    If you don't know what this is for, just leave it empty.
-    Read more about conftest.py under:
-    https://pytest.org/latest/plugins.html
-"""
-from __future__ import print_function, absolute_import, division
 
-# import pytest
+PROJECT_PATH = os.path.join(os.path.dirname(__file__), "..")
+PACKAGE_PATH = os.path.join(PROJECT_PATH, "src")
+os.sys.path.insert(0, PROJECT_PATH)
+os.sys.path.insert(0, PACKAGE_PATH)
