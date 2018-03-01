@@ -46,6 +46,7 @@ def data():
         "botID": "4321",
         "timestamp": 1514998709,
         "topic": "conversation.step_reached",
+        "type": "notification_event",
         "data": {
             "type": "step_reached_event",
             "channel": "facebook",

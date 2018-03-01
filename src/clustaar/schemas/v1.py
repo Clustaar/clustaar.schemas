@@ -211,6 +211,7 @@ WEBHOOK_REQUEST = Schema({
     "topic": f.String(),
     "botID": f.String(binding="bot_id"),
     "timestamp": f.Int(),
+    "type": f.Constant("notification_event", read_only=True),
     "data": f.PolymorphicObject(binding="event", on="type", schemas={
         "step_reached_event": WEBHOOK_STEP_REACHED
     })
