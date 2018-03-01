@@ -12,7 +12,7 @@ def action():
 def data():
     return {
         "type": "send_image_action",
-        "url": "http://example.com/logo.png"
+        "imageURL": "http://example.com/logo.png"
     }
 
 

@@ -70,7 +70,7 @@ ASK_LOCATION_ACTION = Schema({
 
 SEND_IMAGE_ACTION = Schema({
     "type": f.Constant(value="send_image_action", read_only=True),
-    "url": f.String(binding="image_url", validators=[
+    "imageURL": f.String(binding="image_url", validators=[
         v.Length(max=EXTERNAL_URL_MAX_LENGTH),
         v.URL(schemes={"https", "http"})
     ])
