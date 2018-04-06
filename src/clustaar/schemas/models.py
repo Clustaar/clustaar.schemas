@@ -9,9 +9,17 @@ def model(name, attr_names):
         attr_names (str|list): attribute names
     """
     if isinstance(attr_names, str):
-        attr_names = attr_names.split(" ")
+        attr_names = set(attr_names.split(" "))
 
     def constructor(self, **kwargs):
+        """Checks that kwargs are valid property names
+        and then assign those properties to self.
+        """
+        kwarg_names = set(kwargs.keys())
+        unknown_attributes = kwarg_names - attr_names
+        if unknown_attributes:
+            raise TypeError("Unknown properties %s for %s" % (unknown_attributes, name))
+
         for attr_name in attr_names:
             setattr(self, attr_name, kwargs.get(attr_name))
 
@@ -41,6 +49,7 @@ Button = model("Button", "title action")
 Card = model("Card", "title subtitle buttons image_url url")
 SendCardsAction = model("SendCardsAction", "cards")
 StoreSessionValueAction = model("StoreSessionValueAction", "key value")
+GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query")
 
 # Webhook
 Step = model("Step", "actions name id user_data")
