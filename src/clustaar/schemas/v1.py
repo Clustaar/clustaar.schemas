@@ -155,6 +155,11 @@ STORE_SESSION_VALUE_ACTION = Schema({
     "value": f.String(validators=[v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH)])
 })
 
+GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
+    "type": f.Constant(value="google_custom_search_action", read_only=True),
+    "query": f.String(validators=[v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH)])
+})
+
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
     "wait_action": WAIT_ACTION,
@@ -166,7 +171,8 @@ ACTION_SCHEMAS = {
     "send_cards_action": SEND_CARDS_ACTIONS,
     "send_quick_replies_action": SEND_QUICK_REPLIES_ACTION,
     "store_session_value_action": STORE_SESSION_VALUE_ACTION,
-    "ask_location_action": ASK_LOCATION_ACTION
+    "ask_location_action": ASK_LOCATION_ACTION,
+    "google_custom_search_action": GOOGLE_CUSTOM_SEARCH_ACTION
 }
 
 COORDINATES = Schema({
@@ -252,7 +258,8 @@ def get_mapper(factory=bind):
         StepReached: WEBHOOK_STEP_REACHED,
         WebhookRequest: WEBHOOK_REQUEST,
         Coordinates: COORDINATES,
-        StepReachedResponse: WEBHOOK_STEP_REACHED_RESPONSE
+        StepReachedResponse: WEBHOOK_STEP_REACHED_RESPONSE,
+        GoogleCustomSearchAction: GOOGLE_CUSTOM_SEARCH_ACTION
     }
 
     for cls, schema in mappings.items():
