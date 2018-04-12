@@ -10,19 +10,19 @@ from .models import *
 STEP_TARGET = Schema({
     "id": f.String(binding="step_id"),
     "type": f.Constant(value="step", read_only=True),
-    "name": f.String(optional=True)
+    "name": f.String(optional=True, allow_none=True)
 })
 
 STORY_TARGET = Schema({
     "id": f.String(binding="story_id"),
     "type": f.Constant(value="story", read_only=True),
-    "name": f.String(optional=True)
+    "name": f.String(optional=True, allow_none=True)
 })
 
 ACTIONS_BLOCK_TARGET = Schema({
     "id": f.String(binding="actions_block_id"),
     "type": f.Constant(value="actions_block", read_only=True),
-    "name": f.String(optional=True)
+    "name": f.String(optional=True, allow_none=True)
 })
 
 
@@ -39,13 +39,12 @@ GO_TO_ACTION = Schema({
 
 LEGACY_REPLY_TO_MESSAGE_ACTION = Schema({
     "type": f.Constant(value="legacy_reply_to_message_action", read_only=True),
-    "message": f.String(validators=[v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)])
+    "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH))
 })
 
 OPEN_URL_ACTION = Schema({
     "type": f.Constant(value="open_url_action", read_only=True),
-    "url": f.String(validators=[v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH),
-                                v.URL()])
+    "url": f.String(validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH) & v.URL())
 })
 
 SHARE_ACTION = Schema({
@@ -64,34 +63,34 @@ BUTTON_ACTIONS_SCHEMAS = {
 #
 ASK_LOCATION_ACTION = Schema({
     "type": f.Constant(value="ask_location_action", read_only=True),
-    "message": f.String(validators=[v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)]),
+    "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
     "action": f.Object(schema=GO_TO_ACTION, binding="callback_action")
 })
 
 SEND_IMAGE_ACTION = Schema({
     "type": f.Constant(value="send_image_action", read_only=True),
-    "imageURL": f.String(binding="image_url", validators=[
-        v.Length(max=EXTERNAL_URL_MAX_LENGTH),
-        v.URL(schemes={"https", "http"})
-    ])
+    "imageURL": f.String(binding="image_url",
+                         validators=(v.Length(max=EXTERNAL_URL_MAX_LENGTH) &
+                                     v.URL(schemes={"https", "http"}) |
+                                     v.Equal("")))
 })
 
 SEND_TEXT_ACTION = Schema({
     "type": f.Constant(value="send_text_action", read_only=True),
-    "alternatives": f.List(f.String(validators=[v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)]),
-                           validators=[v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT)])
+    "alternatives": f.List(f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
+                           validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT))
 })
 
 SEND_EMAIL_ACTION = Schema({
     "type": f.Constant(value="send_email_action", read_only=True),
-    "recipient": f.String(validators=[v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH)]),
-    "subject": f.String(validators=[v.Length(max=SEND_EMAIL_ACTION_SUBJECT_MAX_LENGTH)]),
-    "content": f.String(validators=[v.Length(max=SEND_EMAIL_ACTION_CONTENT_MAX_LENGTH)])
+    "recipient": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH)),
+    "subject": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_SUBJECT_MAX_LENGTH)),
+    "content": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_CONTENT_MAX_LENGTH))
 })
 
 WAIT_ACTION = Schema({
     "type": f.Constant(value="wait_action", read_only=True),
-    "duration": f.Number(validators=[v.Between(min=WAIT_ACTION_MIN_DURATION, max=WAIT_ACTION_MAX_DURATION)],
+    "duration": f.Number(validators=v.Between(min=WAIT_ACTION_MIN_DURATION, max=WAIT_ACTION_MAX_DURATION),
                          default=WAIT_ACTION_DEFAULT_DURATION)
 })
 
@@ -108,56 +107,58 @@ ASSIGN_INTERCOM_CONVERSATION_ACTION = Schema({
 })
 
 QUICK_REPLY = Schema({
-    "title": f.String(validators=[v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH)]),
+    "title": f.String(validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH)),
     "action": f.Object(GO_TO_ACTION),
     "type": f.Constant(value="quick_reply", read_only=True)
 })
 
 SEND_QUICK_REPLIES_ACTION = Schema({
     "type": f.Constant(value="send_quick_replies_action", read_only=True),
-    "message": f.String(validators=[v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)]),
+    "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
     "buttons": f.List(f.Object(QUICK_REPLY),
-                      validators=[v.Length(min=1, max=SEND_QUICK_REPLIES_ACTION_MAX_BUTTONS_COUNT)])
+                      validators=v.Length(min=1, max=SEND_QUICK_REPLIES_ACTION_MAX_BUTTONS_COUNT))
 })
 
 BUTTON = Schema({
     "type": f.Constant(value="button", read_only=True),
-    "title": f.String(validators=[v.Length(min=1, max=BUTTON_TITLE_MAX_LENGTH)]),
+    "title": f.String(validators=v.Length(min=1, max=BUTTON_TITLE_MAX_LENGTH)),
     "action": f.PolymorphicObject(on="type", schemas=BUTTON_ACTIONS_SCHEMAS)
 })
 
 CARD = Schema({
     "type": f.Constant(value="card", read_only=True),
-    "title": f.String(validators=[v.Length(min=1, max=CARD_TITLE_MAX_LENGTH)]),
-    "subtitle": f.String(optional=True, validators=[v.Length(max=CARD_SUBTITLE_MAX_LENGTH)]),
-    "imageURL": f.String(optional=True, binding="image_url", validators=[
-        v.Length(max=EXTERNAL_URL_MAX_LENGTH),
+    "title": f.String(validators=v.Length(min=1, max=CARD_TITLE_MAX_LENGTH)),
+    "subtitle": f.String(optional=True, validators=v.Length(max=CARD_SUBTITLE_MAX_LENGTH), allow_none=True),
+    "imageURL": f.String(optional=True, allow_none=True, binding="image_url", validators=(
+        v.Length(max=EXTERNAL_URL_MAX_LENGTH) &
         v.URL(schemes={"http", "https"})
-    ]),
-    "url": f.String(optional=True, validators=[
-        v.Length(max=EXTERNAL_URL_MAX_LENGTH)
-    ]),
+    )),
+    "url": f.String(optional=True, validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH), allow_none=True),
     "buttons": f.List(f.Object(BUTTON),
+                      allow_none=True,
+                      default=(),
                       optional=True,
-                      validators=[v.Length(max=CARD_MAX_BUTTONS_COUNT)])
+                      validators=v.Length(max=CARD_MAX_BUTTONS_COUNT))
 })
 
 SEND_CARDS_ACTIONS = Schema({
     "type": f.Constant(value="send_cards_action", read_only=True),
     "cards": f.List(f.Object(CARD),
-                    validators=[v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT)])
+                    validators=v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT))
 })
 
 STORE_SESSION_VALUE_ACTION = Schema({
     "type": f.Constant(value="store_session_value_action", read_only=True),
-    "key": f.String(validators=[v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH),
-                                v.Match(re.compile(r"^[\w\d_]+$"))]),
-    "value": f.String(validators=[v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH)])
+    "key": f.String(validators=(
+        v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH) &
+        v.Match(re.compile(r"^[\w\d_]+$"))
+    )),
+    "value": f.String(validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH))
 })
 
 GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
     "type": f.Constant(value="google_custom_search_action", read_only=True),
-    "query": f.String(validators=[v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH)])
+    "query": f.String(validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH))
 })
 
 ACTION_SCHEMAS = {
@@ -186,7 +187,7 @@ COORDINATES = Schema({
 
 WEBHOOK_INTERLOCUTOR = Schema({
     "id": f.String(),
-    "location": f.Object(COORDINATES)
+    "location": f.Object(COORDINATES, allow_none=True)
 })
 
 WEBHOOK_CONVERSATION_SESSION = Schema({
@@ -210,7 +211,7 @@ WEBHOOK_STEP_REACHED = Schema({
 
 WEBHOOK_STEP_REACHED_RESPONSE = Schema({
     "actions": f.PolymorphicList(on="type", schemas=ACTION_SCHEMAS),
-    "session": f.Object(schema=WEBHOOK_CONVERSATION_SESSION, optional=True),
+    "session": f.Object(schema=WEBHOOK_CONVERSATION_SESSION, optional=True, allow_none=True),
 })
 
 WEBHOOK_REQUEST = Schema({

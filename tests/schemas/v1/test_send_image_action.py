@@ -27,3 +27,12 @@ class TestLoad(object):
         action = mapper.load(data, SEND_IMAGE_ACTION)
         assert isinstance(action, SendImageAction)
         assert action.image_url == "http://example.com/logo.png"
+
+
+class TestValidate(object):
+    def test_do_not_raise_error_if_valid(self, data, mapper):
+        mapper.validate(data, SEND_IMAGE_ACTION)
+
+    def test_do_not_raise_error_if_empty_string(self, data, mapper):
+        data["imageURL"] = ""
+        mapper.validate(data, SEND_IMAGE_ACTION)
