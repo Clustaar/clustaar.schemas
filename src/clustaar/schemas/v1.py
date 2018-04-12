@@ -131,9 +131,10 @@ CARD = Schema({
     "subtitle": f.String(optional=True, validators=v.Length(max=CARD_SUBTITLE_MAX_LENGTH), allow_none=True),
     "imageURL": f.String(optional=True, allow_none=True, binding="image_url", validators=(
         v.Length(max=EXTERNAL_URL_MAX_LENGTH) &
-        v.URL(schemes={"http", "https"})
+        v.URL(schemes={"http", "https"}) |
+        v.Equal("")
     )),
-    "url": f.String(optional=True, validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH), allow_none=True),
+    "url": f.String(optional=True, validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) | v.Equal(""), allow_none=True),
     "buttons": f.List(f.Object(BUTTON),
                       allow_none=True,
                       default=(),
