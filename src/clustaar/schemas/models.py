@@ -49,7 +49,7 @@ Button = model("Button", "title action")
 Card = model("Card", "title subtitle buttons image_url url")
 SendCardsAction = model("SendCardsAction", "cards")
 StoreSessionValueAction = model("StoreSessionValueAction", "key value")
-GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query")
+GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query limit custom_engine_id")
 
 # Webhook
 Step = model("Step", "actions name id user_data")

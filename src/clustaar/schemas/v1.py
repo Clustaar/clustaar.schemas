@@ -159,7 +159,9 @@ STORE_SESSION_VALUE_ACTION = Schema({
 
 GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
     "type": f.Constant(value="google_custom_search_action", read_only=True),
-    "query": f.String(validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH))
+    "query": f.String(validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH)),
+    "customEngineID": f.String(binding="custom_engine_id", validators=v.Length(min=1)),
+    "limit": f.Int(validators=v.Between(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_MAX_LIMIT))
 })
 
 ACTION_SCHEMAS = {
