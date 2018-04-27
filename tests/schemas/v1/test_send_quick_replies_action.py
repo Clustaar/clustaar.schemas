@@ -58,3 +58,9 @@ class TestLoad(object):
         quick_reply = action.buttons[0]
         assert quick_reply.title == "Ok"
         assert quick_reply.action.target.step_id == "a1" * 12
+
+
+class TestValidate(object):
+    def test_do_not_raise_error_if_no_type_for_quick_reply(self, action, data, mapper):
+        del data["buttons"][0]["type"]
+        mapper.validate(data, SEND_QUICK_REPLIES_ACTION)

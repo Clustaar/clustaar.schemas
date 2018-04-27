@@ -109,7 +109,7 @@ ASSIGN_INTERCOM_CONVERSATION_ACTION = Schema({
 QUICK_REPLY = Schema({
     "title": f.String(validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH)),
     "action": f.Object(GO_TO_ACTION),
-    "type": f.Constant(value="quick_reply", read_only=True)
+    "type": f.Constant(value="quick_reply", read_only=True, optional=True)
 })
 
 SEND_QUICK_REPLIES_ACTION = Schema({
