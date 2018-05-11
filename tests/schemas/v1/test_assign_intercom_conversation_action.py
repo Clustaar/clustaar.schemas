@@ -5,13 +5,14 @@ import pytest
 
 @pytest.fixture
 def action():
-    return AssignIntercomConversationAction()
+    return AssignIntercomConversationAction(assignee_id="FJNBDDHH654789")
 
 
 @pytest.fixture
 def data():
     return {
-        "type": "assign_intercom_conversation_action"
+        "type": "assign_intercom_conversation_action",
+        "assigneeID": "FJNBDDHH654789"
     }
 
 

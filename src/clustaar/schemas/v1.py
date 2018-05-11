@@ -103,7 +103,8 @@ CLOSE_INTERCOM_CONVERSATION_ACTION = Schema({
 })
 
 ASSIGN_INTERCOM_CONVERSATION_ACTION = Schema({
-    "type": f.Constant(value="assign_intercom_conversation_action", read_only=True)
+    "type": f.Constant(value="assign_intercom_conversation_action", read_only=True),
+    "assigneeID": f.String(optional=True, allow_none=True, binding="assignee_id")
 })
 
 QUICK_REPLY = Schema({
