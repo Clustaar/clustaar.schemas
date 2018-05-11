@@ -26,3 +26,4 @@ class TestLoad(object):
     def test_returns_an_action(self, data, mapper):
         action = mapper.load(data, ASSIGN_INTERCOM_CONVERSATION_ACTION)
         assert isinstance(action, AssignIntercomConversationAction)
+        assert action.assignee_id == "FJNBDDHH654789"
