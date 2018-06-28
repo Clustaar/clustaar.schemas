@@ -50,6 +50,10 @@ Card = model("Card", "title subtitle buttons image_url url")
 SendCardsAction = model("SendCardsAction", "cards")
 StoreSessionValueAction = model("StoreSessionValueAction", "key value")
 GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query limit custom_engine_id")
+CreateZendeskTicketAction = model(
+    "CreateZendeskTicketAction",
+    "ticket_type subject description assignee_id group_id tags name email phone_number"
+)
 
 # Webhook
 Step = model("Step", "actions name id user_data")

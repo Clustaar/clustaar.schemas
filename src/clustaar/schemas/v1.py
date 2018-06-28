@@ -166,6 +166,24 @@ GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
     "limit": f.Int(validators=v.Between(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_MAX_LIMIT))
 })
 
+
+CREATE_ZENDESK_TICKET_ACTION = Schema({
+    "type": f.Constant(value="create_zendesk_ticket_action", read_only=True),
+    "ticketType": f.String(optional=True, binding="ticket_type",
+                           validators=v.In(ZENDESK_TICKET_TYPES)),
+    "tags": f.List(f.String(validators=v.Length(max=ZENDESK_TAG_MAX_LENGTH)), optional=True,
+                   validators=v.Length(max=ZENDESK_TAGS_MAX_COUNT)),
+    "subject": f.String(optional=True, validators=v.Length(max=ZENDESK_SUBJECT_MAX_LENGTH)),
+    "description": f.String(optional=True, validators=v.Length(max=ZENDESK_DESCRIPTION_MAX_LENGTH)),
+    "email": f.String(optional=True, validators=v.Length(min=5, max=ZENDESK_EMAIL_MAX_LENGTH)),
+    "groupID": f.String(optional=True, binding="group_id",
+                        validators=v.Length(min=5, max=ZENDESK_ASSIGNEE_ID_MAX_LENGTH)),
+    "name": f.String(validators=v.Length(min=1, max=ZENDESK_NAME_MAX_LENGTH)),
+    "assigneeID": f.String(binding="assignee_id", validators=v.Length(min=5, max=ZENDESK_ASSIGNEE_ID_MAX_LENGTH)),
+    "phoneNumber": f.String(optional=True, binding="phone_number"),
+})
+
+
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
     "wait_action": WAIT_ACTION,
@@ -265,7 +283,8 @@ def get_mapper(factory=bind):
         WebhookRequest: WEBHOOK_REQUEST,
         Coordinates: COORDINATES,
         StepReachedResponse: WEBHOOK_STEP_REACHED_RESPONSE,
-        GoogleCustomSearchAction: GOOGLE_CUSTOM_SEARCH_ACTION
+        GoogleCustomSearchAction: GOOGLE_CUSTOM_SEARCH_ACTION,
+        CreateZendeskTicketAction: CREATE_ZENDESK_TICKET_ACTION,
     }
 
     for cls, schema in mappings.items():
