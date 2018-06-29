@@ -22,13 +22,16 @@ def action(user):
     return CreateZendeskTicketAction(
         group_id="b2" * 12,
         assignee_id="a1" * 12,
-        phone_number="0611654852",
         subject="Tester cette action",
         description="Pfff aucune idée",
         tags=["finished", "fish", "turtle"],
         ticket_type=list(ZENDESK_TICKET_TYPES)[0],
         ticket_priority=list(ZENDESK_TICKET_PRIORITIES)[0],
-        user=ZendeskUser(email="Tintin@doe.fifi", name="Je suis un super test")
+        user=ZendeskUser(
+            email="Tintin@doe.fifi",
+            name="Je suis un super test",
+            phone_number="0611654852"
+        )
     )
 
 
@@ -36,7 +39,8 @@ def action(user):
 def user():
     return {
         "name": "Je suis un super test",
-        "email": "Tintin@doe.fifi"
+        "email": "Tintin@doe.fifi",
+        "phoneNumber": "0611654852"
     }
 
 
@@ -49,7 +53,6 @@ def data(user):
         "tags": ["finished", "fish", "turtle"],
         "description": "Pfff aucune idée",
         "subject": "Tester cette action",
-        "phoneNumber": "0611654852",
         "assigneeID": "a1" * 12,
         "groupID": "b2" * 12,
         "user": user

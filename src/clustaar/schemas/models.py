@@ -52,9 +52,9 @@ StoreSessionValueAction = model("StoreSessionValueAction", "key value")
 GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query limit custom_engine_id")
 CreateZendeskTicketAction = model(
     "CreateZendeskTicketAction",
-    "ticket_type ticket_priority subject description assignee_id group_id tags user phone_number"
+    "ticket_type ticket_priority subject description assignee_id group_id tags user"
 )
-ZendeskUser = model("ZendeskUser", "email name")
+ZendeskUser = model("ZendeskUser", "email name phone_number")
 
 # Webhook
 Step = model("Step", "actions name id user_data")
