@@ -170,7 +170,7 @@ GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
 
 ZENDESK_USER = Schema({
     "email": f.String(optional=True, validators=v.Length(min=5, max=ZENDESK_TICKET_EMAIL_MAX_LENGTH)),
-    "name": f.String(validators=v.Length(min=1, max=ZENDESK_TICKET_NAME_MAX_LENGTH)),
+    "name": f.String(optional=True, validators=v.Length(min=1, max=ZENDESK_TICKET_NAME_MAX_LENGTH)),
     "phoneNumber": f.String(optional=True, binding="phone_number"),
 })
 
