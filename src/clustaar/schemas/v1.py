@@ -2,25 +2,27 @@ import re
 from lupin import Schema, fields as f, validators as v, Mapper, bind
 from .constants import *
 from .models import *
+from .validators import ObjectID
 
+_OBJECT_ID_VALIDATOR = ObjectID()
 
 #
 # Targets
 #
 STEP_TARGET = Schema({
-    "id": f.String(binding="step_id"),
+    "id": f.String(binding="step_id", validators=_OBJECT_ID_VALIDATOR),
     "type": f.Constant(value="step", read_only=True),
     "name": f.String(optional=True, allow_none=True)
 })
 
 STORY_TARGET = Schema({
-    "id": f.String(binding="story_id"),
+    "id": f.String(binding="story_id", validators=_OBJECT_ID_VALIDATOR),
     "type": f.Constant(value="story", read_only=True),
     "name": f.String(optional=True, allow_none=True)
 })
 
 ACTIONS_BLOCK_TARGET = Schema({
-    "id": f.String(binding="actions_block_id"),
+    "id": f.String(binding="actions_block_id", validators=_OBJECT_ID_VALIDATOR),
     "type": f.Constant(value="actions_block", read_only=True),
     "name": f.String(optional=True, allow_none=True)
 })
