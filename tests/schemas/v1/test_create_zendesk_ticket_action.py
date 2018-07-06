@@ -2,7 +2,7 @@ import pytest
 
 from clustaar.schemas.models import CreateZendeskTicketAction, ZendeskUser
 from clustaar.schemas.v1 import CREATE_ZENDESK_TICKET_ACTION
-from lupin.errors import InvalidDocument, InvalidLength
+from lupin.errors import InvalidDocument, InvalidLength, NotEqual
 from clustaar.schemas.constants import (
     ZENDESK_TICKET_TYPES,
     ZENDESK_TICKET_PRIORITIES,
@@ -67,6 +67,14 @@ def assert_raise_on_length(mapper, data):
     assert isinstance(error, InvalidLength)
 
 
+def assert_raise_on_equal(mapper, data):
+    with pytest.raises(InvalidDocument) as errors:
+        mapper.validate(data, CREATE_ZENDESK_TICKET_ACTION)
+
+    error = errors.value[0]
+    assert isinstance(error, NotEqual)
+
+
 class TestDump(object):
     def test_returns_a_dict(self, action, data, mapper):
         result = CREATE_ZENDESK_TICKET_ACTION.dump(action, mapper)
@@ -80,17 +88,19 @@ class TestLoad(object):
 
 
 class TestValidate(object):
-    def test_raise_if_dirty_name(self, mapper, data, user):
-        user["name"] = ""
-        assert_raise_on_length(mapper, data)
+    def test_raise_if_dirty_ticket_type(self, mapper, data, user):
+        data["ticketType"] = "hh"
+        assert_raise_on_equal(mapper, data)
 
+    def test_raise_if_dirty_ticket_priority(self, mapper, data, user):
+        data["ticketPriority"] = "hh"
+        assert_raise_on_equal(mapper, data)
+
+    def test_raise_if_dirty_name(self, mapper, data, user):
         user["name"] = "a" * (ZENDESK_TICKET_NAME_MAX_LENGTH + 1)
         assert_raise_on_length(mapper, data)
 
     def test_raise_if_dirty_email(self, mapper, data, user):
-        user["email"] = ""
-        assert_raise_on_length(mapper, data)
-
         user["email"] = "a" * (ZENDESK_TICKET_EMAIL_MAX_LENGTH + 1)
         assert_raise_on_length(mapper, data)
 
