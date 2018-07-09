@@ -2,14 +2,14 @@ import pytest
 
 from clustaar.schemas.models import CreateZendeskTicketAction, ZendeskUser
 from clustaar.schemas.v1 import CREATE_ZENDESK_TICKET_ACTION
-from lupin.errors import InvalidDocument, InvalidLength, NotEqual
+from lupin.errors import InvalidDocument, InvalidLength, NotEqual, InvalidMatch
 from clustaar.schemas.constants import (
     ZENDESK_TICKET_TYPES,
     ZENDESK_TICKET_PRIORITIES,
     ZENDESK_TICKET_TAG_MAX_LENGTH,
     ZENDESK_TICKET_TAGS_MAX_COUNT,
-    ZENDESK_TICKET_NAME_MAX_LENGTH,
-    ZENDESK_TICKET_EMAIL_MAX_LENGTH,
+    ZENDESK_USER_NAME_MAX_LENGTH,
+    ZENDESK_USER_EMAIL_MAX_LENGTH,
     ZENDESK_TICKET_SUBJECT_MAX_LENGTH,
     ZENDESK_TICKET_GROUP_ID_MAX_LENGTH,
     ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH,
@@ -20,8 +20,8 @@ from clustaar.schemas.constants import (
 @pytest.fixture
 def action(user):
     return CreateZendeskTicketAction(
-        group_id="b2" * 12,
-        assignee_id="a1" * 12,
+        group_id="12" * 12,
+        assignee_id="21" * 12,
         subject="Tester cette action",
         description="Pfff aucune idée",
         tags=["finished", "fish", "turtle"],
@@ -53,8 +53,8 @@ def data(user):
         "tags": ["finished", "fish", "turtle"],
         "description": "Pfff aucune idée",
         "subject": "Tester cette action",
-        "assigneeID": "a1" * 12,
-        "groupID": "b2" * 12,
+        "assigneeID": "21" * 12,
+        "groupID": "12" * 12,
         "user": user
     }
 
@@ -73,6 +73,14 @@ def assert_raise_on_equal(mapper, data):
 
     error = errors.value[0]
     assert isinstance(error, NotEqual)
+
+
+def assert_raise_on_format(mapper, data):
+    with pytest.raises(InvalidDocument) as errors:
+        mapper.validate(data, CREATE_ZENDESK_TICKET_ACTION)
+
+    error = errors.value[0]
+    assert isinstance(error, InvalidMatch)
 
 
 class TestDump(object):
@@ -97,11 +105,11 @@ class TestValidate(object):
         assert_raise_on_equal(mapper, data)
 
     def test_raise_if_dirty_name(self, mapper, data, user):
-        user["name"] = "a" * (ZENDESK_TICKET_NAME_MAX_LENGTH + 1)
+        user["name"] = "a" * (ZENDESK_USER_NAME_MAX_LENGTH + 1)
         assert_raise_on_length(mapper, data)
 
     def test_raise_if_dirty_email(self, mapper, data, user):
-        user["email"] = "a" * (ZENDESK_TICKET_EMAIL_MAX_LENGTH + 1)
+        user["email"] = "a" * (ZENDESK_USER_EMAIL_MAX_LENGTH + 1)
         assert_raise_on_length(mapper, data)
 
     def test_raise_if_dirty_subject(self, mapper, data):
@@ -113,15 +121,22 @@ class TestValidate(object):
         assert_raise_on_length(mapper, data)
 
     def test_raise_if_dirty_group_id(self, mapper, data):
-        data["groupID"] = "a" * (ZENDESK_TICKET_GROUP_ID_MAX_LENGTH + 1)
+        data["groupID"] = "1" * (ZENDESK_TICKET_GROUP_ID_MAX_LENGTH + 1)
         assert_raise_on_length(mapper, data)
+
+        data["groupID"] = "1j"
+        assert_raise_on_format(mapper, data)
 
     def test_raise_if_dirty_assignee_id(self, mapper, data):
-        data["groupID"] = "a" * (ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH + 1)
+        data["assigneeID"] = "1" * (ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH + 1)
         assert_raise_on_length(mapper, data)
 
+        data["assigneeID"] = "1j"
+        assert_raise_on_format(mapper, data)
+
     def test_raise_if_dirty_tags(self, mapper, data):
-        data["tags"] = [str(n) for n in range((ZENDESK_TICKET_TAGS_MAX_COUNT + 1))]
+        data["tags"] = [str(n) for n in range(
+            (ZENDESK_TICKET_TAGS_MAX_COUNT + 1))]
         assert_raise_on_length(mapper, data)
 
         data["tags"] = ["a" * (ZENDESK_TICKET_TAG_MAX_LENGTH + 1)]
