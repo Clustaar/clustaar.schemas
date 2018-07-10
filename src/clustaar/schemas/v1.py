@@ -187,12 +187,12 @@ CREATE_ZENDESK_TICKET_ACTION = Schema({
     "groupID": f.String(optional=True, binding="group_id",
                         validators=[
                             v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH),
-                            v.Match(re.compile(r"^[\d]*$"))
+                            v.Match(re.compile(r"^\d*$"))
                         ]),
     "assigneeID": f.String(optional=True, binding="assignee_id",
                            validators=[
                                v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH),
-                               v.Match(re.compile(r"^[\d]*$"))
+                               v.Match(re.compile(r"^\d*$"))
                            ])
 }, name="create_zendesk_ticket_action")
 
