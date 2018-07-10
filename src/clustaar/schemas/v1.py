@@ -169,8 +169,8 @@ GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
 }, name="google_custom_search_action")
 
 ZENDESK_USER = Schema({
-    "email": f.String(optional=True, validators=v.Length(max=ZENDESK_TICKET_EMAIL_MAX_LENGTH)),
-    "name": f.String(optional=True, validators=v.Length(max=ZENDESK_TICKET_NAME_MAX_LENGTH)),
+    "email": f.String(optional=True, validators=v.Length(max=ZENDESK_USER_EMAIL_MAX_LENGTH)),
+    "name": f.String(optional=True, validators=v.Length(max=ZENDESK_USER_NAME_MAX_LENGTH)),
     "phoneNumber": f.String(optional=True, binding="phone_number"),
 }, name="zendesk_user")
 
@@ -185,9 +185,15 @@ CREATE_ZENDESK_TICKET_ACTION = Schema({
     "tags": f.List(f.String(validators=v.Length(max=ZENDESK_TICKET_TAG_MAX_LENGTH)), optional=True,
                    validators=v.Length(max=ZENDESK_TICKET_TAGS_MAX_COUNT)),
     "groupID": f.String(optional=True, binding="group_id",
-                        validators=v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH)),
+                        validators=[
+                            v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH),
+                            v.Match(re.compile(r"^\d*$"))
+                        ]),
     "assigneeID": f.String(optional=True, binding="assignee_id",
-                           validators=v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH))
+                           validators=[
+                               v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH),
+                               v.Match(re.compile(r"^\d*$"))
+                           ])
 }, name="create_zendesk_ticket_action")
 
 
