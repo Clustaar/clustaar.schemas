@@ -1,7 +1,7 @@
 """Model classes"""
 
 
-def model(name, attr_names):
+def model(name: str, attr_names: str = ""):
     """Generate a new class with a constructor taking attr_names as parameters.
 
     Args:
@@ -55,6 +55,28 @@ CreateZendeskTicketAction = model(
     "ticket_type ticket_priority subject description assignee_id group_id tags user"
 )
 ZendeskUser = model("ZendeskUser", "email name phone_number")
+JumpToAction = model("JumpToAction", "default_connection connections")
+
+# Flow connection
+MessageGetter = model("MessageGetter")
+SessionValueGetter = model("SessionValueGetter", "key")
+FlowConnection = model("FlowConnection", "target predicates")
+ConnectionPredicate = model("ConnectionPredicate", "value_getter condition")
+
+# Conditions
+IsNotSetCondition = model("IsNotSetCondition")
+IsSetCondition = model("IsSetCondition")
+ContainCondition = model("ContainCondition", "values")
+EqualsCondition = model("EqualsCondition", "expected")
+MatchRegexpCondition = model("MatchRegexpCondition", "regexp")
+MatchIntentConditionIntent = model("MatchIntentConditionIntent", "id name")
+MatchIntentCondition = model("MatchIntentCondition", "intent_id")
+IsLessThanCondition = model("IsLessThanCondition", "maximum")
+IsLessThanOrEqualCondition = model("IsLessThanOrEqualCondition", "maximum")
+IsGreaterThanCondition = model("IsGreaterThanCondition", "minimum")
+IsGreaterThanOrEqualCondition = model("IsGreaterThanOrEqualCondition", "minimum")
+IsNumberCondition = model("IsNumberCondition")
+
 
 # Webhook
 Step = model("Step", "actions name id user_data")

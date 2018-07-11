@@ -2,9 +2,85 @@ import re
 from lupin import Schema, fields as f, validators as v, Mapper, bind
 from .constants import *
 from .models import *
-from .validators import ObjectID
+from .validators import ObjectID, IsRegexp
+from .fields import RegexpField
+from .custom_schemas import MatchIntentConditionSchema
 
 _OBJECT_ID_VALIDATOR = ObjectID()
+
+#
+# Conditions
+#
+PREDICATE_MESSAGE_GETTER = Schema({
+    "type": f.Constant("message", read_only=True)
+}, name="predicate_message_getter")
+
+PREDICATE_SESSION_VALUE_GETTER = Schema({
+    "type": f.Constant("session_value", read_only=True),
+    "key": f.String(validators=(
+        v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH) &
+        v.Match(re.compile(r"^[\w\d_]+$"))
+    )),
+}, name="predicate_session_value_getter")
+
+IS_NOT_SET_CONDITION = Schema({
+    "type": f.Constant("is_not_set", read_only=True)
+}, name="is_not_set_condition")
+
+IS_SET_CONDITION = Schema({
+    "type": f.Constant("is_set", read_only=True)
+}, name="is_set_condition")
+
+CONTAIN_CONDITION = Schema({
+    "type": f.Constant("contains", read_only=True),
+    "values": f.List(f.String())
+}, name="contain_condition")
+
+EQUALS_CONDITION = Schema({
+    "type": f.Constant("equals", read_only=True),
+    "expected": f.String()
+}, name="equals_condition")
+
+MATCH_REGEXP_CONDITION = Schema({
+    "type": f.Constant("match_regexp", read_only=True),
+    "pattern": RegexpField(binding="regexp", validators=IsRegexp())
+}, name="match_regexp_condition")
+
+MATCH_INTENT_CONDITION_INTENT = Schema({
+    "type": f.Constant("intent", read_only=True),
+    "id": f.String(validators=ObjectID()),
+    "name": f.String(read_only=True)
+}, name="match_intent_condition_intent")
+
+MATCH_INTENT_CONDITION = MatchIntentConditionSchema({
+    "type": f.Constant("match_intent", read_only=True),
+    "intent": f.Object(MATCH_INTENT_CONDITION_INTENT)
+}, name="match_intent_condition")
+
+IS_LESS_THAN_CONDITION = Schema({
+    "maximum": f.Number(),
+    "type": f.Constant("is_less_than", read_only=True)
+}, name="is_less_than_condition")
+
+IS_LESS_THAN_OR_EQUAL_CONDITION = Schema({
+    "maximum": f.Number(),
+    "type": f.Constant("is_less_than_or_equal", read_only=True)
+}, name="is_less_than_or_equal_condition")
+
+IS_GREATER_THAN_CONDITION = Schema({
+    "minimum": f.Number(),
+    "type": f.Constant("is_greater_than", read_only=True)
+}, name="is_greater_than_condition")
+
+IS_GREATER_THAN_OR_EQUAL_CONDITION = Schema({
+    "minimum": f.Number(),
+    "type": f.Constant("is_greater_than_or_equal", read_only=True)
+}, name="is_greater_than_or_equal_condition")
+
+IS_NUMBER_CONDITION = Schema({
+    "type": f.Constant("is_number", read_only=True)
+}, name="is_number_condition")
+
 
 #
 # Targets
@@ -26,6 +102,47 @@ ACTIONS_BLOCK_TARGET = Schema({
     "type": f.Constant(value="actions_block", read_only=True),
     "name": f.String(optional=True, allow_none=True)
 }, name="actions_block_target")
+
+
+#
+# Flow connections
+#
+
+FLOW_CONNECTION_PREDICATE = Schema({
+    "type": f.Constant("connection_predicate", read_only=True),
+    "condition": f.PolymorphicObject(on="type",
+                                     schemas={
+                                         "is_not_set": IS_NOT_SET_CONDITION,
+                                         "is_set": IS_SET_CONDITION,
+                                         "contains": CONTAIN_CONDITION,
+                                         "equals": EQUALS_CONDITION,
+                                         "match_regexp": MATCH_REGEXP_CONDITION,
+                                         "match_intent": MATCH_INTENT_CONDITION,
+                                         "is_less_than": IS_LESS_THAN_CONDITION,
+                                         "is_less_than_or_equal": IS_LESS_THAN_OR_EQUAL_CONDITION,
+                                         "is_greater_than": IS_GREATER_THAN_CONDITION,
+                                         "is_greater_than_or_equal": IS_GREATER_THAN_OR_EQUAL_CONDITION,
+                                         "is_number": IS_NUMBER_CONDITION
+                                     }),
+    "valueGetter": f.PolymorphicObject(on="type",
+                                       binding="value_getter",
+                                       schemas={
+                                           "message": PREDICATE_MESSAGE_GETTER,
+                                           "session_value": PREDICATE_SESSION_VALUE_GETTER
+                                       })
+})
+
+FLOW_CONNECTION = Schema({
+    "type": f.Constant("flow_connection", read_only=True),
+    "target": f.PolymorphicObject(on="type",
+                                  schemas={
+                                      "story": STORY_TARGET,
+                                      "step": STEP_TARGET
+                                  }),
+    "predicates": f.List(f.Object(FLOW_CONNECTION_PREDICATE),
+                         validators=v.Length(min=1,
+                                             max=FLOW_CONNECTION_MAX_PREDICATES_COUNT))
+})
 
 
 #
@@ -196,6 +313,13 @@ CREATE_ZENDESK_TICKET_ACTION = Schema({
                            ])
 }, name="create_zendesk_ticket_action")
 
+JUMP_TO_ACTION = Schema({
+    "type": f.Constant(value="jump_to_action", read_only=True),
+    "connections": f.List(f.Object(FLOW_CONNECTION), validators=v.Length(min=1,
+                                                                         max=JUMP_TO_ACTION_MAX_CONNECTIONS_COUNT)),
+    "defaultConnection": f.Object(FLOW_CONNECTION, allow_none=True, binding="default_connection")
+})
+
 
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
@@ -210,7 +334,8 @@ ACTION_SCHEMAS = {
     "store_session_value_action": STORE_SESSION_VALUE_ACTION,
     "ask_location_action": ASK_LOCATION_ACTION,
     "google_custom_search_action": GOOGLE_CUSTOM_SEARCH_ACTION,
-    "create_zendesk_ticket_action": CREATE_ZENDESK_TICKET_ACTION
+    "create_zendesk_ticket_action": CREATE_ZENDESK_TICKET_ACTION,
+    "jump_to_action": JUMP_TO_ACTION
 }
 
 COORDINATES = Schema({
@@ -299,7 +424,24 @@ def get_mapper(factory=bind):
         StepReachedResponse: WEBHOOK_STEP_REACHED_RESPONSE,
         GoogleCustomSearchAction: GOOGLE_CUSTOM_SEARCH_ACTION,
         CreateZendeskTicketAction: CREATE_ZENDESK_TICKET_ACTION,
-        ZendeskUser: ZENDESK_USER
+        ZendeskUser: ZENDESK_USER,
+        JumpToAction: JUMP_TO_ACTION,
+        MessageGetter: PREDICATE_MESSAGE_GETTER,
+        SessionValueGetter: PREDICATE_SESSION_VALUE_GETTER,
+        IsNotSetCondition: IS_NOT_SET_CONDITION,
+        IsSetCondition: IS_SET_CONDITION,
+        ContainCondition: CONTAIN_CONDITION,
+        EqualsCondition: EQUALS_CONDITION,
+        MatchRegexpCondition: MATCH_REGEXP_CONDITION,
+        MatchIntentConditionIntent: MATCH_INTENT_CONDITION_INTENT,
+        MatchIntentCondition: MATCH_INTENT_CONDITION,
+        IsLessThanCondition: IS_LESS_THAN_CONDITION,
+        IsLessThanOrEqualCondition: IS_LESS_THAN_OR_EQUAL_CONDITION,
+        IsGreaterThanCondition: IS_GREATER_THAN_CONDITION,
+        IsGreaterThanOrEqualCondition: IS_GREATER_THAN_OR_EQUAL_CONDITION,
+        IsNumberCondition: IS_NUMBER_CONDITION,
+        FlowConnection: FLOW_CONNECTION,
+        ConnectionPredicate: FLOW_CONNECTION_PREDICATE
     }
 
     for cls, schema in mappings.items():
