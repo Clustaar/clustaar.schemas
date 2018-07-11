@@ -181,7 +181,7 @@ CREATE_ZENDESK_TICKET_ACTION = Schema({
     "ticketPriority": f.String(optional=True, binding="ticket_priority",
                                validators=(v.In(ZENDESK_TICKET_PRIORITIES) | v.Equal(""))),
     "subject": f.String(optional=True, validators=v.Length(max=ZENDESK_TICKET_SUBJECT_MAX_LENGTH)),
-    "description": f.String(validators=v.Length(min=5, max=ZENDESK_TICKET_DESCRIPTION_MAX_LENGTH)),
+    "description": f.String(validators=v.Length(min=1, max=ZENDESK_TICKET_DESCRIPTION_MAX_LENGTH)),
     "tags": f.List(f.String(validators=v.Length(max=ZENDESK_TICKET_TAG_MAX_LENGTH)), optional=True,
                    validators=v.Length(max=ZENDESK_TICKET_TAGS_MAX_COUNT)),
     "groupID": f.String(optional=True, binding="group_id",

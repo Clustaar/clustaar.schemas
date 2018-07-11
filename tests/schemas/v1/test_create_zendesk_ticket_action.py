@@ -120,6 +120,9 @@ class TestValidate(object):
         data["description"] = "a" * (ZENDESK_TICKET_DESCRIPTION_MAX_LENGTH + 1)
         assert_raise_on_length(mapper, data)
 
+        data["description"] = ""
+        assert_raise_on_length(mapper, data)
+
     def test_raise_if_dirty_group_id(self, mapper, data):
         data["groupID"] = "1" * (ZENDESK_TICKET_GROUP_ID_MAX_LENGTH + 1)
         assert_raise_on_length(mapper, data)
