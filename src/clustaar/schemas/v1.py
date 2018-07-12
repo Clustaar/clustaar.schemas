@@ -85,6 +85,8 @@ SEND_TEXT_ACTION = Schema({
 
 SEND_EMAIL_ACTION = Schema({
     "type": f.Constant(value="send_email_action", read_only=True),
+    "fromEmail": f.String(binding="from_email", validators=v.Length(max=SEND_EMAIL_ACTION_FROM_EMAIL_MAX_LENGTH)),
+    "fromName": f.String(binding="from_name", validators=v.Length(max=SEND_EMAIL_ACTION_FROM_NAME_MAX_LENGTH)),
     "recipient": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH)),
     "subject": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_SUBJECT_MAX_LENGTH)),
     "content": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_CONTENT_MAX_LENGTH))
