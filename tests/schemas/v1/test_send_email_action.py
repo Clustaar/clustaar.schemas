@@ -5,15 +5,21 @@ import pytest
 
 @pytest.fixture
 def action():
-    return SendEmailAction(recipient="test@example.com",
-                           subject="Hello",
-                           content=":)")
+    return SendEmailAction(
+        from_email="tintin@gmail.com",
+        from_name="Tintin",
+        recipient="test@example.com",
+        subject="Hello",
+        content=":)"
+    )
 
 
 @pytest.fixture
 def data():
     return {
         "type": "send_email_action",
+        "fromEmail": "tintin@gmail.com",
+        "fromName": "Tintin",
         "recipient": "test@example.com",
         "subject": "Hello",
         "content": ":)"
@@ -33,3 +39,5 @@ class TestLoad(object):
         assert action.content == ":)"
         assert action.subject == "Hello"
         assert action.recipient == "test@example.com"
+        assert action.from_email == "tintin@gmail.com"
+        assert action.from_name == "Tintin"
