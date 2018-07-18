@@ -323,7 +323,13 @@ JUMP_TO_ACTION = Schema({
     "type": f.Constant(value="jump_to_action", read_only=True),
     "connections": f.List(f.Object(FLOW_CONNECTION), validators=v.Length(min=1,
                                                                          max=JUMP_TO_ACTION_MAX_CONNECTIONS_COUNT)),
-    "defaultConnection": f.Object(FLOW_CONNECTION, allow_none=True, binding="default_connection")
+    "defaultTarget": f.PolymorphicObject(on="type",
+                                         binding="default_target",
+                                         allow_none=True,
+                                         schemas={
+                                             "story": STORY_TARGET,
+                                             "step": STEP_TARGET
+                                         })
 })
 
 

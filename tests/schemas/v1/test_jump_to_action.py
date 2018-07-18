@@ -29,24 +29,10 @@ def data():
                 ]
             }
         ],
-        "defaultConnection": {
-            "type": "flow_connection",
-            "target": {
-                "id": "a1" * 12,
-                "type": "step",
-                "name": "a step"
-            },
-            "predicates": [
-                {
-                    "type": "connection_predicate",
-                    "condition": {
-                        "type": "is_set"
-                    },
-                    "valueGetter": {
-                        "type": "message"
-                    }
-                }
-            ]
+        "defaultTarget": {
+            "id": "a1" * 12,
+            "type": "step",
+            "name": "a step"
         }
     }
 
@@ -62,16 +48,8 @@ def action():
         ],
         target=StoryTarget(story_id="a2" * 12, name="a story")
     )
-    step_connection = FlowConnection(
-        predicates=[
-            ConnectionPredicate(
-                condition=IsSetCondition(),
-                value_getter=MessageGetter()
-            )
-        ],
-        target=StepTarget(step_id="a1" * 12, name="a step")
-    )
-    return JumpToAction(default_connection=step_connection,
+    step_target = StepTarget(step_id="a1" * 12, name="a step")
+    return JumpToAction(default_target=step_target,
                         connections=[story_connection])
 
 
@@ -90,14 +68,10 @@ class TestLoad(object):
         assert isinstance(predicate.condition, IsNotSetCondition)
         assert isinstance(predicate.value_getter, MessageGetter)
 
-        assert isinstance(result.default_connection, FlowConnection)
-        target = result.default_connection.target
+        assert isinstance(result.default_target, StepTarget)
+        target = result.default_target
         assert isinstance(target, StepTarget)
         assert target.step_id == "a1" * 12
-        predicate = result.default_connection.predicates[0]
-        assert isinstance(predicate, ConnectionPredicate)
-        assert isinstance(predicate.condition, IsSetCondition)
-        assert isinstance(predicate.value_getter, MessageGetter)
 
 
 class TestDump(object):

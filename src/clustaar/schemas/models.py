@@ -55,7 +55,7 @@ CreateZendeskTicketAction = model(
     "ticket_type ticket_priority subject description assignee_id group_id tags user"
 )
 ZendeskUser = model("ZendeskUser", "email name phone_number")
-JumpToAction = model("JumpToAction", "default_connection connections")
+JumpToAction = model("JumpToAction", "default_target connections")
 
 # Flow connection
 MessageGetter = model("MessageGetter")
