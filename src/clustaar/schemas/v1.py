@@ -358,6 +358,63 @@ COORDINATES = Schema({
 #
 # Webhook
 #
+URL_LOADED_EVENT = Schema({
+    "url": f.String(),
+    "type": f.Constant("url_loaded_event", read_only=True)
+}, name="url_loaded_event")
+
+CUSTOM_EVENT = Schema({
+    "type": f.Constant("custom_event", read_only=True),
+    "name": f.String()
+}, name="custom_event")
+
+FILE = Schema({
+    "type": f.Constant("file", read_only=True),
+    "url": f.String()
+}, name="file")
+
+VIDEO = Schema({
+    "type": f.Constant("video", read_only=True),
+    "url": f.String()
+}, name="video")
+
+IMAGE = Schema({
+    "type": f.Constant("image", read_only=True),
+    "url": f.String()
+}, name="image")
+
+AUDIO = Schema({
+    "type": f.Constant("audio", read_only=True),
+    "url": f.String(),
+}, name="audio")
+
+ATTACHMENTS_SCHEMAS = {
+    "file": FILE,
+    "audio": AUDIO,
+    "video": VIDEO,
+    "image": IMAGE
+}
+
+INCOMING_MESSAGE = Schema({
+    "type": f.Constant("message", read_only=True),
+    "text": f.String(),
+    "attachments": f.PolymorphicList(on="type", schemas=ATTACHMENTS_SCHEMAS)
+}, name="incoming_message")
+
+
+REPLY_TO_ACTION_TO_MESSAGE = Schema({
+    "type": f.Constant("message"),
+    "attachments": f.Constant([]),
+    "text": f.String(binding="message")
+}, name="reply_to_action_to_message")
+
+INPUT_SCHEMAS = {
+    "message": INCOMING_MESSAGE,
+    "legacy_reply_to_message_action": REPLY_TO_ACTION_TO_MESSAGE,
+    "url_loaded_event": URL_LOADED_EVENT,
+    "go_to_action": GO_TO_ACTION,
+    "custom_event": CUSTOM_EVENT
+}
 
 WEBHOOK_INTERLOCUTOR = Schema({
     "id": f.String(),
@@ -380,7 +437,8 @@ WEBHOOK_STEP_REACHED = Schema({
     "channel": f.String(),
     "interlocutor": f.Object(schema=WEBHOOK_INTERLOCUTOR),
     "session": f.Object(schema=WEBHOOK_CONVERSATION_SESSION),
-    "step": f.Object(schema=WEBHOOK_STEP)
+    "step": f.Object(schema=WEBHOOK_STEP),
+    "input": f.PolymorphicObject(on="type", schemas=INPUT_SCHEMAS)
 }, name="webhook_step_reached")
 
 WEBHOOK_STEP_REACHED_RESPONSE = Schema({
@@ -453,10 +511,21 @@ def get_mapper(factory=bind):
         IsGreaterThanOrEqualCondition: IS_GREATER_THAN_OR_EQUAL_CONDITION,
         IsNumberCondition: IS_NUMBER_CONDITION,
         FlowConnection: FLOW_CONNECTION,
-        ConnectionPredicate: FLOW_CONNECTION_PREDICATE
+        ConnectionPredicate: FLOW_CONNECTION_PREDICATE,
+        URLLoadedEvent: URL_LOADED_EVENT,
+        CustomEvent: CUSTOM_EVENT,
+        Message: (INCOMING_MESSAGE, REPLY_TO_ACTION_TO_MESSAGE),
+        File: FILE,
+        Audio: AUDIO,
+        Video: VIDEO,
+        Image: IMAGE
     }
 
-    for cls, schema in mappings.items():
-        mapper.register(cls, schema, factory=factory)
+    for cls, schemas in mappings.items():
+        if not isinstance(schemas, tuple):
+            schemas = (schemas,)
+
+        for schema in schemas:
+            mapper.register(cls, schema, factory=factory)
 
     return mapper

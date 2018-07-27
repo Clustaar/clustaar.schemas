@@ -1,6 +1,6 @@
 from clustaar.schemas.v1 import WEBHOOK_REQUEST
 from clustaar.schemas.models import Interlocutor, ConversationSession, Coordinates, Step,\
-    PauseBotAction, StepReached, WebhookRequest
+    PauseBotAction, StepReached, WebhookRequest, CustomEvent
 import pytest
 
 
@@ -33,6 +33,7 @@ def request(step, session, interlocutor):
     event = StepReached(step=step,
                         session=session,
                         interlocutor=interlocutor,
+                        input=CustomEvent(name="event1"),
                         channel="facebook")
     return WebhookRequest(event=event,
                           bot_id="4321",
@@ -68,6 +69,10 @@ def data():
                 "id": "1234",
                 "name": "A step",
                 "userData": "{}"
+            },
+            "input": {
+                "type": "custom_event",
+                "name": "event1"
             }
         }
     }

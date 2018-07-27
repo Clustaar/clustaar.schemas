@@ -79,10 +79,17 @@ IsNumberCondition = model("IsNumberCondition")
 
 
 # Webhook
+URLLoadedEvent = model("URLLoadedEvent", "url")
+CustomEvent = model("CustomEvent", "name")
+Message = model("Message", "text attachments")
+Audio = model("Audio", "url")
+File = model("File", "url")
+Video = model("Video", "url")
+Image = model("Image", "url")
 Step = model("Step", "actions name id user_data")
 Coordinates = model("Coordinates", "lat long")
 Interlocutor = model("Interlocutor", "id location")
 ConversationSession = model("ConversationSession", "values")
-StepReached = model("StepReached", "step session interlocutor channel")
+StepReached = model("StepReached", "step session interlocutor channel input")
 StepReachedResponse = model("StepReachedResponse", "actions session")
 WebhookRequest = model("WebhookRequest", "event bot_id timestamp topic")
