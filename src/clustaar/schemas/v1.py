@@ -204,7 +204,10 @@ SEND_EMAIL_ACTION = Schema({
     "type": f.Constant(value="send_email_action", read_only=True),
     "fromEmail": f.String(binding="from_email",
                           optional=True,
-                          validators=v.Length(max=SEND_EMAIL_ACTION_FROM_EMAIL_MAX_LENGTH)),
+                          validators=[
+                              v.Length(max=SEND_EMAIL_ACTION_FROM_EMAIL_MAX_LENGTH),
+                              v.Match(re.compile(r"^.*@(?!clustaar\.).*$"))
+                          ]),
     "fromName": f.String(binding="from_name",
                          optional=True,
                          validators=v.Length(max=SEND_EMAIL_ACTION_FROM_NAME_MAX_LENGTH)),
