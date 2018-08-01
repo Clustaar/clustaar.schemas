@@ -321,7 +321,7 @@ CREATE_ZENDESK_TICKET_ACTION = Schema({
 
 JUMP_TO_ACTION = Schema({
     "type": f.Constant(value="jump_to_action", read_only=True),
-    "connections": f.List(f.Object(FLOW_CONNECTION), validators=v.Length(min=1,
+    "connections": f.List(f.Object(FLOW_CONNECTION), validators=v.Length(min=0,
                                                                          max=JUMP_TO_ACTION_MAX_CONNECTIONS_COUNT)),
     "defaultTarget": f.PolymorphicObject(on="type",
                                          binding="default_target",
