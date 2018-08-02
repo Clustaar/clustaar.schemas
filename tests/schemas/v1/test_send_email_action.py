@@ -55,6 +55,14 @@ class TestValidate(object):
         error = errors.value[0]
         assert isinstance(error, InvalidMatch)
 
+        data["fromEmail"] = "titin@CluStaaR.com"
+
+        with pytest.raises(InvalidDocument) as errors:
+            mapper.validate(data, SEND_EMAIL_ACTION)
+
+        error = errors.value[0]
+        assert isinstance(error, InvalidMatch)
+
     def test_do_not_raises_if_from_email_doesnt_contains_clustaar_domain(self, data, mapper):
         data["fromEmail"] = "titin@clustaaar.com"
         mapper.validate(data, SEND_EMAIL_ACTION)

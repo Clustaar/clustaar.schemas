@@ -206,7 +206,7 @@ SEND_EMAIL_ACTION = Schema({
                           optional=True,
                           validators=[
                               v.Length(max=SEND_EMAIL_ACTION_FROM_EMAIL_MAX_LENGTH),
-                              v.Match(re.compile(r"^.*@(?!clustaar\.).*$"))
+                              v.Match(re.compile(r"^.*@(?!clustaar\.).*$", re.IGNORECASE))
                           ]),
     "fromName": f.String(binding="from_name",
                          optional=True,
