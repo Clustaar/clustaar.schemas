@@ -1,5 +1,7 @@
 from clustaar.schemas.v1 import SEND_EMAIL_ACTION
 from clustaar.schemas.models import SendEmailAction
+from lupin.errors import InvalidDocument, InvalidMatch
+
 import pytest
 
 
@@ -41,3 +43,29 @@ class TestLoad(object):
         assert action.recipient == "test@example.com"
         assert action.from_email == "tintin@gmail.com"
         assert action.from_name == "Tintin"
+
+
+class TestValidate(object):
+    def test_raises_if_from_email_contains_clustaar_domain(self, data, mapper):
+        data["fromEmail"] = "titin@clustaar.com"
+
+        with pytest.raises(InvalidDocument) as errors:
+            mapper.validate(data, SEND_EMAIL_ACTION)
+
+        error = errors.value[0]
+        assert isinstance(error, InvalidMatch)
+
+        data["fromEmail"] = "titin@CluStaaR.com"
+
+        with pytest.raises(InvalidDocument) as errors:
+            mapper.validate(data, SEND_EMAIL_ACTION)
+
+        error = errors.value[0]
+        assert isinstance(error, InvalidMatch)
+
+    def test_do_not_raises_if_from_email_doesnt_contains_clustaar_domain(self, data, mapper):
+        data["fromEmail"] = "titin@clustaaar.com"
+        mapper.validate(data, SEND_EMAIL_ACTION)
+
+        data["fromEmail"] = "titin@gmail.com"
+        mapper.validate(data, SEND_EMAIL_ACTION)
