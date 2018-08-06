@@ -49,23 +49,22 @@ class TestValidate(object):
     def test_raises_if_from_email_contains_clustaar_domain(self, data, mapper):
         data["fromEmail"] = "titin@clustaar.com"
 
-        with pytest.raises(InvalidDocument) as errors:
+        with pytest.raises(InvalidDocument):
             mapper.validate(data, SEND_EMAIL_ACTION)
-
-        error = errors.value[0]
-        assert isinstance(error, InvalidMatch)
 
         data["fromEmail"] = "titin@CluStaaR.com"
 
-        with pytest.raises(InvalidDocument) as errors:
+        with pytest.raises(InvalidDocument):
             mapper.validate(data, SEND_EMAIL_ACTION)
-
-        error = errors.value[0]
-        assert isinstance(error, InvalidMatch)
 
     def test_do_not_raises_if_from_email_doesnt_contains_clustaar_domain(self, data, mapper):
         data["fromEmail"] = "titin@clustaaar.com"
         mapper.validate(data, SEND_EMAIL_ACTION)
 
         data["fromEmail"] = "titin@gmail.com"
+        mapper.validate(data, SEND_EMAIL_ACTION)
+
+    def test_do_not_raise_error_if_from_email_is_empty(self, data, mapper):
+        data["fromEmail"] = ""
+        data["fromName"] = ""
         mapper.validate(data, SEND_EMAIL_ACTION)
