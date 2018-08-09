@@ -1,5 +1,6 @@
 import re
 from lupin import Schema, fields as f, validators as v, Mapper, bind
+from lupin.processors import strip
 from .constants import *
 from .models import *
 from .validators import ObjectID, IsRegexp
@@ -163,7 +164,7 @@ LEGACY_REPLY_TO_MESSAGE_ACTION = Schema({
 
 OPEN_URL_ACTION = Schema({
     "type": f.Constant(value="open_url_action", read_only=True),
-    "url": f.String(validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH) & v.URL())
+    "url": f.String(pre_load=[strip], validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH) & v.URL())
 }, name="open_url_action")
 
 SHARE_ACTION = Schema({
@@ -189,6 +190,7 @@ ASK_LOCATION_ACTION = Schema({
 SEND_IMAGE_ACTION = Schema({
     "type": f.Constant(value="send_image_action", read_only=True),
     "imageURL": f.String(binding="image_url",
+                         pre_load=[strip],
                          validators=(v.Length(max=EXTERNAL_URL_MAX_LENGTH) &
                                      v.URL(schemes={"https", "http"}) |
                                      v.Equal("")))
@@ -203,6 +205,7 @@ SEND_TEXT_ACTION = Schema({
 SEND_EMAIL_ACTION = Schema({
     "type": f.Constant(value="send_email_action", read_only=True),
     "fromEmail": f.String(binding="from_email",
+                          pre_load=[strip],
                           optional=True,
                           allow_none=True,
                           validators=[
@@ -210,10 +213,11 @@ SEND_EMAIL_ACTION = Schema({
                               v.Match(re.compile(r"^((?!@clustaar\.).)*$", re.IGNORECASE))
                           ]),
     "fromName": f.String(binding="from_name",
+                         pre_load=[strip],
                          optional=True,
                          allow_none=True,
                          validators=v.Length(max=SEND_EMAIL_ACTION_FROM_NAME_MAX_LENGTH)),
-    "recipient": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH)),
+    "recipient": f.String(pre_load=[strip], validators=v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH)),
     "subject": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_SUBJECT_MAX_LENGTH)),
     "content": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_CONTENT_MAX_LENGTH))
 }, name="send_text_action")
@@ -234,7 +238,7 @@ CLOSE_INTERCOM_CONVERSATION_ACTION = Schema({
 
 ASSIGN_INTERCOM_CONVERSATION_ACTION = Schema({
     "type": f.Constant(value="assign_intercom_conversation_action", read_only=True),
-    "assigneeID": f.String(optional=True, allow_none=True, binding="assignee_id",
+    "assigneeID": f.String(optional=True, allow_none=True, binding="assignee_id", pre_load=[strip],
                            validators=v.Length(max=ASSIGN_INTERCOM_CONVERSATION_ACTION_ASSIGNEE_ID_MAX_LENGTH))
 }, name="assign_intercom_conversation_action")
 
@@ -261,12 +265,12 @@ CARD = Schema({
     "type": f.Constant(value="card", read_only=True),
     "title": f.String(validators=v.Length(min=1, max=CARD_TITLE_MAX_LENGTH)),
     "subtitle": f.String(optional=True, validators=v.Length(max=CARD_SUBTITLE_MAX_LENGTH), allow_none=True),
-    "imageURL": f.String(optional=True, allow_none=True, binding="image_url", validators=(
+    "imageURL": f.String(optional=True, allow_none=True, binding="image_url", pre_load=[strip], validators=(
         v.Length(max=EXTERNAL_URL_MAX_LENGTH) &
         v.URL(schemes={"http", "https"}) |
         v.Equal("")
     )),
-    "url": f.String(optional=True, validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) | v.Equal(""), allow_none=True),
+    "url": f.String(optional=True, pre_load=[strip], validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) | v.Equal(""), allow_none=True),
     "buttons": f.List(f.Object(BUTTON),
                       allow_none=True,
                       default=(),
@@ -292,13 +296,13 @@ STORE_SESSION_VALUE_ACTION = Schema({
 GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
     "type": f.Constant(value="google_custom_search_action", read_only=True),
     "query": f.String(validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH)),
-    "customEngineID": f.String(binding="custom_engine_id", validators=v.Length(min=1)),
+    "customEngineID": f.String(binding="custom_engine_id", pre_load=[strip], validators=v.Length(min=1)),
     "limit": f.Int(validators=v.Between(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_MAX_LIMIT))
 }, name="google_custom_search_action")
 
 ZENDESK_USER = Schema({
-    "email": f.String(optional=True, validators=v.Length(max=ZENDESK_USER_EMAIL_MAX_LENGTH)),
-    "name": f.String(optional=True, validators=v.Length(max=ZENDESK_USER_NAME_MAX_LENGTH)),
+    "email": f.String(optional=True, pre_load=[strip], validators=v.Length(max=ZENDESK_USER_EMAIL_MAX_LENGTH)),
+    "name": f.String(optional=True, pre_load=[strip], validators=v.Length(max=ZENDESK_USER_NAME_MAX_LENGTH)),
     "phoneNumber": f.String(optional=True, binding="phone_number"),
 }, name="zendesk_user")
 
@@ -318,6 +322,7 @@ CREATE_ZENDESK_TICKET_ACTION = Schema({
                             v.Match(re.compile(r"^\d*$"))
                         ]),
     "assigneeID": f.String(optional=True, binding="assignee_id",
+                           pre_load=[strip],
                            validators=[
                                v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH),
                                v.Match(re.compile(r"^\d*$"))
@@ -364,7 +369,7 @@ COORDINATES = Schema({
 # Webhook
 #
 URL_LOADED_EVENT = Schema({
-    "url": f.String(),
+    "url": f.String(pre_load=[strip]),
     "type": f.Constant("url_loaded_event", read_only=True)
 }, name="url_loaded_event")
 
