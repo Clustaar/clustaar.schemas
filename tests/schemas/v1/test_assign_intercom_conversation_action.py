@@ -5,14 +5,14 @@ import pytest
 
 @pytest.fixture
 def action():
-    return AssignIntercomConversationAction(assignee_id="FJNBDDHH654789")
+    return AssignIntercomConversationAction(assignee_id="1234567")
 
 
 @pytest.fixture
 def data():
     return {
         "type": "assign_intercom_conversation_action",
-        "assigneeID": "FJNBDDHH654789"
+        "assigneeID": "1234567"
     }
 
 
@@ -26,4 +26,4 @@ class TestLoad(object):
     def test_returns_an_action(self, data, mapper):
         action = mapper.load(data, ASSIGN_INTERCOM_CONVERSATION_ACTION)
         assert isinstance(action, AssignIntercomConversationAction)
-        assert action.assignee_id == "FJNBDDHH654789"
+        assert action.assignee_id == "1234567"
