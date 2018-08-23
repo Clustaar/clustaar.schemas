@@ -241,7 +241,7 @@ ASSIGN_INTERCOM_CONVERSATION_ACTION = Schema({
     "assigneeID": f.String(optional=True, allow_none=True, binding="assignee_id", pre_load=[strip],
                            validators=[
                                v.Length(max=ASSIGN_INTERCOM_CONVERSATION_ACTION_ASSIGNEE_ID_MAX_LENGTH),
-                               v.Match(re.compile(r"\d"))]
+                               v.Match(re.compile(r"^\d*$"))]
                            )
 }, name="assign_intercom_conversation_action")
 
