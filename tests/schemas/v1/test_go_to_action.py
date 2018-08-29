@@ -37,3 +37,14 @@ class TestLoad(object):
         action = mapper.load(data, GO_TO_ACTION)
         assert isinstance(action, GoToAction)
         assert action.target.step_id == "a1" * 12
+
+
+class TestValidate(object):
+    def test_doesnt_raise(self, data, mapper):
+        mapper.validate(data, GO_TO_ACTION)
+
+        del data["extraSession"]
+        mapper.validate(data, GO_TO_ACTION)
+
+        data["extraSession"] = None
+        mapper.validate(data, GO_TO_ACTION)
