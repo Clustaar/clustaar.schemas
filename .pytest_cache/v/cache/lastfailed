@@ -1,0 +1,5 @@
+{
+  "tests/schemas/v1/test_send_quick_replies_action.py::TestDump": true,
+  "tests/schemas/v1/test_send_quick_replies_action.py::TestLoad": true,
+  "tests/schemas/v1/test_send_quick_replies_action.py::TestValidate": true
+}

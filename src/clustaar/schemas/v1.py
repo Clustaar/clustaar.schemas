@@ -154,7 +154,8 @@ GO_TO_ACTION = Schema({
     "target": f.PolymorphicObject(on="type", schemas={
         "step": STEP_TARGET,
         "story": STORY_TARGET
-    })
+    }),
+    "extraSession": f.Dict(binding="extra_session", optional=True, allow_none=True)
 }, name="go_to_action")
 
 LEGACY_REPLY_TO_MESSAGE_ACTION = Schema({
