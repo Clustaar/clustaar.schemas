@@ -1,8 +1,0 @@
-{
-  "tests/schemas/v1/test_go_to_action.py::TestDump": true,
-  "tests/schemas/v1/test_go_to_action.py::TestDump::()": true,
-  "tests/schemas/v1/test_go_to_action.py::TestLoad": true,
-  "tests/schemas/v1/test_go_to_action.py::TestLoad::()": true,
-  "tests/schemas/v1/test_go_to_action.py::TestValidate": true,
-  "tests/schemas/v1/test_go_to_action.py::TestValidate::()": true
-}
