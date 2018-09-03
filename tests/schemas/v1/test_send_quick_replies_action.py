@@ -38,7 +38,7 @@ def data():
                         "name": "a step",
                         "id": "a1" * 12
                     },
-                    "extraSession": None
+                    "sessionValues": None
                 }
             }
         ]
