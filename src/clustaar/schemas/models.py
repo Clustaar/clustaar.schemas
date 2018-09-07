@@ -49,6 +49,7 @@ Button = model("Button", "title action")
 Card = model("Card", "title subtitle buttons image_url url")
 SendCardsAction = model("SendCardsAction", "cards")
 StoreSessionValueAction = model("StoreSessionValueAction", "key value")
+SetUserAttributeAction = model("SetUserAttributeAction", "key value")
 GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query limit custom_engine_id")
 CreateZendeskTicketAction = model(
     "CreateZendeskTicketAction",
@@ -60,6 +61,7 @@ JumpToAction = model("JumpToAction", "default_target connections")
 # Flow connection
 MessageGetter = model("MessageGetter")
 SessionValueGetter = model("SessionValueGetter", "key")
+UserAttributeGetter = model("UserAttributeGetter", "key")
 FlowConnection = model("FlowConnection", "target predicates")
 ConnectionPredicate = model("ConnectionPredicate", "value_getter condition")
 
