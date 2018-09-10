@@ -23,7 +23,8 @@ def data():
                 "type": "step",
                 "name": "a step",
                 "id": "a1" * 12
-            }
+            },
+            "sessionValues": None
         }
     }
 

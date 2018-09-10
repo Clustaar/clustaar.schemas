@@ -7,7 +7,7 @@ from clustaar.schemas.models import StepTarget, GoToAction
 def action():
     target = StepTarget(step_id="a1" * 12,
                         name="a step")
-    return GoToAction(target=target)
+    return GoToAction(target=target, session_values={"aa": 1, "bb": 2})
 
 
 @pytest.fixture
@@ -18,6 +18,10 @@ def data():
             "type": "step",
             "name": "a step",
             "id": "a1" * 12
+        },
+        "sessionValues": {
+            "aa": 1,
+            "bb": 2
         }
     }
 
@@ -33,3 +37,14 @@ class TestLoad(object):
         action = mapper.load(data, GO_TO_ACTION)
         assert isinstance(action, GoToAction)
         assert action.target.step_id == "a1" * 12
+
+
+class TestValidate(object):
+    def test_doesnt_raise(self, data, mapper):
+        mapper.validate(data, GO_TO_ACTION)
+
+        del data["sessionValues"]
+        mapper.validate(data, GO_TO_ACTION)
+
+        data["sessionValues"] = None
+        mapper.validate(data, GO_TO_ACTION)
