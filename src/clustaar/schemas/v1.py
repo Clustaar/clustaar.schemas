@@ -24,6 +24,14 @@ PREDICATE_SESSION_VALUE_GETTER = Schema({
     )),
 }, name="predicate_session_value_getter")
 
+PREDICATE_USER_ATTRIBUTE_GETTER = Schema({
+    "type": f.Constant("user_attribute", read_only=True),
+    "key": f.String(validators=(
+        v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH) &
+        v.Match(re.compile(r"^[\w\d_]+$"))
+    )),
+}, name="predicate_user_attribute_getter")
+
 IS_NOT_SET_CONDITION = Schema({
     "type": f.Constant("is_not_set", read_only=True)
 }, name="is_not_set_condition")
@@ -129,7 +137,8 @@ FLOW_CONNECTION_PREDICATE = Schema({
                                        binding="value_getter",
                                        schemas={
                                            "message": PREDICATE_MESSAGE_GETTER,
-                                           "session_value": PREDICATE_SESSION_VALUE_GETTER
+                                           "session_value": PREDICATE_SESSION_VALUE_GETTER,
+                                           "user_attribute": PREDICATE_USER_ATTRIBUTE_GETTER
                                        })
 })
 
@@ -298,6 +307,15 @@ STORE_SESSION_VALUE_ACTION = Schema({
     "value": f.String(validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH))
 }, name="store_session_value_action")
 
+SET_USER_ATTRIBUTE_ACTION = Schema({
+    "type": f.Constant(value="set_user_attribute_action", read_only=True),
+    "key": f.String(validators=(
+        v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH) &
+        v.Match(re.compile(r"^[\w\d_]+$"))
+    )),
+    "value": f.String(validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH))
+}, name="set_user_attribute_action")
+
 GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
     "type": f.Constant(value="google_custom_search_action", read_only=True),
     "query": f.String(validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH)),
@@ -359,6 +377,7 @@ ACTION_SCHEMAS = {
     "send_cards_action": SEND_CARDS_ACTIONS,
     "send_quick_replies_action": SEND_QUICK_REPLIES_ACTION,
     "store_session_value_action": STORE_SESSION_VALUE_ACTION,
+    "set_user_attribute_action": SET_USER_ATTRIBUTE_ACTION,
     "ask_location_action": ASK_LOCATION_ACTION,
     "google_custom_search_action": GOOGLE_CUSTOM_SEARCH_ACTION,
     "create_zendesk_ticket_action": CREATE_ZENDESK_TICKET_ACTION,
@@ -500,6 +519,7 @@ def get_mapper(factory=bind):
         Card: CARD,
         SendCardsAction: SEND_CARDS_ACTIONS,
         StoreSessionValueAction: STORE_SESSION_VALUE_ACTION,
+        SetUserAttributeAction: SET_USER_ATTRIBUTE_ACTION,
         Step: WEBHOOK_STEP,
         Interlocutor: WEBHOOK_INTERLOCUTOR,
         ConversationSession: WEBHOOK_CONVERSATION_SESSION,
@@ -513,6 +533,7 @@ def get_mapper(factory=bind):
         JumpToAction: JUMP_TO_ACTION,
         MessageGetter: PREDICATE_MESSAGE_GETTER,
         SessionValueGetter: PREDICATE_SESSION_VALUE_GETTER,
+        UserAttributeGetter: PREDICATE_USER_ATTRIBUTE_GETTER,
         IsNotSetCondition: IS_NOT_SET_CONDITION,
         IsSetCondition: IS_SET_CONDITION,
         ContainCondition: CONTAIN_CONDITION,
