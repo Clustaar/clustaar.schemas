@@ -2,7 +2,7 @@ import pytest
 
 from clustaar.schemas.v1 import ASSIGN_INTERCOM_CONVERSATION_ACTION
 from clustaar.schemas.models import AssignIntercomConversationAction
-from lupin.errors import InvalidDocument, NotNone
+from lupin.errors import InvalidDocument, InvalidMatch
 
 
 @pytest.fixture
@@ -58,4 +58,4 @@ class TestValidate(object):
 
         assert error.path == ["assigneeID"]
         assert len(errors) == 1
-        assert isinstance(error, NotNone)
+        assert isinstance(error, InvalidMatch)
