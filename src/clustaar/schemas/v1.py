@@ -452,7 +452,18 @@ INPUT_SCHEMAS = {
 
 WEBHOOK_INTERLOCUTOR = Schema({
     "id": f.String(),
-    "location": f.Object(COORDINATES, allow_none=True)
+    "location": f.Object(COORDINATES, allow_none=True),
+    "email": f.String(allow_none=True,
+                      validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH)),
+    "firstName": f.String(binding="first_name",
+                          allow_none=True,
+                          validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH)),
+    "lastName": f.String(binding="last_name",
+                         allow_none=True,
+                         validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH)),
+    "customAttributes": f.Dict(binding="custom_attributes",
+                               validators=v.TypedDict(str, str) &
+                               v.DictKeysFormat(re.compile(r"^[\w\d]+$")))
 }, name="webhook_interlocutor")
 
 WEBHOOK_CONVERSATION_SESSION = Schema({
@@ -478,6 +489,7 @@ WEBHOOK_STEP_REACHED = Schema({
 WEBHOOK_STEP_REACHED_RESPONSE = Schema({
     "actions": f.PolymorphicList(on="type", schemas=ACTION_SCHEMAS),
     "session": f.Object(schema=WEBHOOK_CONVERSATION_SESSION, optional=True, allow_none=True),
+    "interlocutor": f.Object(schema=WEBHOOK_INTERLOCUTOR, optional=True, allow_none=True)
 }, name="webhook_step_reached_response")
 
 WEBHOOK_REQUEST = Schema({
