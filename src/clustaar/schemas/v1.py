@@ -202,8 +202,7 @@ SEND_IMAGE_ACTION = Schema({
     "imageURL": f.String(binding="image_url",
                          pre_load=[strip],
                          validators=(v.Length(max=EXTERNAL_URL_MAX_LENGTH) &
-                                     v.URL(schemes={"https", "http"}) |
-                                     v.Equal("")))
+                                     v.URL(schemes={"https", "http"})))
 }, name="send_image_action")
 
 SEND_TEXT_ACTION = Schema({

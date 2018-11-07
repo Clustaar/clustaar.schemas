@@ -1,5 +1,7 @@
 from clustaar.schemas.v1 import SEND_IMAGE_ACTION
 from clustaar.schemas.models import SendImageAction
+from lupin.errors import InvalidDocument, InvalidURL
+
 import pytest
 
 
@@ -33,6 +35,15 @@ class TestValidate(object):
     def test_do_not_raise_error_if_valid(self, data, mapper):
         mapper.validate(data, SEND_IMAGE_ACTION)
 
-    def test_do_not_raise_error_if_empty_string(self, data, mapper):
+    def test_must_raise_error_if_empty_string(self, data, mapper):
         data["imageURL"] = ""
-        mapper.validate(data, SEND_IMAGE_ACTION)
+
+        with pytest.raises(InvalidDocument) as exc:
+            mapper.validate(data, SEND_IMAGE_ACTION)
+
+        errors = exc.value.errors
+        assert len(errors) == 1
+        error = errors[0]
+
+        assert isinstance(error, InvalidURL)
+        assert error.path == ["imageURL"]
