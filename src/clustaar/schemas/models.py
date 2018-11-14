@@ -57,6 +57,9 @@ CreateZendeskTicketAction = model(
 )
 ZendeskUser = model("ZendeskUser", "email name phone_number")
 JumpToAction = model("JumpToAction", "default_target connections")
+CustomerSatisfactionCallbackAction = model("CustomerSatisfactionCallbackAction", "target kind")
+CustomerSatisfactionChoice = model("CustomerSatisfactionChoice", "kind label target matching_intent_id")
+CustomerSatisfactionAction = model("CustomerSatisfactionAction", "message choices")
 
 # Flow connection
 MessageGetter = model("MessageGetter")
