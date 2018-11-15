@@ -167,6 +167,15 @@ GO_TO_ACTION = Schema({
     "sessionValues": f.Dict(binding="session_values", optional=True, allow_none=True)
 }, name="go_to_action")
 
+CUSTOMER_SATISFACTION_CALLBACK_ACTION = Schema({
+    "type": f.Constant(value="customer_satisfaction_callback_action", read_only=True),
+    "target": f.PolymorphicObject(on="type", schemas={
+        "step": STEP_TARGET,
+        "story": STORY_TARGET
+    }),
+    "kind": f.String(validators=v.In(CUSTOMER_SATISFACTION_CHOICE_KINDS))
+}, name="customer_satisfaction_callback_action")
+
 LEGACY_REPLY_TO_MESSAGE_ACTION = Schema({
     "type": f.Constant(value="legacy_reply_to_message_action", read_only=True),
     "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH))
@@ -185,7 +194,8 @@ BUTTON_ACTIONS_SCHEMAS = {
     "go_to_action": GO_TO_ACTION,
     "legacy_reply_to_message_action": LEGACY_REPLY_TO_MESSAGE_ACTION,
     "open_url_action": OPEN_URL_ACTION,
-    "share_action": SHARE_ACTION
+    "share_action": SHARE_ACTION,
+    "customer_satisfaction_callback_action": CUSTOMER_SATISFACTION_CALLBACK_ACTION
 }
 
 #
@@ -256,7 +266,10 @@ ASSIGN_INTERCOM_CONVERSATION_ACTION = Schema({
 
 QUICK_REPLY = Schema({
     "title": f.String(validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH)),
-    "action": f.Object(GO_TO_ACTION),
+    "action": f.PolymorphicObject(on="type", schemas={
+        "go_to_action": GO_TO_ACTION,
+        "customer_satisfaction_callback_action": CUSTOMER_SATISFACTION_CALLBACK_ACTION
+    }),
     "type": f.Constant(value="quick_reply", read_only=True, optional=True)
 }, name="quick_reply")
 
@@ -364,6 +377,29 @@ JUMP_TO_ACTION = Schema({
                                          })
 })
 
+CUSTOMER_SATISFACTION_CHOICE = Schema({
+    "type": f.Constant("customer_satisfaction_choice", read_only=True),
+    "target": f.PolymorphicObject(on="type",
+                                  allow_none=True,
+                                  schemas={
+                                      "story": STORY_TARGET,
+                                      "step": STEP_TARGET
+                                  }),
+    "kind": f.String(validators=v.In(CUSTOMER_SATISFACTION_CHOICE_KINDS)),
+    "label": f.String(validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH)),
+    "matchingIntentID": f.String(binding="matching_intent_id",
+                                 validators=ObjectID() | v.Equal(""),
+                                 allow_none=True)
+}, name="customer_satisfaction_choice")
+
+CUSTOMER_SATISFACTION_ACTION = Schema({
+    "type": f.Constant("customer_satisfaction_action", read_only=True),
+    "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
+    "choices": f.List(f.Object(CUSTOMER_SATISFACTION_CHOICE),
+                      validators=v.Length(min=CUSTOMER_SATISFACTION_ACTION_BUTTONS_COUNT,
+                                          max=CUSTOMER_SATISFACTION_ACTION_BUTTONS_COUNT))
+}, name="customer_satisfaction_action")
+
 
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
@@ -380,7 +416,8 @@ ACTION_SCHEMAS = {
     "ask_location_action": ASK_LOCATION_ACTION,
     "google_custom_search_action": GOOGLE_CUSTOM_SEARCH_ACTION,
     "create_zendesk_ticket_action": CREATE_ZENDESK_TICKET_ACTION,
-    "jump_to_action": JUMP_TO_ACTION
+    "jump_to_action": JUMP_TO_ACTION,
+    "customer_satisfaction_action": CUSTOMER_SATISFACTION_ACTION
 }
 
 COORDINATES = Schema({
@@ -565,7 +602,10 @@ def get_mapper(factory=bind):
         File: FILE,
         Audio: AUDIO,
         Video: VIDEO,
-        Image: IMAGE
+        Image: IMAGE,
+        CustomerSatisfactionCallbackAction: CUSTOMER_SATISFACTION_CALLBACK_ACTION,
+        CustomerSatisfactionChoice: CUSTOMER_SATISFACTION_CHOICE,
+        CustomerSatisfactionAction: CUSTOMER_SATISFACTION_ACTION,
     }
 
     for cls, schemas in mappings.items():
