@@ -48,3 +48,8 @@ class TestLoad:
         assert action.service == "zapier"
         assert action.fields[0].key == "name"
         assert action.fields[0].value == "Tintin"
+
+
+class TestValidate(object):
+    def test_do_not_raise(self, action, data, mapper):
+        mapper.validate(data, SEND_WEBHOOK_REQUEST_ACTION)
