@@ -335,6 +335,19 @@ GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
     "limit": f.Int(validators=v.Between(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_MAX_LIMIT))
 }, name="google_custom_search_action")
 
+FIELD = Schema({
+    "type": f.Constant(value="field", read_only=True),
+    "key": f.String(validators=v.Length(min=FIELD_KEY_MIN_LENGTH, max=FIELD_KEY_MAX_LENGTH)),
+    "value": f.String(validators=v.Length(min=FIELD_VALUE_MIN_LENGTH, max=FIELD_VALUE_MAX_LENGTH))
+}, name="field")
+
+SEND_WEBHOOK_REQUEST_ACTION = Schema({
+    "type": f.Constant(value="send_webhook_request_action", read_only=True),
+    "url": f.String(validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH)),
+    "service": f.String(validators=v.In(SEND_WEBHOOK_REQUEST_ACTION_TYPES)),
+    "fields": f.List(f.Object(FIELD), validators=v.Length(max=SEND_WEBHOOK_REQUEST_ACTION_MAX_FIELD_COUNT)),
+}, name="send_webhook_request_action")
+
 ZENDESK_USER = Schema({
     "email": f.String(optional=True, pre_load=[strip], validators=v.Length(max=ZENDESK_USER_EMAIL_MAX_LENGTH)),
     "name": f.String(optional=True, pre_load=[strip], validators=v.Length(max=ZENDESK_USER_NAME_MAX_LENGTH)),
@@ -417,7 +430,8 @@ ACTION_SCHEMAS = {
     "google_custom_search_action": GOOGLE_CUSTOM_SEARCH_ACTION,
     "create_zendesk_ticket_action": CREATE_ZENDESK_TICKET_ACTION,
     "jump_to_action": JUMP_TO_ACTION,
-    "customer_satisfaction_action": CUSTOMER_SATISFACTION_ACTION
+    "customer_satisfaction_action": CUSTOMER_SATISFACTION_ACTION,
+    "send_webhook_request_action": SEND_WEBHOOK_REQUEST_ACTION
 }
 
 COORDINATES = Schema({
@@ -606,6 +620,8 @@ def get_mapper(factory=bind):
         CustomerSatisfactionCallbackAction: CUSTOMER_SATISFACTION_CALLBACK_ACTION,
         CustomerSatisfactionChoice: CUSTOMER_SATISFACTION_CHOICE,
         CustomerSatisfactionAction: CUSTOMER_SATISFACTION_ACTION,
+        SendWebhookRequestAction: SEND_WEBHOOK_REQUEST_ACTION,
+        Field: FIELD
     }
 
     for cls, schemas in mappings.items():
