@@ -1,12 +1,11 @@
 from clustaar.schemas.v1 import SEND_WEBHOOK_REQUEST_ACTION
-from clustaar.schemas.models import SendWebhookRequestAction, Field
+from clustaar.schemas.models import SendWebhookRequestAction, WebhookRequestField
 import pytest
 
 
 @pytest.fixture
 def fields():
-    print(type(Field))
-    return [Field(key="name", value="Tintin")]
+    return [WebhookRequestField(key="name", value="Tintin")]
 
 
 @pytest.fixture
@@ -26,7 +25,7 @@ def data():
         "service": "zapier",
         "fields": [
             {
-                "type": "field",
+                "type": "webhook_request_field",
                 "key": "name",
                 "value": "Tintin"
             }
