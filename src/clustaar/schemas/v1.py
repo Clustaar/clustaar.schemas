@@ -211,6 +211,13 @@ SEND_TEXT_ACTION = Schema({
                            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT))
 })
 
+
+SEND_JS_EVENT_ACTION = Schema({
+    "type": f.Constant(value="send_js_event_action", read_only=True),
+    "script": f.String(validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_SCRIPT_MAX_LENGTH))
+}, name="send_js_event_action")
+
+
 SEND_EMAIL_ACTION = Schema({
     "type": f.Constant(value="send_email_action", read_only=True),
     "fromEmail": f.String(binding="from_email",
@@ -370,6 +377,7 @@ ACTION_SCHEMAS = {
     "wait_action": WAIT_ACTION,
     "send_email_action": SEND_EMAIL_ACTION,
     "send_text_action": SEND_TEXT_ACTION,
+    "send_js_event_action": SEND_JS_EVENT_ACTION,
     "send_image_action": SEND_IMAGE_ACTION,
     "close_intercom_conversation_action": CLOSE_INTERCOM_CONVERSATION_ACTION,
     "assign_intercom_conversation_action": ASSIGN_INTERCOM_CONVERSATION_ACTION,
@@ -519,6 +527,7 @@ def get_mapper(factory=bind):
         ShareAction: SHARE_ACTION,
         SendImageAction: SEND_IMAGE_ACTION,
         SendTextAction: SEND_TEXT_ACTION,
+        SendJSEventAction: SEND_JS_EVENT_ACTION,
         SendEmailAction: SEND_EMAIL_ACTION,
         WaitAction: WAIT_ACTION,
         PauseBotAction: PAUSE_BOT_ACTION,
