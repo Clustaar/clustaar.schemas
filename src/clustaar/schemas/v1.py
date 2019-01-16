@@ -214,7 +214,7 @@ SEND_TEXT_ACTION = Schema({
 
 SEND_JS_EVENT_ACTION = Schema({
     "type": f.Constant(value="send_js_event_action", read_only=True),
-    "script": f.String(validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_SCRIPT_MAX_LENGTH))
+    "event": f.String(validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_EVENT_MAX_LENGTH), pre_load=[strip])
 }, name="send_js_event_action")
 
 

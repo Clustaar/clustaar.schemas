@@ -5,14 +5,14 @@ import pytest
 
 @pytest.fixture
 def action():
-    return SendJSEventAction(script="var test='jojo'")
+    return SendJSEventAction(event="test")
 
 
 @pytest.fixture
 def data():
     return {
         "type": "send_js_event_action",
-        "script": "var test='jojo'"
+        "event": "test"
     }
 
 
@@ -26,4 +26,4 @@ class TestLoad:
     def test_returns_an_action(self, data, mapper):
         action = mapper.load(data, SEND_JS_EVENT_ACTION)
         assert isinstance(action, SendJSEventAction)
-        assert action.script == data["script"]
+        assert action.event == data["event"]
