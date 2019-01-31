@@ -13,6 +13,7 @@ def action(fields):
     return SendWebhookRequestAction(
         url="www.zapier.com",
         service="zapier",
+        description="Je suis là!",
         fields=fields
     )
 
@@ -23,6 +24,7 @@ def data():
         "type": "send_webhook_request_action",
         "url": "www.zapier.com",
         "service": "zapier",
+        "description": "Je suis là!",
         "fields": [
             {
                 "type": "webhook_request_field",
@@ -45,6 +47,7 @@ class TestLoad:
         assert isinstance(action, SendWebhookRequestAction)
         assert action.url == "www.zapier.com"
         assert action.service == "zapier"
+        assert action.description == "Je suis là!"
         assert action.fields[0].key == "name"
         assert action.fields[0].value == "Tintin"
 

@@ -62,7 +62,7 @@ CustomerSatisfactionCallbackAction = model("CustomerSatisfactionCallbackAction",
 CustomerSatisfactionChoice = model("CustomerSatisfactionChoice", "kind label target matching_intent_id")
 CustomerSatisfactionAction = model("CustomerSatisfactionAction", "message choices")
 WebhookRequestField = model("WebhookRequestField", "key value")
-SendWebhookRequestAction = model("SendWebhookRequestAction", "url service fields")
+SendWebhookRequestAction = model("SendWebhookRequestAction", "url service description fields")
 
 # Flow connection
 MessageGetter = model("MessageGetter")
