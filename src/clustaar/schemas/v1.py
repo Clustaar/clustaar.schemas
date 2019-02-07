@@ -5,7 +5,7 @@ from .constants import *
 from .models import *
 from .validators import ObjectID, IsRegexp
 from .fields import RegexpField
-from .custom_schemas import MatchIntentConditionSchema
+from .custom_schemas import MatchIntentConditionSchema, CustomerSatisfactionChoiceSchema
 
 _OBJECT_ID_VALIDATOR = ObjectID()
 
@@ -401,7 +401,7 @@ JUMP_TO_ACTION = Schema({
                                          })
 })
 
-CUSTOMER_SATISFACTION_CHOICE = Schema({
+CUSTOMER_SATISFACTION_CHOICE = CustomerSatisfactionChoiceSchema({
     "type": f.Constant("customer_satisfaction_choice", read_only=True),
     "target": f.PolymorphicObject(on="type",
                                   allow_none=True,
@@ -411,9 +411,9 @@ CUSTOMER_SATISFACTION_CHOICE = Schema({
                                   }),
     "kind": f.String(validators=v.In(CUSTOMER_SATISFACTION_CHOICE_KINDS)),
     "label": f.String(validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH)),
-    "matchingIntentID": f.String(binding="matching_intent_id",
-                                 validators=ObjectID() | v.Equal(""),
-                                 allow_none=True)
+    "matchingIntent": f.Object(MATCH_INTENT_CONDITION_INTENT, binding="matching_intent",
+                               allow_none=True, read_only=True),
+    "matching_intent_id": f.String(write_only=True, optional=True)
 }, name="customer_satisfaction_choice")
 
 CUSTOMER_SATISFACTION_ACTION = Schema({
