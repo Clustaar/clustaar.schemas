@@ -1,27 +1,30 @@
 import pytest
 from clustaar.schemas.models import CustomerSatisfactionAction, CustomerSatisfactionChoice, \
-    StepTarget
+    StepTarget, MatchIntentConditionIntent
 from tests.utils import MAPPER
 
 
 @pytest.fixture
 def action():
+    choice1 = CustomerSatisfactionChoice(
+        kind="positive",
+        target=StepTarget(step_id="a1" * 12, name="a step"),
+        matching_intent_id="b1" * 12,
+        label="yes"
+    )
+    choice1.matching_intent = MatchIntentConditionIntent(id="b1" * 12, name="an intent")
+
+    choice2 = CustomerSatisfactionChoice(
+        kind="negative",
+        target=StepTarget(step_id="a2" * 12, name="a step"),
+        matching_intent_id="b2" * 12,
+        label="no"
+    )
+    choice2.matching_intent = MatchIntentConditionIntent(id="b2" * 12, name="another intent")
+
     return CustomerSatisfactionAction(
         message="Are you satisfied ?",
-        choices=[
-            CustomerSatisfactionChoice(
-                kind="positive",
-                target=StepTarget(step_id="a1" * 12, name="a step"),
-                matching_intent_id="b1" * 12,
-                label="yes"
-            ),
-            CustomerSatisfactionChoice(
-                kind="negative",
-                target=StepTarget(step_id="a2" * 12, name="a step"),
-                matching_intent_id="b2" * 12,
-                label="no"
-            )
-        ]
+        choices=[choice1, choice2]
     )
 
 
@@ -35,7 +38,11 @@ def data():
                 "type": "customer_satisfaction_choice",
                 "kind": "positive",
                 "label": "yes",
-                "matchingIntentID": "b1" * 12,
+                "matchingIntent": {
+                    "id": "b1" * 12,
+                    "name": "an intent",
+                    "type": "intent"
+                },
                 "target": {
                     "type": "step",
                     "id": "a1" * 12,
@@ -45,7 +52,11 @@ def data():
             {
                 "type": "customer_satisfaction_choice",
                 "kind": "negative",
-                "matchingIntentID": "b2" * 12,
+                "matchingIntent": {
+                    "id": "b2" * 12,
+                    "name": "another intent",
+                    "type": "intent"
+                },
                 "label": "no",
                 "target": {
                     "type": "step",
