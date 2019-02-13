@@ -11,6 +11,7 @@ def interlocutor():
         email="tintin@moulinsart.fr",
         first_name="tintin",
         last_name=None,
+        phone_number="0645592034",
         custom_attributes={"age": "21"}
     )
 
@@ -26,6 +27,7 @@ def data():
         "email": "tintin@moulinsart.fr",
         "firstName": "tintin",
         "lastName": None,
+        "phoneNumber": "0645592034",
         "customAttributes": {"age": "21"}
     }
 
@@ -47,3 +49,4 @@ class TestLoad(object):
         assert result.first_name == "tintin"
         assert result.last_name is None
         assert result.custom_attributes == {"age": "21"}
+        assert result.phone_number == "0645592034"

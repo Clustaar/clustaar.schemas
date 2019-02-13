@@ -25,7 +25,8 @@ def interlocutor():
                         first_name="tintin",
                         last_name=None,
                         custom_attributes={"age": "21"},
-                        location=location)
+                        location=location,
+                        phone_number="271177")
 
 
 @pytest.fixture
@@ -62,7 +63,8 @@ def data():
                 "firstName": "tintin",
                 "id": "123",
                 "lastName": None,
-                "location": {"lat": 1.0, "long": 2.4}
+                "location": {"lat": 1.0, "long": 2.4},
+                "phoneNumber": "271177"
             },
             "session": {
                 "values": {"name": "tintin"}

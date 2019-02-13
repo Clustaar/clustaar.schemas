@@ -523,6 +523,9 @@ WEBHOOK_INTERLOCUTOR = Schema({
     "lastName": f.String(binding="last_name",
                          allow_none=True,
                          validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH)),
+    "phoneNumber": f.String(binding="phone_number",
+                            allow_none=True,
+                            validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH)),
     "customAttributes": f.Dict(binding="custom_attributes",
                                validators=v.TypedDict(str, str) &
                                v.DictKeysFormat(re.compile(r"^[\w\d]+$")))
