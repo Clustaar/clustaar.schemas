@@ -353,7 +353,7 @@ WEBHOOK_REQUEST_FIELD = Schema({
 
 SEND_WEBHOOK_REQUEST_ACTION = Schema({
     "type": f.Constant(value="send_webhook_request_action", read_only=True),
-    "url": f.String(validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH), pre_load=[strip]),
+    "url": f.String(validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH), pre_load=[strip]),
     "description": f.String(validators=v.Length(min=0, max=SEND_WEBHOOK_REQUEST_ACTION_DESCRIPTION_MAX_LENGTH)),
     "service": f.String(validators=v.In(SEND_WEBHOOK_REQUEST_ACTION_TYPES)),
     "fields": f.List(f.Object(WEBHOOK_REQUEST_FIELD), validators=v.Length(max=SEND_WEBHOOK_REQUEST_ACTION_MAX_FIELD_COUNT)),
