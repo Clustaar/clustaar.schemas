@@ -220,7 +220,7 @@ SEND_TEXT_ACTION = Schema({
     "alternatives": f.List(f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
                            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT)),
     "text": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
-                     read_only=True, ignore_if_null=True)
+                     read_only=True, ignore_if_null=True, optional=True)
 }, name="send_text_action")
 
 
