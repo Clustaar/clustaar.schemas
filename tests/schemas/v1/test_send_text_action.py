@@ -5,14 +5,15 @@ import pytest
 
 @pytest.fixture
 def action():
-    return SendTextAction(alternatives=["Hi", "Hello"])
+    return SendTextAction(alternatives=["Hi", "Hello"], text="Hello")
 
 
 @pytest.fixture
 def data():
     return {
         "type": "send_text_action",
-        "alternatives": ["Hi", "Hello"]
+        "alternatives": ["Hi", "Hello"],
+        "text": "Hello"
     }
 
 

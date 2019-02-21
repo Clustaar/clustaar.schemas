@@ -218,7 +218,8 @@ SEND_IMAGE_ACTION = Schema({
 SEND_TEXT_ACTION = Schema({
     "type": f.Constant(value="send_text_action", read_only=True),
     "alternatives": f.List(f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
-                           validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT))
+                           validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT)),
+    "text": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH))
 })
 
 
