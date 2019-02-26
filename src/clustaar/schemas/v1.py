@@ -140,7 +140,7 @@ FLOW_CONNECTION_PREDICATE = Schema({
                                            "session_value": PREDICATE_SESSION_VALUE_GETTER,
                                            "user_attribute": PREDICATE_USER_ATTRIBUTE_GETTER
                                        })
-})
+}, name="flow_connection_predicate")
 
 FLOW_CONNECTION = Schema({
     "type": f.Constant("flow_connection", read_only=True),
@@ -152,7 +152,7 @@ FLOW_CONNECTION = Schema({
     "predicates": f.List(f.Object(FLOW_CONNECTION_PREDICATE),
                          validators=v.Length(min=1,
                                              max=FLOW_CONNECTION_MAX_PREDICATES_COUNT))
-})
+}, name="flow_connection")
 
 
 #
@@ -218,8 +218,10 @@ SEND_IMAGE_ACTION = Schema({
 SEND_TEXT_ACTION = Schema({
     "type": f.Constant(value="send_text_action", read_only=True),
     "alternatives": f.List(f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
-                           validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT))
-})
+                           validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT)),
+    "text": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
+                     read_only=True, ignore_if_null=True, optional=True)
+}, name="send_text_action")
 
 
 SEND_JS_EVENT_ACTION = Schema({
@@ -246,7 +248,7 @@ SEND_EMAIL_ACTION = Schema({
     "recipient": f.String(pre_load=[strip], validators=v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH)),
     "subject": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_SUBJECT_MAX_LENGTH)),
     "content": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_CONTENT_MAX_LENGTH))
-}, name="send_text_action")
+}, name="send_email_action")
 
 WAIT_ACTION = Schema({
     "type": f.Constant(value="wait_action", read_only=True),
@@ -399,7 +401,7 @@ JUMP_TO_ACTION = Schema({
                                              "story": STORY_TARGET,
                                              "step": STEP_TARGET
                                          })
-})
+}, name="jump_to_action")
 
 CUSTOMER_SATISFACTION_CHOICE = CustomerSatisfactionChoiceSchema({
     "type": f.Constant("customer_satisfaction_choice", read_only=True),
