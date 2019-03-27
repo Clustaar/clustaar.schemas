@@ -19,16 +19,16 @@ PREDICATE_MESSAGE_GETTER = Schema({
 PREDICATE_SESSION_VALUE_GETTER = Schema({
     "type": f.Constant("session_value", read_only=True),
     "key": f.String(validators=(
-        v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH) &
-        v.Match(re.compile(r"^[\w\d_]+$"))
+            v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH) &
+            v.Match(re.compile(r"^[\w\d_]+$"))
     )),
 }, name="predicate_session_value_getter")
 
 PREDICATE_USER_ATTRIBUTE_GETTER = Schema({
     "type": f.Constant("user_attribute", read_only=True),
     "key": f.String(validators=(
-        v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH) &
-        v.Match(re.compile(r"^[\w\d_]+$"))
+            v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH) &
+            v.Match(re.compile(r"^[\w\d_]+$"))
     )),
 }, name="predicate_user_attribute_getter")
 
@@ -90,7 +90,6 @@ IS_NUMBER_CONDITION = Schema({
     "type": f.Constant("is_number", read_only=True)
 }, name="is_number_condition")
 
-
 #
 # Targets
 #
@@ -111,7 +110,6 @@ ACTIONS_BLOCK_TARGET = Schema({
     "type": f.Constant(value="actions_block", read_only=True),
     "name": f.String(optional=True, allow_none=True)
 }, name="actions_block_target")
-
 
 #
 # Flow connections
@@ -153,7 +151,6 @@ FLOW_CONNECTION = Schema({
                          validators=v.Length(min=1,
                                              max=FLOW_CONNECTION_MAX_PREDICATES_COUNT))
 })
-
 
 #
 # Button actions
@@ -221,12 +218,20 @@ SEND_TEXT_ACTION = Schema({
                            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT))
 })
 
-
 SEND_JS_EVENT_ACTION = Schema({
     "type": f.Constant(value="send_js_event_action", read_only=True),
     "event": f.String(validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_EVENT_MAX_LENGTH), pre_load=[strip])
 }, name="send_js_event_action")
 
+SEND_USER_INPUT_ACTION = Schema({
+    "type": f.Constant(value="send_user_input_action", read_only=True),
+    "text": f.String(validators=v.Length(min=1, max=SEND_USER_INPUT_TEXT_MAX_LENGTH), pre_load=[strip]),
+    "kind": f.String(validators=v.In(SEND_USER_INPUT_KINDS)),
+    "required": f.Bool(default=False),
+    "key": f.String(validators=(
+            v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH) &
+            v.Match(re.compile(r"^[\w\d_]+$"))))
+}, name="send_user_input_action")
 
 SEND_EMAIL_ACTION = Schema({
     "type": f.Constant(value="send_email_action", read_only=True),
@@ -298,9 +303,9 @@ CARD = Schema({
     "title": f.String(validators=v.Length(min=1, max=CARD_TITLE_MAX_LENGTH)),
     "subtitle": f.String(optional=True, validators=v.Length(max=CARD_SUBTITLE_MAX_LENGTH), allow_none=True),
     "imageURL": f.String(optional=True, allow_none=True, binding="image_url", pre_load=[strip], validators=(
-        v.Length(max=EXTERNAL_URL_MAX_LENGTH) &
-        v.URL(schemes={"http", "https"}) |
-        v.Equal("")
+            v.Length(max=EXTERNAL_URL_MAX_LENGTH) &
+            v.URL(schemes={"http", "https"}) |
+            v.Equal("")
     )),
     "url": f.String(optional=True, pre_load=[strip], allow_none=True,
                     validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) | v.Equal("")),
@@ -320,8 +325,8 @@ SEND_CARDS_ACTIONS = Schema({
 STORE_SESSION_VALUE_ACTION = Schema({
     "type": f.Constant(value="store_session_value_action", read_only=True),
     "key": f.String(validators=(
-        v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH) &
-        v.Match(re.compile(r"^[\w\d_]+$"))
+            v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH) &
+            v.Match(re.compile(r"^[\w\d_]+$"))
     )),
     "value": f.String(validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH))
 }, name="store_session_value_action")
@@ -329,8 +334,8 @@ STORE_SESSION_VALUE_ACTION = Schema({
 SET_USER_ATTRIBUTE_ACTION = Schema({
     "type": f.Constant(value="set_user_attribute_action", read_only=True),
     "key": f.String(validators=(
-        v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH) &
-        v.Match(re.compile(r"^[\w\d_]+$"))
+            v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH) &
+            v.Match(re.compile(r"^[\w\d_]+$"))
     )),
     "value": f.String(validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH))
 }, name="set_user_attribute_action")
@@ -345,10 +350,11 @@ GOOGLE_CUSTOM_SEARCH_ACTION = Schema({
 WEBHOOK_REQUEST_FIELD = Schema({
     "type": f.Constant(value="webhook_request_field", read_only=True),
     "key": f.String(validators=(
-        v.Length(min=WEBHOOK_REQUEST_FIELD_KEY_MIN_LENGTH, max=WEBHOOK_REQUEST_FIELD_KEY_MAX_LENGTH) &
-        v.Match(re.compile(r"^[\w\d_]+$"))
+            v.Length(min=WEBHOOK_REQUEST_FIELD_KEY_MIN_LENGTH, max=WEBHOOK_REQUEST_FIELD_KEY_MAX_LENGTH) &
+            v.Match(re.compile(r"^[\w\d_]+$"))
     )),
-    "value": f.String(validators=v.Length(min=WEBHOOK_REQUEST_FIELD_VALUE_MIN_LENGTH, max=WEBHOOK_REQUEST_FIELD_VALUE_MAX_LENGTH))
+    "value": f.String(
+        validators=v.Length(min=WEBHOOK_REQUEST_FIELD_VALUE_MIN_LENGTH, max=WEBHOOK_REQUEST_FIELD_VALUE_MAX_LENGTH))
 }, name="webhook_request_field")
 
 SEND_WEBHOOK_REQUEST_ACTION = Schema({
@@ -356,7 +362,8 @@ SEND_WEBHOOK_REQUEST_ACTION = Schema({
     "url": f.String(validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH), pre_load=[strip]),
     "description": f.String(validators=v.Length(min=0, max=SEND_WEBHOOK_REQUEST_ACTION_DESCRIPTION_MAX_LENGTH)),
     "service": f.String(validators=v.In(SEND_WEBHOOK_REQUEST_ACTION_TYPES)),
-    "fields": f.List(f.Object(WEBHOOK_REQUEST_FIELD), validators=v.Length(max=SEND_WEBHOOK_REQUEST_ACTION_MAX_FIELD_COUNT)),
+    "fields": f.List(f.Object(WEBHOOK_REQUEST_FIELD),
+                     validators=v.Length(max=SEND_WEBHOOK_REQUEST_ACTION_MAX_FIELD_COUNT)),
 }, name="send_webhook_request_action")
 
 ZENDESK_USER = Schema({
@@ -424,11 +431,11 @@ CUSTOMER_SATISFACTION_ACTION = Schema({
                                           max=CUSTOMER_SATISFACTION_ACTION_BUTTONS_COUNT))
 }, name="customer_satisfaction_action")
 
-
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
     "wait_action": WAIT_ACTION,
     "send_email_action": SEND_EMAIL_ACTION,
+    "send_user_input_action": SEND_USER_INPUT_ACTION,
     "send_text_action": SEND_TEXT_ACTION,
     "send_js_event_action": SEND_JS_EVENT_ACTION,
     "send_image_action": SEND_IMAGE_ACTION,
@@ -496,7 +503,6 @@ INCOMING_MESSAGE = Schema({
     "text": f.String(),
     "attachments": f.PolymorphicList(on="type", schemas=ATTACHMENTS_SCHEMAS)
 }, name="incoming_message")
-
 
 REPLY_TO_ACTION_TO_MESSAGE = Schema({
     "type": f.Constant("message"),
@@ -586,6 +592,7 @@ def get_mapper(factory=bind):
         SendImageAction: SEND_IMAGE_ACTION,
         SendTextAction: SEND_TEXT_ACTION,
         SendJSEventAction: SEND_JS_EVENT_ACTION,
+        SendUserInputAction: SEND_USER_INPUT_ACTION,
         SendEmailAction: SEND_EMAIL_ACTION,
         WaitAction: WAIT_ACTION,
         PauseBotAction: PAUSE_BOT_ACTION,

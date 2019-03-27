@@ -40,6 +40,7 @@ SendImageAction = model("SendImageAction", "image_url")
 SendTextAction = model("SendTextAction", "alternatives")
 SendJSEventAction = model("SendJSEventAction", "event")
 SendEmailAction = model("SendEmailAction", "from_name from_email content subject recipient")
+SendUserInputAction = model("SendUserInputAction", "text kind required key")
 WaitAction = model("WaitAction", "duration")
 PauseBotAction = model("PauseBotAction", "")
 CloseIntercomConversationAction = model("CloseIntercomConversationAction", "")
@@ -84,7 +85,6 @@ IsLessThanOrEqualCondition = model("IsLessThanOrEqualCondition", "maximum")
 IsGreaterThanCondition = model("IsGreaterThanCondition", "minimum")
 IsGreaterThanOrEqualCondition = model("IsGreaterThanOrEqualCondition", "minimum")
 IsNumberCondition = model("IsNumberCondition")
-
 
 # Webhook
 URLLoadedEvent = model("URLLoadedEvent", "url")
