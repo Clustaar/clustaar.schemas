@@ -426,6 +426,11 @@ CUSTOMER_SATISFACTION_ACTION = Schema({
                                           max=CUSTOMER_SATISFACTION_ACTION_BUTTONS_COUNT))
 }, name="customer_satisfaction_action")
 
+CREATE_USER_REQUEST_ACTION = Schema({
+    "type": f.Constant("create_user_request_action", read_only=True),
+    "message": f.String(validators=v.Length(min=1, max=CREATE_USER_REQUEST_ACTION_MESSAGE_MAX_LENGTH), pre_load=[strip]),
+    "assignee_id": f.String(optional=True, allow_none=True, binding="assignee_id", pre_load=[strip])
+}, name="create_user_request_action")
 
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
@@ -445,7 +450,8 @@ ACTION_SCHEMAS = {
     "create_zendesk_ticket_action": CREATE_ZENDESK_TICKET_ACTION,
     "jump_to_action": JUMP_TO_ACTION,
     "customer_satisfaction_action": CUSTOMER_SATISFACTION_ACTION,
-    "send_webhook_request_action": SEND_WEBHOOK_REQUEST_ACTION
+    "send_webhook_request_action": SEND_WEBHOOK_REQUEST_ACTION,
+    "create_user_request_action": CREATE_USER_REQUEST_ACTION
 }
 
 COORDINATES = Schema({
@@ -639,7 +645,8 @@ def get_mapper(factory=bind):
         CustomerSatisfactionChoice: CUSTOMER_SATISFACTION_CHOICE,
         CustomerSatisfactionAction: CUSTOMER_SATISFACTION_ACTION,
         SendWebhookRequestAction: SEND_WEBHOOK_REQUEST_ACTION,
-        WebhookRequestField: WEBHOOK_REQUEST_FIELD
+        WebhookRequestField: WEBHOOK_REQUEST_FIELD,
+        CreateUserRequestAction: CREATE_USER_REQUEST_ACTION
     }
 
     for cls, schemas in mappings.items():
