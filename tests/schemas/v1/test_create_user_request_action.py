@@ -16,7 +16,7 @@ def data():
     return {
         "type": "create_user_request_action",
         "message": "I need help",
-        "assignee_id": "a1" * 12
+        "assigneeID": "a1" * 12
     }
 
 

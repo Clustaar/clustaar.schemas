@@ -429,7 +429,7 @@ CUSTOMER_SATISFACTION_ACTION = Schema({
 CREATE_USER_REQUEST_ACTION = Schema({
     "type": f.Constant("create_user_request_action", read_only=True),
     "message": f.String(validators=v.Length(min=1, max=CREATE_USER_REQUEST_ACTION_MESSAGE_MAX_LENGTH), pre_load=[strip]),
-    "assignee_id": f.String(optional=True, allow_none=True, binding="assignee_id", pre_load=[strip])
+    "assigneeID": f.String(optional=True, allow_none=True, binding="assignee_id", pre_load=[strip])
 }, name="create_user_request_action")
 
 ACTION_SCHEMAS = {
