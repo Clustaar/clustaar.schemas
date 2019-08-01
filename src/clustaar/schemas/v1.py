@@ -332,7 +332,7 @@ SET_USER_ATTRIBUTE_ACTION = Schema({
     "type": f.Constant(value="set_user_attribute_action", read_only=True),
     "key": f.String(validators=(
         v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH) &
-        v.Match(re.compile(r"^[\w\d_]+$"))
+        v.Match(re.compile(r"(?i)^(?!(id)$)[\w\d_]+$"))
     )),
     "value": f.String(validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH))
 }, name="set_user_attribute_action")
