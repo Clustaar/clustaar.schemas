@@ -107,6 +107,13 @@ IS_NUMBER_CONDITION = Schema(
     {"type": f.Constant("is_number", read_only=True)}, name="is_number_condition"
 )
 
+IS_ONLINE_CONDITION = Schema({
+    "type": f.Constant("is_online", read_only=True)
+}, name="is_online_condition")
+
+IS_OFFLINE_CONDITION = Schema({
+    "type": f.Constant("is_offline", read_only=True)
+}, name="is_offline_condition")
 
 #
 # Targets
@@ -175,19 +182,29 @@ FLOW_CONNECTION_PREDICATE = Schema(
     name="flow_connection_predicate",
 )
 
-FLOW_CONNECTION = Schema(
-    {
-        "type": f.Constant("flow_connection", read_only=True),
-        "target": f.PolymorphicObject(
-            on="type", schemas={"story": STORY_TARGET, "step": STEP_TARGET}
-        ),
-        "predicates": f.List(
-            f.Object(FLOW_CONNECTION_PREDICATE),
-            validators=v.Length(min=1, max=FLOW_CONNECTION_MAX_PREDICATES_COUNT),
-        ),
-    },
-    name="flow_connection",
-)
+FLOW_CONNECTION_TEAM_PREDICATE = Schema({
+    "type": f.Constant("connection_team_predicate", read_only=True),
+    "condition": f.PolymorphicObject(on="type",
+                                     schemas={
+                                         "is_online": IS_ONLINE_CONDITION,
+                                         "is_offline": IS_OFFLINE_CONDITION
+                                     })
+}, name="flow_connection_team_predicate")
+
+FLOW_CONNECTION = Schema({
+    "type": f.Constant("flow_connection", read_only=True),
+    "target": f.PolymorphicObject(on="type",
+                                  schemas={
+                                      "story": STORY_TARGET,
+                                      "step": STEP_TARGET
+                                  }),
+    "predicates": f.List(f.PolymorphicObject(on="type", schemas={
+        "connection_predicate": FLOW_CONNECTION_PREDICATE,
+        "connection_team_predicate": FLOW_CONNECTION_TEAM_PREDICATE,
+    }),
+                         validators=v.Length(min=1,
+                                             max=FLOW_CONNECTION_MAX_PREDICATES_COUNT))
+}, name="flow_connection")
 
 
 #
@@ -911,8 +928,11 @@ def get_mapper(factory=bind):
         IsGreaterThanCondition: IS_GREATER_THAN_CONDITION,
         IsGreaterThanOrEqualCondition: IS_GREATER_THAN_OR_EQUAL_CONDITION,
         IsNumberCondition: IS_NUMBER_CONDITION,
+        IsOnlineCondition: IS_ONLINE_CONDITION,
+        IsOfflineCondition: IS_OFFLINE_CONDITION,
         FlowConnection: FLOW_CONNECTION,
         ConnectionPredicate: FLOW_CONNECTION_PREDICATE,
+        ConnectionTeamPredicate: FLOW_CONNECTION_TEAM_PREDICATE,
         URLLoadedEvent: URL_LOADED_EVENT,
         CustomEvent: CUSTOM_EVENT,
         Message: (INCOMING_MESSAGE, REPLY_TO_ACTION_TO_MESSAGE),

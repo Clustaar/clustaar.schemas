@@ -17,18 +17,35 @@ def data():
         "predicates": [
             {
                 "type": "connection_predicate",
-                "condition": {"type": "is_set"},
-                "valueGetter": {"type": "message"},
+                "condition": {
+                    "type": "is_set"
+                },
+                "valueGetter": {
+                    "type": "message"
+                }
+            },
+            {
+                "type": "connection_team_predicate",
+                "condition": {
+                    "type": "is_offline"
+                }
             }
-        ],
+        ]
     }
 
 
 @pytest.fixture
 def connection():
-    predicate = ConnectionPredicate(condition=IsSetCondition(), value_getter=MessageGetter())
+    predicate = ConnectionPredicate(
+        condition=IsSetCondition(),
+        value_getter=MessageGetter()
+    )
+    predicateTeam = ConnectionTeamPredicate(
+        condition=IsOfflineCondition()
+    )
     return FlowConnection(
-        predicates=[predicate], target=StepTarget(step_id="a1" * 12, name="a step")
+        predicates=[predicate, predicateTeam],
+        target=StepTarget(step_id="a1" * 12, name="a step")
     )
 
 
@@ -43,6 +60,9 @@ class TestLoad(object):
         assert isinstance(predicate, ConnectionPredicate)
         assert isinstance(predicate.condition, IsSetCondition)
         assert isinstance(predicate.value_getter, MessageGetter)
+        predicate2 = result.predicates[1]
+        assert isinstance(predicate2, ConnectionTeamPredicate)
+        assert isinstance(predicate2.condition, IsOfflineCondition)
 
 
 class TestDump(object):
