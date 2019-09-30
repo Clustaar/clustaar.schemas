@@ -23,7 +23,12 @@ def data2():
     return {"type": "send_text_action", "alternatives": ["Hi", "Hello"]}
 
 
-class TestDump(object):
+@pytest.fixture
+def malicious_data():
+    return {"type": "send_text_action", "alternatives": ["<script>void();</script>Hi", "Hello"]}
+
+
+class TestDump:
     def test_returns_a_dict(self, action, data, mapper):
         result = SEND_TEXT_ACTION.dump(action, mapper)
         assert result == data
@@ -33,7 +38,7 @@ class TestDump(object):
         assert result == data2
 
 
-class TestLoad(object):
+class TestLoad:
     def test_returns_an_action(self, data, mapper):
         action = mapper.load(data, SEND_TEXT_ACTION)
         assert isinstance(action, SendTextAction)
@@ -42,3 +47,8 @@ class TestLoad(object):
     def test_fail_load_text(self, data, mapper):
         action = mapper.load(data, SEND_TEXT_ACTION)
         assert action.text is None
+
+    def test_returns_an_action_malicious(self, malicious_data, mapper):
+        send_text = mapper.load(malicious_data, SEND_TEXT_ACTION)
+        assert isinstance(send_text, SendTextAction)
+        assert send_text.alternatives == ["&lt;script&gt;void();&lt;/script&gt;Hi", "Hello"]

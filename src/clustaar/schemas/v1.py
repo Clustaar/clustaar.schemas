@@ -280,7 +280,10 @@ SEND_TEXT_ACTION = Schema(
     {
         "type": f.Constant(value="send_text_action", read_only=True),
         "alternatives": f.List(
-            f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
+            f.String(
+                validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
+                pre_load=[html_sanitize, unicode_normalize],
+            ),
             validators=v.Length(min=1, max=SEND_TEXT_ACTION_MAX_MESSAGES_COUNT),
         ),
         "text": f.String(
@@ -299,8 +302,7 @@ SEND_JS_EVENT_ACTION = Schema(
     {
         "type": f.Constant(value="send_js_event_action", read_only=True),
         "event": f.String(
-            validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_EVENT_MAX_LENGTH),
-            pre_load=[strip, html_sanitize],
+            validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_EVENT_MAX_LENGTH), pre_load=[strip]
         ),
     },
     name="send_js_event_action",
@@ -442,7 +444,7 @@ CARD = Schema(
             optional=True,
             allow_none=True,
             binding="image_url",
-            pre_load=[strip, html_sanitize],
+            pre_load=[strip],
             validators=(
                 v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"http", "https"})
                 | v.Equal("")
@@ -450,7 +452,7 @@ CARD = Schema(
         ),
         "url": f.String(
             optional=True,
-            pre_load=[strip, html_sanitize],
+            pre_load=[strip],
             allow_none=True,
             validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) | v.Equal(""),
         ),
@@ -513,8 +515,7 @@ GOOGLE_CUSTOM_SEARCH_ACTION = Schema(
     {
         "type": f.Constant(value="google_custom_search_action", read_only=True),
         "query": f.String(
-            validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH),
-            pre_load=[html_sanitize],
+            validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH)
         ),
         "customEngineID": f.String(
             binding="custom_engine_id", pre_load=[strip], validators=v.Length(min=1)
@@ -727,19 +728,12 @@ COORDINATES = Schema({"lat": f.Number(), "long": f.Number()}, name="coordinates"
 # Webhook
 #
 URL_LOADED_EVENT = Schema(
-    {
-        "url": f.String(pre_load=[strip, html_sanitize]),
-        "type": f.Constant("url_loaded_event", read_only=True),
-    },
+    {"url": f.String(pre_load=[strip]), "type": f.Constant("url_loaded_event", read_only=True)},
     name="url_loaded_event",
 )
 
 CUSTOM_EVENT = Schema(
-    {
-        "type": f.Constant("custom_event", read_only=True),
-        "name": f.String(pre_load=[html_sanitize, unicode_normalize]),
-    },
-    name="custom_event",
+    {"type": f.Constant("custom_event", read_only=True), "name": f.String()}, name="custom_event"
 )
 
 FILE = Schema({"type": f.Constant("file", read_only=True), "url": f.String()}, name="file")

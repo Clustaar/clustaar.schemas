@@ -22,15 +22,30 @@ def data():
     }
 
 
-class TestDump(object):
+@pytest.fixture
+def malicious_data():
+    return {
+        "type": "message",
+        "text": "<script>void();</script>hello",
+        "attachments": [{"type": "video", "url": "http://example.com/"}],
+    }
+
+
+class TestDump:
     def test_returns_a_dict(self, data, message):
         result = MAPPER.dump(message)
         assert result == data
 
 
-class TestLoad(object):
+class TestLoad:
     def test_returns_an_object(self, data):
         result = MAPPER.load(data, "incoming_message")
         assert isinstance(result, Message)
         assert result.text == "hello"
         assert isinstance(result.attachments[0], Video)
+
+
+class TestLoadMalicious:
+    def test_returns_an_object(self, malicious_data):
+        result = MAPPER.load(malicious_data, "incoming_message")
+        assert result.text == "&lt;script&gt;void();&lt;/script&gt;hello"

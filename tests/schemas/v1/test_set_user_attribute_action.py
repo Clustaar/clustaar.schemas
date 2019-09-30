@@ -14,21 +14,36 @@ def data():
     return {"type": "set_user_attribute_action", "key": "var1", "value": "val1"}
 
 
-class TestDump(object):
+@pytest.fixture
+def malicious_data():
+    return {
+        "type": "set_user_attribute_action",
+        "key": "var1",
+        "value": "<script>void();</script>val1",
+    }
+
+
+class TestDump:
     def test_returns_a_dict(self, action, data, mapper):
         result = SET_USER_ATTRIBUTE_ACTION.dump(action, mapper)
         assert result == data
 
 
-class TestLoad(object):
+class TestLoad:
     def test_returns_an_action(self, data, mapper):
         action = mapper.load(data, SET_USER_ATTRIBUTE_ACTION)
         assert isinstance(action, SetUserAttributeAction)
         assert action.key == "var1"
         assert action.value == "val1"
 
+    def test_returns_an_action_malicious(self, malicious_data, mapper):
+        action = mapper.load(malicious_data, SET_USER_ATTRIBUTE_ACTION)
+        assert isinstance(action, SetUserAttributeAction)
+        assert action.key == "var1"
+        assert action.value == "&lt;script&gt;void();&lt;/script&gt;val1"
 
-class TestValidate(object):
+
+class TestValidate:
     def test_does_nothing_if_ok(self, data, mapper):
         mapper.validate(data, SET_USER_ATTRIBUTE_ACTION)
 

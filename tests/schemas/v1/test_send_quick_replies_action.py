@@ -38,6 +38,25 @@ def data():
     }
 
 
+@pytest.fixture
+def malicious_data():
+    return {
+        "type": "send_quick_replies_action",
+        "message": "<script>void();</script>Ok?",
+        "buttons": [
+            {
+                "type": "quick_reply",
+                "title": "<script>void();</script>Ok",
+                "action": {
+                    "type": "go_to_action",
+                    "target": {"type": "step", "name": "a step", "id": "a1" * 12},
+                    "sessionValues": None,
+                },
+            }
+        ],
+    }
+
+
 class TestDump(object):
     def test_returns_a_dict(self, action, data, mapper):
         result = SEND_QUICK_REPLIES_ACTION.dump(action, mapper)
@@ -52,6 +71,13 @@ class TestLoad(object):
         quick_reply = action.buttons[0]
         assert quick_reply.title == "Ok"
         assert quick_reply.action.target.step_id == "a1" * 12
+
+    def test_returns_an_action_malicious(self, malicious_data, mapper):
+        action = mapper.load(malicious_data, SEND_QUICK_REPLIES_ACTION)
+        assert isinstance(action, SendQuickRepliesAction)
+        assert action.message == "&lt;script&gt;void();&lt;/script&gt;Ok?"
+        quick_reply = action.buttons[0]
+        assert quick_reply.title == "&lt;script&gt;void();&lt;/script&gt;Ok"
 
 
 class TestValidate(object):
