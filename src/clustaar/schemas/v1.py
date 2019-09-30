@@ -4,6 +4,7 @@ from lupin.processors import strip
 from .constants import *
 from .models import *
 from .validators import ObjectID, IsRegexp
+from .processors import html_sanitize, unicode_normalize
 from .fields import RegexpField
 from .custom_schemas import MatchIntentConditionSchema, CustomerSatisfactionChoiceSchema
 
@@ -217,7 +218,10 @@ CUSTOMER_SATISFACTION_CALLBACK_ACTION = Schema(
 LEGACY_REPLY_TO_MESSAGE_ACTION = Schema(
     {
         "type": f.Constant(value="legacy_reply_to_message_action", read_only=True),
-        "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
+        "message": f.String(
+            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize],
+        ),
     },
     name="legacy_reply_to_message_action",
 )
@@ -226,7 +230,8 @@ OPEN_URL_ACTION = Schema(
     {
         "type": f.Constant(value="open_url_action", read_only=True),
         "url": f.String(
-            pre_load=[strip], validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH) & v.URL()
+            pre_load=[strip, html_sanitize],
+            validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH) & v.URL(),
         ),
     },
     name="open_url_action",
@@ -250,7 +255,10 @@ BUTTON_ACTIONS_SCHEMAS = {
 ASK_LOCATION_ACTION = Schema(
     {
         "type": f.Constant(value="ask_location_action", read_only=True),
-        "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
+        "message": f.String(
+            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize],
+        ),
         "action": f.Object(schema=GO_TO_ACTION, binding="callback_action"),
     },
     name="ask_location_action",
@@ -261,7 +269,7 @@ SEND_IMAGE_ACTION = Schema(
         "type": f.Constant(value="send_image_action", read_only=True),
         "imageURL": f.String(
             binding="image_url",
-            pre_load=[strip],
+            pre_load=[strip, html_sanitize],
             validators=(v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"https", "http"})),
         ),
     },
@@ -277,6 +285,7 @@ SEND_TEXT_ACTION = Schema(
         ),
         "text": f.String(
             validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
             read_only=True,
             ignore_if_null=True,
             optional=True,
@@ -290,7 +299,8 @@ SEND_JS_EVENT_ACTION = Schema(
     {
         "type": f.Constant(value="send_js_event_action", read_only=True),
         "event": f.String(
-            validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_EVENT_MAX_LENGTH), pre_load=[strip]
+            validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_EVENT_MAX_LENGTH),
+            pre_load=[strip, html_sanitize],
         ),
     },
     name="send_js_event_action",
@@ -302,7 +312,7 @@ SEND_EMAIL_ACTION = Schema(
         "type": f.Constant(value="send_email_action", read_only=True),
         "fromEmail": f.String(
             binding="from_email",
-            pre_load=[strip],
+            pre_load=[strip, html_sanitize],
             optional=True,
             allow_none=True,
             validators=[
@@ -312,16 +322,23 @@ SEND_EMAIL_ACTION = Schema(
         ),
         "fromName": f.String(
             binding="from_name",
-            pre_load=[strip],
+            pre_load=[strip, html_sanitize],
             optional=True,
             allow_none=True,
             validators=v.Length(max=SEND_EMAIL_ACTION_FROM_NAME_MAX_LENGTH),
         ),
         "recipient": f.String(
-            pre_load=[strip], validators=v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH)
+            pre_load=[strip, html_sanitize],
+            validators=v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH),
         ),
-        "subject": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_SUBJECT_MAX_LENGTH)),
-        "content": f.String(validators=v.Length(max=SEND_EMAIL_ACTION_CONTENT_MAX_LENGTH)),
+        "subject": f.String(
+            validators=v.Length(max=SEND_EMAIL_ACTION_SUBJECT_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
+        "content": f.String(
+            validators=v.Length(max=SEND_EMAIL_ACTION_CONTENT_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
     },
     name="send_email_action",
 )
@@ -365,7 +382,10 @@ ASSIGN_INTERCOM_CONVERSATION_ACTION = Schema(
 
 QUICK_REPLY = Schema(
     {
-        "title": f.String(validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH)),
+        "title": f.String(
+            validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
         "action": f.PolymorphicObject(
             on="type",
             schemas={
@@ -381,7 +401,10 @@ QUICK_REPLY = Schema(
 SEND_QUICK_REPLIES_ACTION = Schema(
     {
         "type": f.Constant(value="send_quick_replies_action", read_only=True),
-        "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
+        "message": f.String(
+            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
         "buttons": f.List(
             f.Object(QUICK_REPLY),
             validators=v.Length(min=1, max=SEND_QUICK_REPLIES_ACTION_MAX_BUTTONS_COUNT),
@@ -393,7 +416,10 @@ SEND_QUICK_REPLIES_ACTION = Schema(
 BUTTON = Schema(
     {
         "type": f.Constant(value="button", read_only=True),
-        "title": f.String(validators=v.Length(min=1, max=BUTTON_TITLE_MAX_LENGTH)),
+        "title": f.String(
+            validators=v.Length(min=1, max=BUTTON_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
         "action": f.PolymorphicObject(on="type", schemas=BUTTON_ACTIONS_SCHEMAS),
     },
     name="button",
@@ -402,15 +428,21 @@ BUTTON = Schema(
 CARD = Schema(
     {
         "type": f.Constant(value="card", read_only=True),
-        "title": f.String(validators=v.Length(min=1, max=CARD_TITLE_MAX_LENGTH)),
+        "title": f.String(
+            validators=v.Length(min=1, max=CARD_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
         "subtitle": f.String(
-            optional=True, validators=v.Length(max=CARD_SUBTITLE_MAX_LENGTH), allow_none=True
+            optional=True,
+            validators=v.Length(max=CARD_SUBTITLE_MAX_LENGTH),
+            allow_none=True,
+            pre_load=[html_sanitize, unicode_normalize],
         ),
         "imageURL": f.String(
             optional=True,
             allow_none=True,
             binding="image_url",
-            pre_load=[strip],
+            pre_load=[strip, html_sanitize],
             validators=(
                 v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"http", "https"})
                 | v.Equal("")
@@ -418,7 +450,7 @@ CARD = Schema(
         ),
         "url": f.String(
             optional=True,
-            pre_load=[strip],
+            pre_load=[strip, html_sanitize],
             allow_none=True,
             validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) | v.Equal(""),
         ),
@@ -453,7 +485,8 @@ STORE_SESSION_VALUE_ACTION = Schema(
             )
         ),
         "value": f.String(
-            validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH)
+            validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH),
+            pre_load=[html_sanitize],
         ),
     },
     name="store_session_value_action",
@@ -469,7 +502,8 @@ SET_USER_ATTRIBUTE_ACTION = Schema(
             )
         ),
         "value": f.String(
-            validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH)
+            validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH),
+            pre_load=[html_sanitize],
         ),
     },
     name="set_user_attribute_action",
@@ -479,7 +513,8 @@ GOOGLE_CUSTOM_SEARCH_ACTION = Schema(
     {
         "type": f.Constant(value="google_custom_search_action", read_only=True),
         "query": f.String(
-            validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH)
+            validators=v.Length(min=1, max=GOOGLE_CUSTOM_SEARCH_ACTION_QUERY_MAX_LENGTH),
+            pre_load=[html_sanitize],
         ),
         "customEngineID": f.String(
             binding="custom_engine_id", pre_load=[strip], validators=v.Length(min=1)
@@ -530,10 +565,14 @@ SEND_WEBHOOK_REQUEST_ACTION = Schema(
 ZENDESK_USER = Schema(
     {
         "email": f.String(
-            optional=True, pre_load=[strip], validators=v.Length(max=ZENDESK_USER_EMAIL_MAX_LENGTH)
+            optional=True,
+            pre_load=[strip, html_sanitize],
+            validators=v.Length(max=ZENDESK_USER_EMAIL_MAX_LENGTH),
         ),
         "name": f.String(
-            optional=True, pre_load=[strip], validators=v.Length(max=ZENDESK_USER_NAME_MAX_LENGTH)
+            optional=True,
+            pre_load=[strip, html_sanitize],
+            validators=v.Length(max=ZENDESK_USER_NAME_MAX_LENGTH),
         ),
         "phoneNumber": f.String(optional=True, binding="phone_number"),
     },
@@ -555,10 +594,13 @@ CREATE_ZENDESK_TICKET_ACTION = Schema(
             validators=(v.In(ZENDESK_TICKET_PRIORITIES) | v.Equal("")),
         ),
         "subject": f.String(
-            optional=True, validators=v.Length(max=ZENDESK_TICKET_SUBJECT_MAX_LENGTH)
+            optional=True,
+            validators=v.Length(max=ZENDESK_TICKET_SUBJECT_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
         ),
         "description": f.String(
-            validators=v.Length(min=1, max=ZENDESK_TICKET_DESCRIPTION_MAX_LENGTH)
+            validators=v.Length(min=1, max=ZENDESK_TICKET_DESCRIPTION_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
         ),
         "tags": f.List(
             f.String(validators=v.Length(max=ZENDESK_TICKET_TAG_MAX_LENGTH)),
@@ -610,7 +652,10 @@ CUSTOMER_SATISFACTION_CHOICE = CustomerSatisfactionChoiceSchema(
             on="type", allow_none=True, schemas={"story": STORY_TARGET, "step": STEP_TARGET}
         ),
         "kind": f.String(validators=v.In(CUSTOMER_SATISFACTION_CHOICE_KINDS)),
-        "label": f.String(validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH)),
+        "label": f.String(
+            validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
         "matchingIntent": f.Object(
             MATCH_INTENT_CONDITION_INTENT,
             binding="matching_intent",
@@ -625,7 +670,10 @@ CUSTOMER_SATISFACTION_CHOICE = CustomerSatisfactionChoiceSchema(
 CUSTOMER_SATISFACTION_ACTION = Schema(
     {
         "type": f.Constant("customer_satisfaction_action", read_only=True),
-        "message": f.String(validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH)),
+        "message": f.String(
+            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
         "choices": f.List(
             f.Object(CUSTOMER_SATISFACTION_CHOICE),
             validators=v.Length(
@@ -642,7 +690,7 @@ CREATE_USER_REQUEST_ACTION = Schema(
         "type": f.Constant("create_user_request_action", read_only=True),
         "message": f.String(
             validators=v.Length(min=1, max=CREATE_USER_REQUEST_ACTION_MESSAGE_MAX_LENGTH),
-            pre_load=[strip],
+            pre_load=[strip, html_sanitize, unicode_normalize],
         ),
         "assigneeID": f.String(
             optional=True, allow_none=True, binding="assignee_id", pre_load=[strip]
@@ -679,12 +727,19 @@ COORDINATES = Schema({"lat": f.Number(), "long": f.Number()}, name="coordinates"
 # Webhook
 #
 URL_LOADED_EVENT = Schema(
-    {"url": f.String(pre_load=[strip]), "type": f.Constant("url_loaded_event", read_only=True)},
+    {
+        "url": f.String(pre_load=[strip, html_sanitize]),
+        "type": f.Constant("url_loaded_event", read_only=True),
+    },
     name="url_loaded_event",
 )
 
 CUSTOM_EVENT = Schema(
-    {"type": f.Constant("custom_event", read_only=True), "name": f.String()}, name="custom_event"
+    {
+        "type": f.Constant("custom_event", read_only=True),
+        "name": f.String(pre_load=[html_sanitize, unicode_normalize]),
+    },
+    name="custom_event",
 )
 
 FILE = Schema({"type": f.Constant("file", read_only=True), "url": f.String()}, name="file")
@@ -700,7 +755,7 @@ ATTACHMENTS_SCHEMAS = {"file": FILE, "audio": AUDIO, "video": VIDEO, "image": IM
 INCOMING_MESSAGE = Schema(
     {
         "type": f.Constant("message", read_only=True),
-        "text": f.String(),
+        "text": f.String(pre_load=[html_sanitize, unicode_normalize]),
         "attachments": f.PolymorphicList(on="type", schemas=ATTACHMENTS_SCHEMAS),
     },
     name="incoming_message",
@@ -711,7 +766,7 @@ REPLY_TO_ACTION_TO_MESSAGE = Schema(
     {
         "type": f.Constant("message"),
         "attachments": f.Constant([]),
-        "text": f.String(binding="message"),
+        "text": f.String(binding="message", pre_load=[html_sanitize, unicode_normalize]),
     },
     name="reply_to_action_to_message",
 )
@@ -729,17 +784,21 @@ WEBHOOK_INTERLOCUTOR = Schema(
         "id": f.String(),
         "location": f.Object(COORDINATES, allow_none=True),
         "email": f.String(
-            allow_none=True, validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH)
+            allow_none=True,
+            validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH),
+            pre_load=[html_sanitize],
         ),
         "firstName": f.String(
             binding="first_name",
             allow_none=True,
             validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
         ),
         "lastName": f.String(
             binding="last_name",
             allow_none=True,
             validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
         ),
         "phoneNumber": f.String(
             binding="phone_number",
