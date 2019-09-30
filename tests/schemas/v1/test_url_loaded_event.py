@@ -10,10 +10,7 @@ def event():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "url_loaded_event",
-        "url": "http://example.com/"
-    }
+    return {"type": "url_loaded_event", "url": "http://example.com/"}
 
 
 class TestDump(object):

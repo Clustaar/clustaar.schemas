@@ -6,17 +6,12 @@ import pytest
 
 @pytest.fixture
 def data():
-    return {
-        "type": "match_regexp",
-        "pattern": "(hello)"
-    }
+    return {"type": "match_regexp", "pattern": "(hello)"}
 
 
 @pytest.fixture
 def condition():
-    return MatchRegexpCondition(
-        regexp=re.compile("(hello)")
-    )
+    return MatchRegexpCondition(regexp=re.compile("(hello)"))
 
 
 class TestLoad(object):

@@ -6,8 +6,7 @@ from tests.utils import MAPPER
 @pytest.fixture
 def callback():
     return CustomerSatisfactionCallbackAction(
-        kind="positive",
-        target=StepTarget(step_id="a1" * 12, name="a step")
+        kind="positive", target=StepTarget(step_id="a1" * 12, name="a step")
     )
 
 
@@ -16,11 +15,7 @@ def data():
     return {
         "type": "customer_satisfaction_callback_action",
         "kind": "positive",
-        "target": {
-            "type": "step",
-            "id": "a1" * 12,
-            "name": "a step"
-        }
+        "target": {"type": "step", "id": "a1" * 12, "name": "a step"},
     }
 
 

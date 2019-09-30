@@ -10,10 +10,7 @@ def action():
 
 @pytest.fixture
 def data(action):
-    return {
-        "type": "open_url_action",
-        "url": action.url
-    }
+    return {"type": "open_url_action", "url": action.url}
 
 
 class TestDump(object):

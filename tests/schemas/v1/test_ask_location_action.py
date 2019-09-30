@@ -5,11 +5,9 @@ from clustaar.schemas.models import StepTarget, GoToAction, AskLocationAction
 
 @pytest.fixture
 def action():
-    target = StepTarget(step_id="a1" * 12,
-                        name="a step")
+    target = StepTarget(step_id="a1" * 12, name="a step")
     go_to = GoToAction(target=target)
-    return AskLocationAction(message="Where are you?",
-                             callback_action=go_to)
+    return AskLocationAction(message="Where are you?", callback_action=go_to)
 
 
 @pytest.fixture
@@ -19,13 +17,9 @@ def data():
         "message": "Where are you?",
         "action": {
             "type": "go_to_action",
-            "target": {
-                "type": "step",
-                "name": "a step",
-                "id": "a1" * 12
-            },
-            "sessionValues": None
-        }
+            "target": {"type": "step", "name": "a step", "id": "a1" * 12},
+            "sessionValues": None,
+        },
     }
 
 

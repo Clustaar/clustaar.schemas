@@ -5,21 +5,18 @@ import pytest
 
 @pytest.fixture
 def go_to_action():
-    target = StepTarget(step_id="a1" * 12,
-                        name="a step")
+    target = StepTarget(step_id="a1" * 12, name="a step")
     return GoToAction(target=target)
 
 
 @pytest.fixture
 def quick_reply(go_to_action):
-    return QuickReply(action=go_to_action,
-                      title="Ok")
+    return QuickReply(action=go_to_action, title="Ok")
 
 
 @pytest.fixture
 def action(quick_reply):
-    return SendQuickRepliesAction(message="Ok?",
-                                  buttons=[quick_reply])
+    return SendQuickRepliesAction(message="Ok?", buttons=[quick_reply])
 
 
 @pytest.fixture
@@ -33,15 +30,11 @@ def data():
                 "title": "Ok",
                 "action": {
                     "type": "go_to_action",
-                    "target": {
-                        "type": "step",
-                        "name": "a step",
-                        "id": "a1" * 12
-                    },
-                    "sessionValues": None
-                }
+                    "target": {"type": "step", "name": "a step", "id": "a1" * 12},
+                    "sessionValues": None,
+                },
             }
-        ]
+        ],
     }
 
 

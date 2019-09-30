@@ -10,9 +10,7 @@ def action():
 
 @pytest.fixture
 def data(action):
-    return {
-        "type": "share_action"
-    }
+    return {"type": "share_action"}
 
 
 class TestDump(object):

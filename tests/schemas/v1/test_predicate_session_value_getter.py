@@ -5,10 +5,7 @@ import pytest
 
 @pytest.fixture
 def data():
-    return {
-        "type": "session_value",
-        "key": "name"
-    }
+    return {"type": "session_value", "key": "name"}
 
 
 @pytest.fixture

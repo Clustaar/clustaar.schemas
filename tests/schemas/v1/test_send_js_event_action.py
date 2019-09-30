@@ -10,10 +10,7 @@ def action():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "send_js_event_action",
-        "event": "test"
-    }
+    return {"type": "send_js_event_action", "event": "test"}
 
 
 class TestDump:

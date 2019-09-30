@@ -10,10 +10,7 @@ def video():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "video",
-        "url": "http://example.com/"
-    }
+    return {"type": "video", "url": "http://example.com/"}
 
 
 class TestDump(object):

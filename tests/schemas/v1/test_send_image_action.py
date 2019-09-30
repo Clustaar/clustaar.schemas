@@ -12,10 +12,7 @@ def action():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "send_image_action",
-        "imageURL": "http://example.com/logo.png"
-    }
+    return {"type": "send_image_action", "imageURL": "http://example.com/logo.png"}
 
 
 class TestDump(object):

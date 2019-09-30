@@ -12,7 +12,7 @@ def action():
         from_name="Tintin",
         recipient="test@example.com",
         subject="Hello",
-        content=":)"
+        content=":)",
     )
 
 
@@ -24,7 +24,7 @@ def data():
         "fromName": "Tintin",
         "recipient": "test@example.com",
         "subject": "Hello",
-        "content": ":)"
+        "content": ":)",
     }
 
 

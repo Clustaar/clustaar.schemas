@@ -10,10 +10,7 @@ def action():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "wait_action",
-        "duration": 2.3
-    }
+    return {"type": "wait_action", "duration": 2.3}
 
 
 class TestDump(object):

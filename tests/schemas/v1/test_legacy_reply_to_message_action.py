@@ -10,10 +10,7 @@ def action():
 
 @pytest.fixture
 def data(action):
-    return {
-        "type": "legacy_reply_to_message_action",
-        "message": action.message
-    }
+    return {"type": "legacy_reply_to_message_action", "message": action.message}
 
 
 class TestLoad(object):

@@ -5,9 +5,7 @@ import pytest
 
 @pytest.fixture
 def data():
-    return {
-        "type": "is_set"
-    }
+    return {"type": "is_set"}
 
 
 @pytest.fixture

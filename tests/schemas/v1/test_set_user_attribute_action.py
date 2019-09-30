@@ -11,11 +11,7 @@ def action():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "set_user_attribute_action",
-        "key": "var1",
-        "value": "val1"
-    }
+    return {"type": "set_user_attribute_action", "key": "var1", "value": "val1"}
 
 
 class TestDump(object):
@@ -36,7 +32,7 @@ class TestValidate(object):
     def test_does_nothing_if_ok(self, data, mapper):
         mapper.validate(data, SET_USER_ATTRIBUTE_ACTION)
 
-    @pytest.mark.parametrize('key', ["id", "Id", "iD", "ID"])
+    @pytest.mark.parametrize("key", ["id", "Id", "iD", "ID"])
     def test_raise_error_if_key_is_invalid(self, data, mapper, key):
         data["key"] = key
         with pytest.raises(InvalidDocument) as exc:

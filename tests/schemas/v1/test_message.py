@@ -10,8 +10,7 @@ def video():
 
 @pytest.fixture
 def message(video):
-    return Message(text="hello",
-                   attachments=[video])
+    return Message(text="hello", attachments=[video])
 
 
 @pytest.fixture
@@ -19,12 +18,7 @@ def data():
     return {
         "type": "message",
         "text": "hello",
-        "attachments": [
-            {
-                "type": "video",
-                "url": "http://example.com/"
-            }
-        ]
+        "attachments": [{"type": "video", "url": "http://example.com/"}],
     }
 
 

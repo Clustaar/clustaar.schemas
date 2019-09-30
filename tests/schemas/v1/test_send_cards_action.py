@@ -5,17 +5,18 @@ import pytest
 
 @pytest.fixture
 def button():
-    return Button(title="Share",
-                  action=ShareAction())
+    return Button(title="Share", action=ShareAction())
 
 
 @pytest.fixture
 def card(button):
-    return Card(title="Card 1",
-                subtitle="xxx",
-                image_url="http://example.com/logo.png",
-                url="http://example.com",
-                buttons=[button])
+    return Card(
+        title="Card 1",
+        subtitle="xxx",
+        image_url="http://example.com/logo.png",
+        url="http://example.com",
+        buttons=[button],
+    )
 
 
 @pytest.fixture
@@ -35,16 +36,10 @@ def data(card):
                 "imageURL": card.image_url,
                 "url": card.url,
                 "buttons": [
-                    {
-                        "type": "button",
-                        "title": "Share",
-                        "action": {
-                            "type": "share_action"
-                        }
-                    }
-                ]
+                    {"type": "button", "title": "Share", "action": {"type": "share_action"}}
+                ],
             }
-        ]
+        ],
     }
 
 

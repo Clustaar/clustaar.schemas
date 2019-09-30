@@ -5,8 +5,7 @@ from clustaar.schemas.models import StepTarget, GoToAction
 
 @pytest.fixture
 def action():
-    target = StepTarget(step_id="a1" * 12,
-                        name="a step")
+    target = StepTarget(step_id="a1" * 12, name="a step")
     return GoToAction(target=target, session_values={"aa": 1, "bb": 2})
 
 
@@ -14,15 +13,8 @@ def action():
 def data():
     return {
         "type": "go_to_action",
-        "target": {
-            "type": "step",
-            "name": "a step",
-            "id": "a1" * 12
-        },
-        "sessionValues": {
-            "aa": 1,
-            "bb": 2
-        }
+        "target": {"type": "step", "name": "a step", "id": "a1" * 12},
+        "sessionValues": {"aa": 1, "bb": 2},
     }
 
 

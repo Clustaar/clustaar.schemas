@@ -7,19 +7,13 @@ import pytest
 def data():
     return {
         "type": "match_intent",
-        "intent": {
-            "type": "intent",
-            "id": "a1" * 12,
-            "name": "an intent"
-        }
+        "intent": {"type": "intent", "id": "a1" * 12, "name": "an intent"},
     }
 
 
 @pytest.fixture
 def condition():
-    condition = MatchIntentCondition(
-        intent_id="a1" * 12
-    )
+    condition = MatchIntentCondition(intent_id="a1" * 12)
     condition.intent = MatchIntentConditionIntent(id="a1" * 12, name="an intent")
     return condition
 

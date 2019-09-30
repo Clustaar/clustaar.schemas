@@ -1,6 +1,14 @@
 from clustaar.schemas.v1 import JUMP_TO_ACTION
-from clustaar.schemas.models import FlowConnection, IsSetCondition, MessageGetter, StepTarget,\
-    ConnectionPredicate, JumpToAction, IsNotSetCondition, StoryTarget
+from clustaar.schemas.models import (
+    FlowConnection,
+    IsSetCondition,
+    MessageGetter,
+    StepTarget,
+    ConnectionPredicate,
+    JumpToAction,
+    IsNotSetCondition,
+    StoryTarget,
+)
 import pytest
 
 
@@ -11,29 +19,17 @@ def data():
         "connections": [
             {
                 "type": "flow_connection",
-                "target": {
-                    "id": "a2" * 12,
-                    "type": "story",
-                    "name": "a story"
-                },
+                "target": {"id": "a2" * 12, "type": "story", "name": "a story"},
                 "predicates": [
                     {
                         "type": "connection_predicate",
-                        "condition": {
-                            "type": "is_not_set"
-                        },
-                        "valueGetter": {
-                            "type": "message"
-                        }
+                        "condition": {"type": "is_not_set"},
+                        "valueGetter": {"type": "message"},
                     }
-                ]
+                ],
             }
         ],
-        "defaultTarget": {
-            "id": "a1" * 12,
-            "type": "step",
-            "name": "a step"
-        }
+        "defaultTarget": {"id": "a1" * 12, "type": "step", "name": "a step"},
     }
 
 
@@ -41,16 +37,12 @@ def data():
 def action():
     story_connection = FlowConnection(
         predicates=[
-            ConnectionPredicate(
-                condition=IsNotSetCondition(),
-                value_getter=MessageGetter()
-            )
+            ConnectionPredicate(condition=IsNotSetCondition(), value_getter=MessageGetter())
         ],
-        target=StoryTarget(story_id="a2" * 12, name="a story")
+        target=StoryTarget(story_id="a2" * 12, name="a story"),
     )
     step_target = StepTarget(step_id="a1" * 12, name="a step")
-    return JumpToAction(default_target=step_target,
-                        connections=[story_connection])
+    return JumpToAction(default_target=step_target, connections=[story_connection])
 
 
 class TestLoad(object):

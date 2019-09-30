@@ -15,19 +15,12 @@ def action2():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "send_text_action",
-        "alternatives": ["Hi", "Hello"],
-        "text": "Hello"
-    }
+    return {"type": "send_text_action", "alternatives": ["Hi", "Hello"], "text": "Hello"}
 
 
 @pytest.fixture
 def data2():
-    return {
-        "type": "send_text_action",
-        "alternatives": ["Hi", "Hello"]
-    }
+    return {"type": "send_text_action", "alternatives": ["Hi", "Hello"]}
 
 
 class TestDump(object):

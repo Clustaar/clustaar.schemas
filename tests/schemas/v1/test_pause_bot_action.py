@@ -10,9 +10,7 @@ def action():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "pause_bot_action"
-    }
+    return {"type": "pause_bot_action"}
 
 
 class TestDump(object):

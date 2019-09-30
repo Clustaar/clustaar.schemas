@@ -23,9 +23,7 @@ def model(name: str, attr_names: str = ""):
         for attr_name in attr_names:
             setattr(self, attr_name, kwargs.get(attr_name))
 
-    return type(name, (object,), {
-        "__init__": constructor
-    })
+    return type(name, (object,), {"__init__": constructor})
 
 
 # Bot actions
@@ -54,7 +52,7 @@ SetUserAttributeAction = model("SetUserAttributeAction", "key value")
 GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query limit custom_engine_id")
 CreateZendeskTicketAction = model(
     "CreateZendeskTicketAction",
-    "ticket_type ticket_priority subject description assignee_id group_id tags user"
+    "ticket_type ticket_priority subject description assignee_id group_id tags user",
 )
 
 CreateUserRequestAction = model("CreateUserRequestAction", "message assignee_id")
@@ -62,7 +60,9 @@ CreateUserRequestAction = model("CreateUserRequestAction", "message assignee_id"
 ZendeskUser = model("ZendeskUser", "email name phone_number")
 JumpToAction = model("JumpToAction", "default_target connections")
 CustomerSatisfactionCallbackAction = model("CustomerSatisfactionCallbackAction", "target kind")
-CustomerSatisfactionChoice = model("CustomerSatisfactionChoice", "kind label target matching_intent_id")
+CustomerSatisfactionChoice = model(
+    "CustomerSatisfactionChoice", "kind label target matching_intent_id"
+)
 CustomerSatisfactionAction = model("CustomerSatisfactionAction", "message choices")
 WebhookRequestField = model("WebhookRequestField", "key value")
 SendWebhookRequestAction = model("SendWebhookRequestAction", "url service description fields")
@@ -99,7 +99,9 @@ Video = model("Video", "url")
 Image = model("Image", "url")
 Step = model("Step", "actions name id user_data")
 Coordinates = model("Coordinates", "lat long")
-Interlocutor = model("Interlocutor", "id location last_name first_name email custom_attributes phone_number")
+Interlocutor = model(
+    "Interlocutor", "id location last_name first_name email custom_attributes phone_number"
+)
 ConversationSession = model("ConversationSession", "values")
 StepReached = model("StepReached", "step session interlocutor channel input")
 StepReachedResponse = model("StepReachedResponse", "actions session interlocutor")
