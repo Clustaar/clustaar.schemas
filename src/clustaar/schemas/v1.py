@@ -324,13 +324,13 @@ SEND_EMAIL_ACTION = Schema(
         ),
         "fromName": f.String(
             binding="from_name",
-            pre_load=[strip, html_sanitize],
+            pre_load=[strip, html_sanitize, unicode_normalize],
             optional=True,
             allow_none=True,
             validators=v.Length(max=SEND_EMAIL_ACTION_FROM_NAME_MAX_LENGTH),
         ),
         "recipient": f.String(
-            pre_load=[strip, html_sanitize],
+            pre_load=[strip, html_sanitize, unicode_normalize],
             validators=v.Length(max=SEND_EMAIL_ACTION_RECIPIENT_MAX_LENGTH),
         ),
         "subject": f.String(
@@ -488,7 +488,7 @@ STORE_SESSION_VALUE_ACTION = Schema(
         ),
         "value": f.String(
             validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH),
-            pre_load=[html_sanitize],
+            pre_load=[html_sanitize, unicode_normalize],
         ),
     },
     name="store_session_value_action",
@@ -505,7 +505,7 @@ SET_USER_ATTRIBUTE_ACTION = Schema(
         ),
         "value": f.String(
             validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH),
-            pre_load=[html_sanitize],
+            pre_load=[html_sanitize, unicode_normalize],
         ),
     },
     name="set_user_attribute_action",
@@ -572,7 +572,7 @@ ZENDESK_USER = Schema(
         ),
         "name": f.String(
             optional=True,
-            pre_load=[strip, html_sanitize],
+            pre_load=[strip, html_sanitize, unicode_normalize],
             validators=v.Length(max=ZENDESK_USER_NAME_MAX_LENGTH),
         ),
         "phoneNumber": f.String(optional=True, binding="phone_number"),
@@ -798,6 +798,7 @@ WEBHOOK_INTERLOCUTOR = Schema(
             binding="phone_number",
             allow_none=True,
             validators=v.Length(max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
         ),
         "customAttributes": f.Dict(
             binding="custom_attributes",
