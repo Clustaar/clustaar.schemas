@@ -11,10 +11,7 @@ def fields():
 @pytest.fixture
 def action(fields):
     return SendWebhookRequestAction(
-        url="www.zapier.com",
-        service="zapier",
-        description="Je suis là!",
-        fields=fields
+        url="www.zapier.com", service="zapier", description="Je suis là!", fields=fields
     )
 
 
@@ -25,13 +22,7 @@ def data():
         "url": "www.zapier.com",
         "service": "zapier",
         "description": "Je suis là!",
-        "fields": [
-            {
-                "type": "webhook_request_field",
-                "key": "name",
-                "value": "Tintin"
-            }
-        ]
+        "fields": [{"type": "webhook_request_field", "key": "name", "value": "Tintin"}],
     }
 
 

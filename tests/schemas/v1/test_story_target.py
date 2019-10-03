@@ -11,11 +11,7 @@ def target():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "story",
-        "name": "a story",
-        "id": "a1" * 12
-    }
+    return {"type": "story", "name": "a story", "id": "a1" * 12}
 
 
 class TestDump(object):

@@ -10,10 +10,7 @@ def coordinates():
 
 @pytest.fixture
 def data():
-    return {
-        "lat": 1.0,
-        "long": 2.4
-    }
+    return {"lat": 1.0, "long": 2.4}
 
 
 class TestDump(object):

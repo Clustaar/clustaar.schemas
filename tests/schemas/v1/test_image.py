@@ -10,10 +10,7 @@ def image():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "image",
-        "url": "http://example.com/"
-    }
+    return {"type": "image", "url": "http://example.com/"}
 
 
 class TestDump(object):

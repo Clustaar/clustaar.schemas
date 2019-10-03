@@ -5,10 +5,7 @@ import pytest
 
 @pytest.fixture
 def data():
-    return {
-        "type": "user_attribute",
-        "key": "name"
-    }
+    return {"type": "user_attribute", "key": "name"}
 
 
 @pytest.fixture

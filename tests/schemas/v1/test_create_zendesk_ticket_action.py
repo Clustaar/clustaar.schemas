@@ -28,10 +28,8 @@ def action(user):
         ticket_type=list(ZENDESK_TICKET_TYPES)[0],
         ticket_priority=list(ZENDESK_TICKET_PRIORITIES)[0],
         user=ZendeskUser(
-            email="Tintin@doe.fifi",
-            name="Je suis un super test",
-            phone_number="0611654852"
-        )
+            email="Tintin@doe.fifi", name="Je suis un super test", phone_number="0611654852"
+        ),
     )
 
 
@@ -40,7 +38,7 @@ def user():
     return {
         "name": "Je suis un super test",
         "email": "Tintin@doe.fifi",
-        "phoneNumber": "0611654852"
+        "phoneNumber": "0611654852",
     }
 
 
@@ -55,7 +53,7 @@ def data(user):
         "subject": "Tester cette action",
         "assigneeID": "21" * 12,
         "groupID": "12" * 12,
-        "user": user
+        "user": user,
     }
 
 
@@ -138,8 +136,7 @@ class TestValidate(object):
         assert_raise_on_format(mapper, data)
 
     def test_raise_if_dirty_tags(self, mapper, data):
-        data["tags"] = [str(n) for n in range(
-            (ZENDESK_TICKET_TAGS_MAX_COUNT + 1))]
+        data["tags"] = [str(n) for n in range((ZENDESK_TICKET_TAGS_MAX_COUNT + 1))]
         assert_raise_on_length(mapper, data)
 
         data["tags"] = ["a" * (ZENDESK_TICKET_TAG_MAX_LENGTH + 1)]

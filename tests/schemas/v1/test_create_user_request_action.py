@@ -5,18 +5,20 @@ import pytest
 
 @pytest.fixture
 def action():
-    return CreateUserRequestAction(
-        message="I need help",
-        assignee_id="a1" * 12
-    )
+    return CreateUserRequestAction(message="I need help", assignee_id="a1" * 12)
 
 
 @pytest.fixture
 def data():
+    return {"type": "create_user_request_action", "message": "I need help", "assigneeID": "a1" * 12}
+
+
+@pytest.fixture
+def malicious_data():
     return {
         "type": "create_user_request_action",
-        "message": "I need help",
-        "assigneeID": "a1" * 12
+        "message": "<script>void();</script>I need help",
+        "assigneeID": "a1" * 12,
     }
 
 
@@ -32,6 +34,11 @@ class TestLoad:
         assert isinstance(action, CreateUserRequestAction)
         assert action.message == "I need help"
         assert action.assignee_id == "a1" * 12
+
+    def test_returns_an_action_malicious(self, malicious_data, mapper):
+        action = mapper.load(malicious_data, CREATE_USER_REQUEST_ACTION)
+        assert isinstance(action, CreateUserRequestAction)
+        assert action.message == "&lt;script&gt;void();&lt;/script&gt;I need help"
 
 
 class TestValidate(object):

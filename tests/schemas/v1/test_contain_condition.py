@@ -5,17 +5,12 @@ import pytest
 
 @pytest.fixture
 def data():
-    return {
-        "type": "contains",
-        "values": ["hello", "hi"]
-    }
+    return {"type": "contains", "values": ["hello", "hi"]}
 
 
 @pytest.fixture
 def condition():
-    return ContainCondition(
-        values=["hello", "hi"]
-    )
+    return ContainCondition(values=["hello", "hi"])
 
 
 class TestLoad(object):

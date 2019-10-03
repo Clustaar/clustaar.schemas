@@ -7,21 +7,14 @@ import pytest
 def data():
     return {
         "type": "connection_predicate",
-        "condition": {
-            "type": "is_set"
-        },
-        "valueGetter": {
-            "type": "message"
-        }
+        "condition": {"type": "is_set"},
+        "valueGetter": {"type": "message"},
     }
 
 
 @pytest.fixture
 def predicate():
-    return ConnectionPredicate(
-        condition=IsSetCondition(),
-        value_getter=MessageGetter()
-    )
+    return ConnectionPredicate(condition=IsSetCondition(), value_getter=MessageGetter())
 
 
 class TestLoad(object):

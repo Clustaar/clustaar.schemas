@@ -10,10 +10,7 @@ def file():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "file",
-        "url": "http://example.com/"
-    }
+    return {"type": "file", "url": "http://example.com/"}
 
 
 class TestDump(object):

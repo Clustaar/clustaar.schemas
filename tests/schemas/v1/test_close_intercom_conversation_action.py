@@ -10,9 +10,7 @@ def action():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "close_intercom_conversation_action"
-    }
+    return {"type": "close_intercom_conversation_action"}
 
 
 class TestDump(object):

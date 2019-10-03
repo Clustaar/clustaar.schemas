@@ -10,10 +10,7 @@ def event():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "custom_event",
-        "name": "event1"
-    }
+    return {"type": "custom_event", "name": "event1"}
 
 
 class TestDump(object):

@@ -10,10 +10,7 @@ def condition():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "is_greater_than_or_equal",
-        "minimum": 10
-    }
+    return {"type": "is_greater_than_or_equal", "minimum": 10}
 
 
 class TestDump(object):

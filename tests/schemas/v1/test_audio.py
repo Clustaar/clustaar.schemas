@@ -10,10 +10,7 @@ def audio():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "audio",
-        "url": "http://example.com/"
-    }
+    return {"type": "audio", "url": "http://example.com/"}
 
 
 class TestDump(object):

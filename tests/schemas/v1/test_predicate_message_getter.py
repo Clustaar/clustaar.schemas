@@ -10,9 +10,7 @@ def getter():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "message",
-    }
+    return {"type": "message"}
 
 
 class TestLoad(object):

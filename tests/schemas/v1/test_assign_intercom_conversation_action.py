@@ -12,10 +12,7 @@ def action():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "assign_intercom_conversation_action",
-        "assigneeID": "1234567"
-    }
+    return {"type": "assign_intercom_conversation_action", "assigneeID": "1234567"}
 
 
 class TestDump(object):
@@ -44,7 +41,7 @@ class TestValidate(object):
         mapper.validate(data, ASSIGN_INTERCOM_CONVERSATION_ACTION)
 
     def test_does_nothing_if_assignee_id_is_not_present(self, data, mapper):
-        del(data["assigneeID"])
+        del data["assigneeID"]
         mapper.validate(data, ASSIGN_INTERCOM_CONVERSATION_ACTION)
 
     def test_raise_error_if_assignee_id_have_invalid_format(self, data, mapper):

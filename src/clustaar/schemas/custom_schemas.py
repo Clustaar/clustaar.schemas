@@ -5,6 +5,7 @@ class MatchIntentConditionSchema(Schema):
     """We need a custom schema for the MatchIntentCondition because the JSON structure
     does not reflect the one in our models.
     """
+
     def load(self, cls, data, mapper, allow_partial=False, factory=bind):
         """Loads an instance of cls from dictionary
 
@@ -24,6 +25,7 @@ class CustomerSatisfactionChoiceSchema(Schema):
     """We need a custom schema for the CustomerSatisfactionChoice because the JSON structure
     does not reflect the one in our models.
     """
+
     def load(self, cls, data, mapper, allow_partial=False, factory=bind):
         """Loads an instance of cls from dictionary
 

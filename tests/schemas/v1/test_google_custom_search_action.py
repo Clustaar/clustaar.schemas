@@ -14,7 +14,7 @@ def data():
         "type": "google_custom_search_action",
         "query": "Tintin",
         "limit": 1,
-        "customEngineID": "AZERTY"
+        "customEngineID": "AZERTY",
     }
 
 

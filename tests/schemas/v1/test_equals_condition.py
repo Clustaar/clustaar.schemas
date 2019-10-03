@@ -5,17 +5,12 @@ import pytest
 
 @pytest.fixture
 def data():
-    return {
-        "type": "equals",
-        "expected": "hello"
-    }
+    return {"type": "equals", "expected": "hello"}
 
 
 @pytest.fixture
 def condition():
-    return EqualsCondition(
-        expected="hello"
-    )
+    return EqualsCondition(expected="hello")
 
 
 class TestLoad(object):

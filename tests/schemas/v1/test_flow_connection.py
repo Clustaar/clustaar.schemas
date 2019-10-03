@@ -1,6 +1,11 @@
 from clustaar.schemas.v1 import FLOW_CONNECTION
-from clustaar.schemas.models import FlowConnection, IsSetCondition, MessageGetter, StepTarget,\
-    ConnectionPredicate
+from clustaar.schemas.models import (
+    FlowConnection,
+    IsSetCondition,
+    MessageGetter,
+    StepTarget,
+    ConnectionPredicate,
+)
 import pytest
 
 
@@ -8,34 +13,22 @@ import pytest
 def data():
     return {
         "type": "flow_connection",
-        "target": {
-            "id": "a1" * 12,
-            "type": "step",
-            "name": "a step"
-        },
+        "target": {"id": "a1" * 12, "type": "step", "name": "a step"},
         "predicates": [
             {
                 "type": "connection_predicate",
-                "condition": {
-                    "type": "is_set"
-                },
-                "valueGetter": {
-                    "type": "message"
-                }
+                "condition": {"type": "is_set"},
+                "valueGetter": {"type": "message"},
             }
-        ]
+        ],
     }
 
 
 @pytest.fixture
 def connection():
-    predicate = ConnectionPredicate(
-        condition=IsSetCondition(),
-        value_getter=MessageGetter()
-    )
+    predicate = ConnectionPredicate(condition=IsSetCondition(), value_getter=MessageGetter())
     return FlowConnection(
-        predicates=[predicate],
-        target=StepTarget(step_id="a1" * 12, name="a step")
+        predicates=[predicate], target=StepTarget(step_id="a1" * 12, name="a step")
     )
 
 
