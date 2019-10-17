@@ -29,6 +29,11 @@ def ampersand_data():
 
 
 @pytest.fixture
+def br_data():
+    return {"type": "send_text_action", "alternatives": ["Hi<br>", "Hello & <br />How Are You?"]}
+
+
+@pytest.fixture
 def malicious_data():
     return {"type": "send_text_action", "alternatives": ["<script>void();</script>Hi", "Hello"]}
 
@@ -56,6 +61,10 @@ class TestLoad:
     def test_preserve_ampersand(self, ampersand_data, mapper):
         action = mapper.load(ampersand_data, SEND_TEXT_ACTION)
         assert action.alternatives == ["Hi", "Hello & How Are You?"]
+
+    def test_preserve_br(self, br_data, mapper):
+        action = mapper.load(br_data, SEND_TEXT_ACTION)
+        assert action.alternatives == ["Hi<br>", "Hello & <br>How Are You?"]
 
     def test_returns_an_action_malicious(self, malicious_data, mapper):
         send_text = mapper.load(malicious_data, SEND_TEXT_ACTION)
