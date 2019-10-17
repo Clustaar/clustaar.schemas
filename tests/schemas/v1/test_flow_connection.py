@@ -6,7 +6,7 @@ from clustaar.schemas.models import (
     StepTarget,
     ConnectionPredicate,
     ConnectionTeamPredicate,
-    IsOfflineCondition
+    IsOfflineCondition,
 )
 import pytest
 
@@ -19,35 +19,20 @@ def data():
         "predicates": [
             {
                 "type": "connection_predicate",
-                "condition": {
-                    "type": "is_set"
-                },
-                "valueGetter": {
-                    "type": "message"
-                }
+                "condition": {"type": "is_set"},
+                "valueGetter": {"type": "message"},
             },
-            {
-                "type": "connection_team_predicate",
-                "condition": {
-                    "type": "is_offline"
-                }
-            }
-        ]
+            {"type": "connection_team_predicate", "condition": {"type": "is_offline"}},
+        ],
     }
 
 
 @pytest.fixture
 def connection():
-    predicate = ConnectionPredicate(
-        condition=IsSetCondition(),
-        value_getter=MessageGetter()
-    )
-    predicateTeam = ConnectionTeamPredicate(
-        condition=IsOfflineCondition()
-    )
+    predicate = ConnectionPredicate(condition=IsSetCondition(), value_getter=MessageGetter())
+    predicateTeam = ConnectionTeamPredicate(condition=IsOfflineCondition())
     return FlowConnection(
-        predicates=[predicate, predicateTeam],
-        target=StepTarget(step_id="a1" * 12, name="a step")
+        predicates=[predicate, predicateTeam], target=StepTarget(step_id="a1" * 12, name="a step")
     )
 
 

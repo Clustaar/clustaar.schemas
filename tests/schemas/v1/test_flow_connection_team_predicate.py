@@ -5,19 +5,12 @@ import pytest
 
 @pytest.fixture
 def data():
-    return {
-        "type": "connection_team_predicate",
-        "condition": {
-            "type": "is_online"
-        }
-    }
+    return {"type": "connection_team_predicate", "condition": {"type": "is_online"}}
 
 
 @pytest.fixture
 def predicate():
-    return ConnectionTeamPredicate(
-        condition=IsOnlineCondition()
-    )
+    return ConnectionTeamPredicate(condition=IsOnlineCondition())
 
 
 class TestLoad(object):

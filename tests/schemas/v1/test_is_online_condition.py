@@ -10,9 +10,7 @@ def condition():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "is_online"
-    }
+    return {"type": "is_online"}
 
 
 class TestDump(object):
