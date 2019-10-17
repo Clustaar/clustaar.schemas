@@ -5,6 +5,8 @@ from clustaar.schemas.models import (
     MessageGetter,
     StepTarget,
     ConnectionPredicate,
+    ConnectionTeamPredicate,
+    IsOfflineCondition
 )
 import pytest
 
