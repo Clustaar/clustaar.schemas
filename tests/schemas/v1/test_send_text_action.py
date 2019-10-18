@@ -34,6 +34,14 @@ def br_data():
 
 
 @pytest.fixture
+def re_data():
+    return {
+        "type": "send_text_action",
+        "alternatives": ["Hi(?P\d{5})", "Hello & (?P\d{5})How Are You?"],
+    }
+
+
+@pytest.fixture
 def malicious_data():
     return {"type": "send_text_action", "alternatives": ["<script>void();</script>Hi", "Hello"]}
 
@@ -65,6 +73,10 @@ class TestLoad:
     def test_preserve_br(self, br_data, mapper):
         action = mapper.load(br_data, SEND_TEXT_ACTION)
         assert action.alternatives == ["Hi<br>", "Hello & <br>How Are You?"]
+
+    def test_preserve_regex(self, re_data, mapper):
+        action = mapper.load(re_data, SEND_TEXT_ACTION)
+        assert action.alternatives == ["Hi(?P\d{5})", "Hello & (?P\d{5})How Are You?"]
 
     def test_returns_an_action_malicious(self, malicious_data, mapper):
         send_text = mapper.load(malicious_data, SEND_TEXT_ACTION)
