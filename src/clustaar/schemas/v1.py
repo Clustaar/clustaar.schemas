@@ -400,6 +400,18 @@ QUICK_REPLY = Schema(
     name="quick_reply",
 )
 
+TITLE_QUICK_REPLY = Schema(
+    {
+        "title": f.String(
+            validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
+        "type": f.Constant(value="title_quick_reply", read_only=True, optional=True),
+    },
+    name="title_quick_reply",
+)
+
+
 SEND_QUICK_REPLIES_ACTION = Schema(
     {
         "type": f.Constant(value="send_quick_replies_action", read_only=True),
@@ -415,6 +427,22 @@ SEND_QUICK_REPLIES_ACTION = Schema(
     name="send_quick_replies_action",
 )
 
+
+SEND_TITLE_QUICK_REPLIES_ACTION = Schema(
+    {
+        "type": f.Constant(value="send_title_quick_replies_action", read_only=True),
+        "message": f.String(
+            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
+        "buttons": f.List(
+            f.Object(TITLE_QUICK_REPLY),
+            validators=v.Length(min=1, max=SEND_QUICK_REPLIES_ACTION_MAX_BUTTONS_COUNT),
+        ),
+    },
+    name="send_title_quick_replies_action",
+)
+
 BUTTON = Schema(
     {
         "type": f.Constant(value="button", read_only=True),
@@ -425,6 +453,19 @@ BUTTON = Schema(
         "action": f.PolymorphicObject(on="type", schemas=BUTTON_ACTIONS_SCHEMAS),
     },
     name="button",
+)
+
+
+OPEN_URL_BUTTON = Schema(
+    {
+        "type": f.Constant(value="open_url_button", read_only=True),
+        "title": f.String(
+            validators=v.Length(min=1, max=BUTTON_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
+        "action": f.Object(schema=OPEN_URL_ACTION),
+    },
+    name="open_url_button",
 )
 
 CARD = Schema(
@@ -467,6 +508,41 @@ CARD = Schema(
     name="card",
 )
 
+SIMPLE_CARD = Schema(
+    {
+        "type": f.Constant(value="simple_card", read_only=True),
+        "title": f.String(
+            validators=v.Length(min=1, max=CARD_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
+        "subtitle": f.String(
+            optional=True,
+            validators=v.Length(max=CARD_SUBTITLE_MAX_LENGTH),
+            allow_none=True,
+            pre_load=[html_sanitize, unicode_normalize],
+        ),
+        "imageURL": f.String(
+            optional=True,
+            allow_none=True,
+            binding="image_url",
+            pre_load=[strip],
+            validators=(
+                v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"http", "https"})
+                | v.Equal("")
+            ),
+        ),
+        "buttons": f.List(
+            f.Object(OPEN_URL_BUTTON),
+            allow_none=True,
+            default=(),
+            optional=True,
+            validators=v.Length(max=CARD_MAX_BUTTONS_COUNT),
+        ),
+    },
+    name="simple_card",
+)
+
+
 SEND_CARDS_ACTIONS = Schema(
     {
         "type": f.Constant(value="send_cards_action", read_only=True),
@@ -475,6 +551,17 @@ SEND_CARDS_ACTIONS = Schema(
         ),
     },
     name="send_cards_action",
+)
+
+
+SEND_SIMPLE_CARDS_ACTIONS = Schema(
+    {
+        "type": f.Constant(value="send_simple_cards_action", read_only=True),
+        "cards": f.List(
+            f.Object(SIMPLE_CARD), validators=v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT)
+        ),
+    },
+    name="send_simple_cards_action",
 )
 
 STORE_SESSION_VALUE_ACTION = Schema(
@@ -700,6 +787,28 @@ CREATE_USER_REQUEST_ACTION = Schema(
     name="create_user_request_action",
 )
 
+CLOSE_IADVIZE_CONVERSATION_ACTION = Schema(
+    {"type": f.Constant(value="close_iadvize_conversation_action", read_only=True)},
+    name="close_iadvize_conversation_action",
+)
+
+
+# TODO check format
+IADVIZE_DISTRIBUTION_RULE = Schema(
+    {"label": f.String(),
+     "id": f.String(optional=False)},
+    name="iadvize_distribution_rule"
+)
+
+
+TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
+    {"type": f.Constant(value="transfer_iadvize_conversation_action", read_only=True),
+     "failed_transfer_message": f.String(optional=True),
+     "distribution_rule": f.Object(IADVIZE_DISTRIBUTION_RULE)},
+    name="transfer_iadvize_conversation_action"
+)
+
+
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
     "wait_action": WAIT_ACTION,
@@ -710,7 +819,9 @@ ACTION_SCHEMAS = {
     "close_intercom_conversation_action": CLOSE_INTERCOM_CONVERSATION_ACTION,
     "assign_intercom_conversation_action": ASSIGN_INTERCOM_CONVERSATION_ACTION,
     "send_cards_action": SEND_CARDS_ACTIONS,
+    "send_simple_cards_action": SEND_SIMPLE_CARDS_ACTIONS,
     "send_quick_replies_action": SEND_QUICK_REPLIES_ACTION,
+    "send_title_quick_replies_action": SEND_TITLE_QUICK_REPLIES_ACTION,
     "store_session_value_action": STORE_SESSION_VALUE_ACTION,
     "set_user_attribute_action": SET_USER_ATTRIBUTE_ACTION,
     "ask_location_action": ASK_LOCATION_ACTION,
@@ -720,6 +831,8 @@ ACTION_SCHEMAS = {
     "customer_satisfaction_action": CUSTOMER_SATISFACTION_ACTION,
     "send_webhook_request_action": SEND_WEBHOOK_REQUEST_ACTION,
     "create_user_request_action": CREATE_USER_REQUEST_ACTION,
+    "transfer_iadvize_conversation_action": TRANSFER_IADVIZE_CONVERSATION_ACTION,
+    "close_iadvize_conversation_action": CLOSE_IADVIZE_CONVERSATION_ACTION
 }
 
 COORDINATES = Schema({"lat": f.Number(), "long": f.Number()}, name="coordinates")
@@ -880,9 +993,13 @@ def get_mapper(factory=bind):
         AssignIntercomConversationAction: ASSIGN_INTERCOM_CONVERSATION_ACTION,
         QuickReply: QUICK_REPLY,
         SendQuickRepliesAction: SEND_QUICK_REPLIES_ACTION,
-        Button: BUTTON,
+        TitleQuickReply: TITLE_QUICK_REPLY,
+        SendTitleQuickRepliesAction: SEND_TITLE_QUICK_REPLIES_ACTION,
+        Button: (BUTTON, OPEN_URL_BUTTON),
         Card: CARD,
         SendCardsAction: SEND_CARDS_ACTIONS,
+        SimpleCard: SIMPLE_CARD,
+        SendSimpleCardsAction: SEND_SIMPLE_CARDS_ACTIONS,
         StoreSessionValueAction: STORE_SESSION_VALUE_ACTION,
         SetUserAttributeAction: SET_USER_ATTRIBUTE_ACTION,
         Step: WEBHOOK_STEP,
@@ -896,6 +1013,9 @@ def get_mapper(factory=bind):
         CreateZendeskTicketAction: CREATE_ZENDESK_TICKET_ACTION,
         ZendeskUser: ZENDESK_USER,
         JumpToAction: JUMP_TO_ACTION,
+        CloseIAdvizeConversationAction: CLOSE_IADVIZE_CONVERSATION_ACTION,
+        IAdvizeDistributionRule: IADVIZE_DISTRIBUTION_RULE,
+        TransferIAdvizeConversationAction: TRANSFER_IADVIZE_CONVERSATION_ACTION,
         MessageGetter: PREDICATE_MESSAGE_GETTER,
         SessionValueGetter: PREDICATE_SESSION_VALUE_GETTER,
         UserAttributeGetter: PREDICATE_USER_ATTRIBUTE_GETTER,
