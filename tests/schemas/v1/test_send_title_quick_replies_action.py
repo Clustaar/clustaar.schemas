@@ -4,7 +4,7 @@ import pytest
 
 
 @pytest.fixture
-def quick_reply(go_to_action):
+def quick_reply():
     return TitleQuickReply(title="Ok")
 
 
@@ -18,12 +18,7 @@ def data():
     return {
         "type": "send_title_quick_replies_action",
         "message": "Ok?",
-        "buttons": [
-            {
-                "type": "title_quick_reply",
-                "title": "Ok",
-            }
-        ],
+        "buttons": [{"type": "title_quick_reply", "title": "Ok"}],
     }
 
 
@@ -32,12 +27,7 @@ def malicious_data():
     return {
         "type": "send_title_quick_replies_action",
         "message": "<script>void();</script>Ok?",
-        "buttons": [
-            {
-                "type": "title_quick_reply",
-                "title": "<script>void();</script>Ok",
-            }
-        ],
+        "buttons": [{"type": "title_quick_reply", "title": "<script>void();</script>Ok"}],
     }
 
 
@@ -61,4 +51,3 @@ class TestLoad(object):
         assert action.message == "&lt;script&gt;void();&lt;/script&gt;Ok?"
         quick_reply = action.buttons[0]
         assert quick_reply.title == "&lt;script&gt;void();&lt;/script&gt;Ok"
-

@@ -6,17 +6,19 @@ import pytest
 @pytest.fixture
 def action():
 
-    return TransferIAdvizeConversationAction(failed_transfer_message="sorry",
-                                             distribution_rule=IAdvizeDistributionRule(id="234",
-                                                                              label="Human"))
+    return TransferIAdvizeConversationAction(
+        failed_transfer_message="sorry",
+        distribution_rule=IAdvizeDistributionRule(id="234", label="Human"),
+    )
 
 
 @pytest.fixture
 def data():
-    return {"type": "transfer_iadvize_conversation_action",
-            "failed_transfer_message": "sorry",
-            "distribution_rule": { "id": "234",
-                                   "label": "Human"}}
+    return {
+        "type": "transfer_iadvize_conversation_action",
+        "failed_transfer_message": "sorry",
+        "distribution_rule": {"id": "234", "label": "Human"},
+    }
 
 
 class TestDump(object):

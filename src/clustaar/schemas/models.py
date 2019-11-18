@@ -72,8 +72,9 @@ WebhookRequestField = model("WebhookRequestField", "key value")
 SendWebhookRequestAction = model("SendWebhookRequestAction", "url service description fields")
 CloseIAdvizeConversationAction = model("CloseIAdvizeConversationAction", "")
 IAdvizeDistributionRule = model("IAdvizeDistributionRule", "label id")
-TransferIAdvizeConversationAction = model("TransferIAdvizeConversationAction",
-                                          "failed_transfer_message distribution_rule")
+TransferIAdvizeConversationAction = model(
+    "TransferIAdvizeConversationAction", "failed_transfer_message distribution_rule"
+)
 
 # Flow connection
 MessageGetter = model("MessageGetter")

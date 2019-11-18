@@ -11,10 +11,7 @@ def button():
 @pytest.fixture
 def card(button):
     return SimpleCard(
-        title="Card 1",
-        subtitle="xxx",
-        image_url="http://example.com/logo.png",
-        buttons=[button],
+        title="Card 1", subtitle="xxx", image_url="http://example.com/logo.png", buttons=[button]
     )
 
 
@@ -34,9 +31,11 @@ def data(card):
                 "subtitle": card.subtitle,
                 "imageURL": card.image_url,
                 "buttons": [
-                    {"type": "open_url_button", "title": "view",
-                     "action": {"type": "open_url_action",
-                                "url": "http://view.org"}}
+                    {
+                        "type": "open_url_button",
+                        "title": "view",
+                        "action": {"type": "open_url_action", "url": "http://view.org"},
+                    }
                 ],
             }
         ],
@@ -57,8 +56,7 @@ def malicious_data(card):
                     {
                         "type": "open_url_button",
                         "title": "<script>void();</script>Share",
-                        "action": {"type": "open_url_action",
-                                "url": "http://view.org"},
+                        "action": {"type": "open_url_action", "url": "http://view.org"},
                     }
                 ],
             }

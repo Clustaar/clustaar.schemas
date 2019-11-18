@@ -795,17 +795,17 @@ CLOSE_IADVIZE_CONVERSATION_ACTION = Schema(
 
 # TODO check format
 IADVIZE_DISTRIBUTION_RULE = Schema(
-    {"label": f.String(),
-     "id": f.String(optional=False)},
-    name="iadvize_distribution_rule"
+    {"label": f.String(), "id": f.String(optional=False)}, name="iadvize_distribution_rule"
 )
 
 
 TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
-    {"type": f.Constant(value="transfer_iadvize_conversation_action", read_only=True),
-     "failed_transfer_message": f.String(optional=True),
-     "distribution_rule": f.Object(IADVIZE_DISTRIBUTION_RULE)},
-    name="transfer_iadvize_conversation_action"
+    {
+        "type": f.Constant(value="transfer_iadvize_conversation_action", read_only=True),
+        "failed_transfer_message": f.String(optional=True),
+        "distribution_rule": f.Object(IADVIZE_DISTRIBUTION_RULE),
+    },
+    name="transfer_iadvize_conversation_action",
 )
 
 
@@ -832,7 +832,7 @@ ACTION_SCHEMAS = {
     "send_webhook_request_action": SEND_WEBHOOK_REQUEST_ACTION,
     "create_user_request_action": CREATE_USER_REQUEST_ACTION,
     "transfer_iadvize_conversation_action": TRANSFER_IADVIZE_CONVERSATION_ACTION,
-    "close_iadvize_conversation_action": CLOSE_IADVIZE_CONVERSATION_ACTION
+    "close_iadvize_conversation_action": CLOSE_IADVIZE_CONVERSATION_ACTION,
 }
 
 COORDINATES = Schema({"lat": f.Number(), "long": f.Number()}, name="coordinates")
