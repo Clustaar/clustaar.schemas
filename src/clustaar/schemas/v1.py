@@ -400,6 +400,7 @@ QUICK_REPLY = Schema(
     name="quick_reply",
 )
 
+# quick reply without action for iadvize quick replies integration
 TITLE_QUICK_REPLY = Schema(
     {
         "title": f.String(
@@ -427,7 +428,7 @@ SEND_QUICK_REPLIES_ACTION = Schema(
     name="send_quick_replies_action",
 )
 
-
+# quick replies without action for iadvize quick replies integration
 SEND_TITLE_QUICK_REPLIES_ACTION = Schema(
     {
         "type": f.Constant(value="send_title_quick_replies_action", read_only=True),
@@ -455,7 +456,7 @@ BUTTON = Schema(
     name="button",
 )
 
-
+# button for simple card, to match iadvize LINK
 OPEN_URL_BUTTON = Schema(
     {
         "type": f.Constant(value="open_url_button", read_only=True),
@@ -508,6 +509,7 @@ CARD = Schema(
     name="card",
 )
 
+# card to match iadvize card format : no url, ad button with only url inside
 SIMPLE_CARD = Schema(
     {
         "type": f.Constant(value="simple_card", read_only=True),
@@ -553,7 +555,7 @@ SEND_CARDS_ACTIONS = Schema(
     name="send_cards_action",
 )
 
-
+# action to match iadvize bundle/card format
 SEND_SIMPLE_CARDS_ACTIONS = Schema(
     {
         "type": f.Constant(value="send_simple_cards_action", read_only=True),
