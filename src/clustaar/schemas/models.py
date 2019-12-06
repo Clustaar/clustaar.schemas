@@ -82,6 +82,7 @@ SessionValueGetter = model("SessionValueGetter", "key")
 UserAttributeGetter = model("UserAttributeGetter", "key")
 FlowConnection = model("FlowConnection", "target predicates")
 ConnectionPredicate = model("ConnectionPredicate", "value_getter condition")
+ConnectionTeamPredicate = model("ConnectionTeamPredicate", "condition")
 
 # Conditions
 IsNotSetCondition = model("IsNotSetCondition")
@@ -96,7 +97,8 @@ IsLessThanOrEqualCondition = model("IsLessThanOrEqualCondition", "maximum")
 IsGreaterThanCondition = model("IsGreaterThanCondition", "minimum")
 IsGreaterThanOrEqualCondition = model("IsGreaterThanOrEqualCondition", "minimum")
 IsNumberCondition = model("IsNumberCondition")
-
+IsOnlineCondition = model("IsOnlineCondition")
+IsOfflineCondition = model("IsOfflineCondition")
 
 # Webhook
 URLLoadedEvent = model("URLLoadedEvent", "url")
