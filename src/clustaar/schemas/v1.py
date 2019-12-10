@@ -562,7 +562,7 @@ SIMPLE_CARD = Schema(
             allow_none=True,
             default=(),
             optional=True,
-            validators=v.Length(max=CARD_MAX_BUTTONS_COUNT),
+            validators=v.Length(min=1, max=CARD_MAX_BUTTONS_COUNT),
         ),
     },
     name="simple_card",
@@ -584,7 +584,7 @@ SEND_SIMPLE_CARDS_ACTIONS = Schema(
     {
         "type": f.Constant(value="send_simple_cards_action", read_only=True),
         "cards": f.List(
-            f.Object(SIMPLE_CARD), validators=v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT)
+            f.Object(SIMPLE_CARD), validators=v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT),
         ),
     },
     name="send_simple_cards_action",
