@@ -424,18 +424,6 @@ QUICK_REPLY = Schema(
     name="quick_reply",
 )
 
-# quick reply without action for iadvize quick replies integration
-TITLE_QUICK_REPLY = Schema(
-    {
-        "title": f.String(
-            validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH),
-            pre_load=[html_sanitize, unicode_normalize],
-        ),
-        "type": f.Constant(value="title_quick_reply", read_only=True, optional=True),
-    },
-    name="title_quick_reply",
-)
-
 
 SEND_QUICK_REPLIES_ACTION = Schema(
     {
@@ -452,21 +440,6 @@ SEND_QUICK_REPLIES_ACTION = Schema(
     name="send_quick_replies_action",
 )
 
-# quick replies without action for iadvize quick replies integration
-SEND_TITLE_QUICK_REPLIES_ACTION = Schema(
-    {
-        "type": f.Constant(value="send_title_quick_replies_action", read_only=True),
-        "message": f.String(
-            validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
-            pre_load=[html_sanitize, unicode_normalize],
-        ),
-        "buttons": f.List(
-            f.Object(TITLE_QUICK_REPLY),
-            validators=v.Length(min=1, max=SEND_QUICK_REPLIES_ACTION_MAX_BUTTONS_COUNT),
-        ),
-    },
-    name="send_title_quick_replies_action",
-)
 
 BUTTON = Schema(
     {
@@ -847,7 +820,6 @@ ACTION_SCHEMAS = {
     "send_cards_action": SEND_CARDS_ACTIONS,
     "send_simple_cards_action": SEND_SIMPLE_CARDS_ACTIONS,
     "send_quick_replies_action": SEND_QUICK_REPLIES_ACTION,
-    "send_title_quick_replies_action": SEND_TITLE_QUICK_REPLIES_ACTION,
     "store_session_value_action": STORE_SESSION_VALUE_ACTION,
     "set_user_attribute_action": SET_USER_ATTRIBUTE_ACTION,
     "ask_location_action": ASK_LOCATION_ACTION,
@@ -1019,8 +991,6 @@ def get_mapper(factory=bind):
         AssignIntercomConversationAction: ASSIGN_INTERCOM_CONVERSATION_ACTION,
         QuickReply: QUICK_REPLY,
         SendQuickRepliesAction: SEND_QUICK_REPLIES_ACTION,
-        TitleQuickReply: TITLE_QUICK_REPLY,
-        SendTitleQuickRepliesAction: SEND_TITLE_QUICK_REPLIES_ACTION,
         Button: (BUTTON, OPEN_URL_BUTTON),
         Card: CARD,
         SendCardsAction: SEND_CARDS_ACTIONS,
