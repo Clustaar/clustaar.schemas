@@ -46,7 +46,9 @@ SendQuickRepliesAction = model("SendQuickRepliesAction", "buttons message")
 QuickReply = model("QuickReply", "title action")
 Button = model("Button", "title action")
 Card = model("Card", "title subtitle buttons image_url url")
+SimpleCard = model("SimpleCard", "title subtitle buttons image_url")
 SendCardsAction = model("SendCardsAction", "cards")
+SendSimpleCardsAction = model("SendSimpleCardsAction", "cards")
 StoreSessionValueAction = model("StoreSessionValueAction", "key value")
 SetUserAttributeAction = model("SetUserAttributeAction", "key value")
 GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query limit custom_engine_id")
@@ -66,6 +68,11 @@ CustomerSatisfactionChoice = model(
 CustomerSatisfactionAction = model("CustomerSatisfactionAction", "message choices")
 WebhookRequestField = model("WebhookRequestField", "key value")
 SendWebhookRequestAction = model("SendWebhookRequestAction", "url service description fields")
+CloseIAdvizeConversationAction = model("CloseIAdvizeConversationAction", "")
+IAdvizeDistributionRule = model("IAdvizeDistributionRule", "label id")
+TransferIAdvizeConversationAction = model(
+    "TransferIAdvizeConversationAction", "failed_transfer_message distribution_rule"
+)
 
 # Flow connection
 MessageGetter = model("MessageGetter")
