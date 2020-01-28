@@ -199,14 +199,12 @@ FLOW_CONNECTION = Schema(
         "target": f.PolymorphicObject(
             on="type", schemas={"story": STORY_TARGET, "step": STEP_TARGET}
         ),
-        "predicates": f.List(
-            f.PolymorphicObject(
-                on="type",
-                schemas={
-                    "connection_predicate": FLOW_CONNECTION_PREDICATE,
-                    "connection_team_predicate": FLOW_CONNECTION_TEAM_PREDICATE,
-                },
-            ),
+        "predicates": f.PolymorphicList(
+            on="type",
+            schemas={
+                "connection_predicate": FLOW_CONNECTION_PREDICATE,
+                "connection_team_predicate": FLOW_CONNECTION_TEAM_PREDICATE,
+            },
             validators=v.Length(min=1, max=FLOW_CONNECTION_MAX_PREDICATES_COUNT),
         ),
     },
