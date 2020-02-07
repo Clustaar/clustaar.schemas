@@ -34,7 +34,9 @@ def action():
     )
     choice3.matching_intent = MatchIntentConditionIntent(id="b2" * 12, name="another intent")
 
-    return CustomerSatisfactionAction(message="Are you satisfied ?", choices=[choice1, choice2, choice3])
+    return CustomerSatisfactionAction(
+        message="Are you satisfied ?", choices=[choice1, choice2, choice3]
+    )
 
 
 @pytest.fixture
