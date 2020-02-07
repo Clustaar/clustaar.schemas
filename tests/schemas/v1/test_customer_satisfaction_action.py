@@ -19,14 +19,22 @@ def action():
     choice1.matching_intent = MatchIntentConditionIntent(id="b1" * 12, name="an intent")
 
     choice2 = CustomerSatisfactionChoice(
+        kind="neutral",
+        target=StepTarget(step_id="a2" * 12, name="a neutral step"),
+        matching_intent_id="c2" * 12,
+        label="neutral",
+    )
+    choice2.matching_intent = MatchIntentConditionIntent(id="c2" * 12, name="neutral")
+
+    choice3 = CustomerSatisfactionChoice(
         kind="negative",
         target=StepTarget(step_id="a2" * 12, name="a step"),
         matching_intent_id="b2" * 12,
         label="no",
     )
-    choice2.matching_intent = MatchIntentConditionIntent(id="b2" * 12, name="another intent")
+    choice3.matching_intent = MatchIntentConditionIntent(id="b2" * 12, name="another intent")
 
-    return CustomerSatisfactionAction(message="Are you satisfied ?", choices=[choice1, choice2])
+    return CustomerSatisfactionAction(message="Are you satisfied ?", choices=[choice1, choice2, choice3])
 
 
 @pytest.fixture
@@ -41,6 +49,13 @@ def data():
                 "label": "yes",
                 "matchingIntent": {"id": "b1" * 12, "name": "an intent", "type": "intent"},
                 "target": {"type": "step", "id": "a1" * 12, "name": "a step"},
+            },
+            {
+                "type": "customer_satisfaction_choice",
+                "kind": "neutral",
+                "label": "neutral",
+                "matchingIntent": {"id": "c2" * 12, "name": "neutral", "type": "intent"},
+                "target": {"type": "step", "id": "a2" * 12, "name": "a neutral step"},
             },
             {
                 "type": "customer_satisfaction_choice",
@@ -88,18 +103,23 @@ class TestLoad(object):
         result = MAPPER.load(data, "customer_satisfaction_action")
         assert isinstance(result, CustomerSatisfactionAction)
         assert result.message == "Are you satisfied ?"
-        assert len(result.choices) == 2
+        assert len(result.choices) == 3
 
-        choice1, choice2 = result.choices
+        choice1, choice2, choice3 = result.choices
         assert choice1.kind == "positive"
         assert choice1.target.step_id == "a1" * 12
         assert choice1.matching_intent_id == "b1" * 12
         assert choice1.label == "yes"
 
-        assert choice2.kind == "negative"
+        assert choice2.kind == "neutral"
         assert choice2.target.step_id == "a2" * 12
-        assert choice2.matching_intent_id == "b2" * 12
-        assert choice2.label == "no"
+        assert choice2.matching_intent_id == "c2" * 12
+        assert choice2.label == "neutral"
+
+        assert choice3.kind == "negative"
+        assert choice3.target.step_id == "a2" * 12
+        assert choice3.matching_intent_id == "b2" * 12
+        assert choice3.label == "no"
 
     def test_returns_an_object_malicious(self, malicious_data):
         result = MAPPER.load(malicious_data, "customer_satisfaction_action")
