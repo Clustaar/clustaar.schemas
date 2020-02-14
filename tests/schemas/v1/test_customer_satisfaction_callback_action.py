@@ -3,6 +3,7 @@ from clustaar.schemas.models import CustomerSatisfactionCallbackAction, StepTarg
 from tests.utils import MAPPER
 from lupin.errors import InvalidDocument
 
+
 @pytest.fixture
 def callback():
     return CustomerSatisfactionCallbackAction(
