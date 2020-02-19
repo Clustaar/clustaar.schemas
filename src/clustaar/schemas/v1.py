@@ -762,8 +762,8 @@ CUSTOMER_SATISFACTION_ACTION = Schema(
         "choices": f.List(
             f.Object(CUSTOMER_SATISFACTION_CHOICE),
             validators=v.Length(
-                min=CUSTOMER_SATISFACTION_ACTION_BUTTONS_COUNT,
-                max=CUSTOMER_SATISFACTION_ACTION_BUTTONS_COUNT,
+                min=CUSTOMER_SATISFACTION_ACTION_MIN_BUTTONS_COUNT,
+                max=CUSTOMER_SATISFACTION_ACTION_MAX_BUTTONS_COUNT,
             ),
         ),
     },
