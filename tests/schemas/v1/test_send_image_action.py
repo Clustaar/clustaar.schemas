@@ -12,11 +12,8 @@ def action():
 
 @pytest.fixture
 def data():
-    return {
-        "type": "send_image_action",
-        "imageURL": "http://example.com/logo.png",
-        "alt": ""
-    }
+    return {"type": "send_image_action", "imageURL": "http://example.com/logo.png", "alt": ""}
+
 
 class TestDump(object):
     def test_returns_a_dict(self, action, data, mapper):
