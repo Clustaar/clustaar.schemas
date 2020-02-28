@@ -15,6 +15,7 @@ def card(button):
         subtitle="xxx",
         image_url="http://example.com/logo.png",
         url="http://example.com",
+        alt="",
         buttons=[button],
     )
 
@@ -34,6 +35,7 @@ def data(card):
                 "title": card.title,
                 "subtitle": card.subtitle,
                 "imageURL": card.image_url,
+                "alt": "",
                 "url": card.url,
                 "buttons": [
                     {"type": "button", "title": "Share", "action": {"type": "share_action"}}
@@ -53,6 +55,7 @@ def malicious_data(card):
                 "title": "<script>void();</script>Card 1",
                 "subtitle": card.subtitle,
                 "imageURL": card.image_url,
+                "alt": "",
                 "url": card.url,
                 "buttons": [
                     {
@@ -81,6 +84,7 @@ class TestLoad:
         assert card.subtitle == "xxx"
         assert card.image_url == "http://example.com/logo.png"
         assert card.url == "http://example.com"
+        assert card.alt == ""
         button = card.buttons[0]
         assert button.title == "Share"
         assert isinstance(button.action, ShareAction)

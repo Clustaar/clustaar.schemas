@@ -289,6 +289,7 @@ ASK_LOCATION_ACTION = Schema(
 SEND_IMAGE_ACTION = Schema(
     {
         "type": f.Constant(value="send_image_action", read_only=True),
+        "alt": f.String(default="", optional=True, validators=v.Length(max=ALT_MESSAGE_MAX_LENGTH)),
         "imageURL": f.String(
             binding="image_url",
             pre_load=[strip, html_sanitize],
@@ -477,6 +478,7 @@ CARD = Schema(
             allow_none=True,
             pre_load=[html_sanitize, unicode_normalize],
         ),
+        "alt": f.String(default="", optional=True, validators=v.Length(max=ALT_MESSAGE_MAX_LENGTH)),
         "imageURL": f.String(
             optional=True,
             allow_none=True,
