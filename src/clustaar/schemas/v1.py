@@ -326,6 +326,7 @@ SEND_JS_EVENT_ACTION = Schema(
         "event": f.String(
             validators=v.Length(min=1, max=SEND_JS_EVENT_ACTION_EVENT_MAX_LENGTH), pre_load=[strip]
         ),
+        "payload": f.Dict(optional=True, allow_none=True),
     },
     name="send_js_event_action",
 )
