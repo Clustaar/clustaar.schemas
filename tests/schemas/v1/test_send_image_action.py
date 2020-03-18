@@ -7,25 +7,28 @@ import pytest
 
 @pytest.fixture
 def action():
-    return SendImageAction(image_url="http://example.com/logo.png")
+    return SendImageAction(image_url="http://example.com/logo.png", alt="")
 
 
 @pytest.fixture
 def data():
-    return {"type": "send_image_action", "imageURL": "http://example.com/logo.png"}
+    return {"type": "send_image_action", "imageURL": "http://example.com/logo.png", "alt": ""}
 
 
 class TestDump(object):
     def test_returns_a_dict(self, action, data, mapper):
         result = SEND_IMAGE_ACTION.dump(action, mapper)
+
         assert result == data
 
 
 class TestLoad(object):
     def test_returns_an_action(self, data, mapper):
         action = mapper.load(data, SEND_IMAGE_ACTION)
+
         assert isinstance(action, SendImageAction)
         assert action.image_url == "http://example.com/logo.png"
+        assert action.alt == ""
 
 
 class TestValidate(object):
