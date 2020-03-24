@@ -19,13 +19,11 @@ def data():
         "target": {"type": "step", "id": "a1" * 12, "name": "a step"},
     }
 
+
 @pytest.fixture
 def data_no_target():
-    return {
-        "type": "customer_satisfaction_callback_action",
-        "kind": "positive",
-        "target": None,
-    }
+    return {"type": "customer_satisfaction_callback_action", "kind": "positive", "target": None}
+
 
 class TestDump:
     def test_returns_a_dict(self, data, callback):
@@ -53,4 +51,4 @@ class TestValidate:
         MAPPER.validate(data, "customer_satisfaction_callback_action")
 
     def test_doesnt_raise_id_target_null(self, data_no_target):
-        MAPPER.validate(data_no_target,"customer_satisfaction_callback_action")
+        MAPPER.validate(data_no_target, "customer_satisfaction_callback_action")
