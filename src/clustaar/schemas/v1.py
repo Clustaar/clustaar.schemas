@@ -226,11 +226,12 @@ GO_TO_ACTION = Schema(
     name="go_to_action",
 )
 
+# should match fields of CUSTOMER_SATISFACTION_CHOICE
 CUSTOMER_SATISFACTION_CALLBACK_ACTION = Schema(
     {
         "type": f.Constant(value="customer_satisfaction_callback_action", read_only=True),
         "target": f.PolymorphicObject(
-            on="type", schemas={"step": STEP_TARGET, "story": STORY_TARGET}
+            on="type", allow_none=True, schemas={"step": STEP_TARGET, "story": STORY_TARGET}
         ),
         "kind": f.String(validators=v.In(CUSTOMER_SATISFACTION_CHOICE_KINDS)),
     },
