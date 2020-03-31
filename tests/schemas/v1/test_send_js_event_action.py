@@ -5,17 +5,18 @@ import pytest
 
 @pytest.fixture
 def action():
-    return SendJSEventAction(event="test")
+    return SendJSEventAction(event="test", payload={})
 
 
 @pytest.fixture
 def data():
-    return {"type": "send_js_event_action", "event": "test"}
+    return {"type": "send_js_event_action", "event": "test", "payload": {}}
 
 
 class TestDump:
     def test_returns_a_dict(self, action, data, mapper):
         result = SEND_JS_EVENT_ACTION.dump(action, mapper)
+
         assert result == data
 
 
