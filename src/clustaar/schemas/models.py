@@ -109,7 +109,8 @@ Image = model("Image", "url")
 Step = model("Step", "actions name id user_data")
 Coordinates = model("Coordinates", "lat long")
 Interlocutor = model(
-    "Interlocutor", "id location last_name first_name email custom_attributes phone_number"
+    "Interlocutor",
+    "id remote_id location last_name first_name email custom_attributes phone_number",
 )
 ConversationSession = model("ConversationSession", "values")
 StepReached = model("StepReached", "step session interlocutor channel input")

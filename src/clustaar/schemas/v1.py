@@ -893,6 +893,7 @@ INPUT_SCHEMAS = {
 WEBHOOK_INTERLOCUTOR = Schema(
     {
         "id": f.String(),
+        "userID": f.String(binding="remote_id"),
         "location": f.Object(COORDINATES, allow_none=True),
         "email": f.String(
             allow_none=True,

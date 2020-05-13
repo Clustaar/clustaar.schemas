@@ -32,6 +32,7 @@ def interlocutor():
         last_name=None,
         custom_attributes={"age": "21"},
         location=location,
+        remote_id="test-tintin",
         phone_number="271177",
     )
 
@@ -71,6 +72,7 @@ def data():
                 "firstName": "tintin",
                 "id": "123",
                 "lastName": None,
+                "userID": "test-tintin",
                 "location": {"lat": 1.0, "long": 2.4},
                 "phoneNumber": "271177",
             },

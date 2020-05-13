@@ -13,6 +13,7 @@ def interlocutor():
         last_name=None,
         phone_number="0645592034",
         custom_attributes={"age": "21"},
+        remote_id="test-tintin",
     )
 
 
@@ -21,6 +22,7 @@ def data():
     return {
         "id": "123",
         "location": {"lat": 1, "long": 2},
+        "userID": "test-tintin",
         "email": "tintin@moulinsart.fr",
         "firstName": "tintin",
         "lastName": None,
