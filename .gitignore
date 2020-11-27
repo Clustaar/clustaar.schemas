@@ -41,3 +41,8 @@ docs/api/*
 docs/_build/*
 cover/*
 MANIFEST
+
+
+# Test files
+.python-version
+.pytest_cache/
