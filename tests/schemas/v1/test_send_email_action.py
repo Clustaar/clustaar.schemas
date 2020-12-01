@@ -12,6 +12,8 @@ def action():
         recipient="test@example.com",
         subject="Hello",
         content=":)",
+        reply_to_email="john.doe@gmail.com",
+        reply_to_name="John Doe",
     )
 
 
@@ -24,8 +26,20 @@ def data():
         "recipient": "test@example.com",
         "subject": "Hello",
         "content": ":)",
-        "replyToEmail": None,
-        "replyToName": None,
+        "replyToEmail": "john.doe@gmail.com",
+        "replyToName": "John Doe",
+    }
+
+
+@pytest.fixture
+def data_without_reply_to():
+    return {
+        "type": "send_email_action",
+        "fromEmail": "tintin@gmail.com",
+        "fromName": "Tintin",
+        "recipient": "test@example.com",
+        "subject": "Hello",
+        "content": ":)",
     }
 
 
@@ -56,6 +70,8 @@ class TestLoad:
         assert action.recipient == "test@example.com"
         assert action.from_email == "tintin@gmail.com"
         assert action.from_name == "Tintin"
+        assert action.reply_to_name == "John Doe"
+        assert action.reply_to_email == "john.doe@gmail.com"
 
     def test_returns_an_action_malicious(self, malicious_data, mapper):
         action = mapper.load(malicious_data, SEND_EMAIL_ACTION)
@@ -65,6 +81,12 @@ class TestLoad:
         assert action.recipient == "test@example.com"
         assert action.from_email == "tintin@gmail.com"
         assert action.from_name == "Tintin"
+
+    def test_returns_an_action_without_reply_to(self, data_without_reply_to, mapper):
+        action = mapper.load(data_without_reply_to, SEND_EMAIL_ACTION)
+        assert isinstance(action, SendEmailAction)
+        assert action.reply_to_name is None
+        assert action.reply_to_email is None
 
 
 class TestValidate:
