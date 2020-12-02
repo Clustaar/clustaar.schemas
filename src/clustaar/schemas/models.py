@@ -37,7 +37,9 @@ ShareAction = model("ShareAction", "")
 SendImageAction = model("SendImageAction", "image_url alt")
 SendTextAction = model("SendTextAction", "alternatives text")
 SendJSEventAction = model("SendJSEventAction", "event payload")
-SendEmailAction = model("SendEmailAction", "from_name from_email content subject recipient")
+SendEmailAction = model(
+    "SendEmailAction", "from_name from_email content subject recipient reply_to_name reply_to_email"
+)
 WaitAction = model("WaitAction", "duration")
 PauseBotAction = model("PauseBotAction", "")
 CloseIntercomConversationAction = model("CloseIntercomConversationAction", "")

@@ -368,6 +368,20 @@ SEND_EMAIL_ACTION = Schema(
             validators=v.Length(max=SEND_EMAIL_ACTION_CONTENT_MAX_LENGTH),
             pre_load=[html_sanitize, unicode_normalize],
         ),
+        "replyToEmail": f.String(
+            binding="reply_to_email",
+            pre_load=[strip, html_sanitize],
+            optional=True,
+            allow_none=True,
+            validators=v.Length(max=SEND_EMAIL_ACTION_REPLY_TO_EMAIL_MAX_LENGTH),
+        ),
+        "replyToName": f.String(
+            binding="reply_to_name",
+            pre_load=[strip, html_sanitize, unicode_normalize],
+            optional=True,
+            allow_none=True,
+            validators=v.Length(max=SEND_EMAIL_ACTION_REPLY_TO_NAME_MAX_LENGTH),
+        ),
     },
     name="send_email_action",
 )
