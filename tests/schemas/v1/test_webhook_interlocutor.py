@@ -15,7 +15,7 @@ def interlocutor():
         custom_attributes={"age": "21"},
         remote_id="test-tintin",
         is_logged=False,
-        used_to_test=True
+        used_to_test=True,
     )
 
 
@@ -31,7 +31,7 @@ def data():
         "phoneNumber": "0645592034",
         "customAttributes": {"age": "21"},
         "isLogged": False,
-        "usedToTest": True
+        "usedToTest": True,
     }
 
 

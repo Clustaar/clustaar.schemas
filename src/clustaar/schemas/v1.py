@@ -956,7 +956,7 @@ WEBHOOK_INTERLOCUTOR = Schema(
             validators=v.TypedDict(str, str) & v.DictKeysFormat(re.compile(r"^[\w\d]+$")),
         ),
         "isLogged": f.Bool(binding="is_logged", optional=True, allow_none=True),
-        "usedToTest": f.Bool(binding="used_to_test", optional=True, allow_none=True)
+        "usedToTest": f.Bool(binding="used_to_test", optional=True, allow_none=True),
     },
     name="webhook_interlocutor",
 )

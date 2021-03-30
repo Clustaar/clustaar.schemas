@@ -35,7 +35,7 @@ def interlocutor():
         remote_id="test-tintin",
         phone_number="271177",
         is_logged=True,
-        used_to_test=False
+        used_to_test=False,
     )
 
 
@@ -78,7 +78,7 @@ def data():
                 "location": {"lat": 1.0, "long": 2.4},
                 "phoneNumber": "271177",
                 "usedToTest": False,
-                "isLogged": True
+                "isLogged": True,
             },
             "session": {"values": {"name": "tintin"}},
             "step": {
