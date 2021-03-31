@@ -1,12 +1,16 @@
 import re
-from lupin import Schema, fields as f, validators as v, Mapper, bind
+
+from lupin import Mapper, Schema, bind
+from lupin import fields as f
+from lupin import validators as v
 from lupin.processors import strip
+
 from .constants import *
-from .models import *
-from .validators import ObjectID, IsRegexp
-from .processors import html_sanitize, unicode_normalize
+from .custom_schemas import CustomerSatisfactionChoiceSchema, MatchIntentConditionSchema
 from .fields import RegexpField
-from .custom_schemas import MatchIntentConditionSchema, CustomerSatisfactionChoiceSchema
+from .models import *
+from .processors import html_sanitize, unicode_normalize
+from .validators import IsRegexp, ObjectID
 
 _OBJECT_ID_VALIDATOR = ObjectID()
 
@@ -223,6 +227,7 @@ FLOW_CONNECTION = Schema(
             schemas={
                 "connection_predicate": FLOW_CONNECTION_PREDICATE,
                 "connection_team_predicate": FLOW_CONNECTION_TEAM_PREDICATE,
+                "connection_user_predicate": FLOW_CONNECTION_USER_PREDICATE,
             },
             validators=v.Length(min=1, max=FLOW_CONNECTION_MAX_PREDICATES_COUNT),
         ),
@@ -596,7 +601,8 @@ SEND_SIMPLE_CARDS_ACTIONS = Schema(
     {
         "type": f.Constant(value="send_simple_cards_action", read_only=True),
         "cards": f.List(
-            f.Object(SIMPLE_CARD), validators=v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT)
+            f.Object(SIMPLE_CARD),
+            validators=v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT),
         ),
     },
     name="send_simple_cards_action",
