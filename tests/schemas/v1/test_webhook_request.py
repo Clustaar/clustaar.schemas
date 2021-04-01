@@ -34,6 +34,8 @@ def interlocutor():
         location=location,
         remote_id="test-tintin",
         phone_number="271177",
+        is_logged=True,
+        used_to_test=False,
     )
 
 
@@ -75,6 +77,8 @@ def data():
                 "userID": "test-tintin",
                 "location": {"lat": 1.0, "long": 2.4},
                 "phoneNumber": "271177",
+                "usedToTest": False,
+                "isLogged": True,
             },
             "session": {"values": {"name": "tintin"}},
             "step": {

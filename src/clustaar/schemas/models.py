@@ -83,6 +83,7 @@ UserAttributeGetter = model("UserAttributeGetter", "key")
 FlowConnection = model("FlowConnection", "target predicates")
 ConnectionPredicate = model("ConnectionPredicate", "value_getter condition")
 ConnectionTeamPredicate = model("ConnectionTeamPredicate", "condition")
+ConnectionUserPredicate = model("ConnectionUserPredicate", "condition")
 
 # Conditions
 IsNotSetCondition = model("IsNotSetCondition")
@@ -99,6 +100,8 @@ IsGreaterThanOrEqualCondition = model("IsGreaterThanOrEqualCondition", "minimum"
 IsNumberCondition = model("IsNumberCondition")
 IsOnlineCondition = model("IsOnlineCondition")
 IsOfflineCondition = model("IsOfflineCondition")
+IsLoggedCondition = model("IsLoggedCondition")
+IsNotLoggedCondition = model("IsNotLoggedCondition")
 
 # Webhook
 URLLoadedEvent = model("URLLoadedEvent", "url")
@@ -112,7 +115,7 @@ Step = model("Step", "actions name id user_data")
 Coordinates = model("Coordinates", "lat long")
 Interlocutor = model(
     "Interlocutor",
-    "id remote_id location last_name first_name email custom_attributes phone_number",
+    "id remote_id location last_name first_name email custom_attributes phone_number used_to_test is_logged",
 )
 ConversationSession = model("ConversationSession", "values")
 StepReached = model("StepReached", "step session interlocutor channel input")

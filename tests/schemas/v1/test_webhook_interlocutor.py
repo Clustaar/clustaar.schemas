@@ -14,6 +14,8 @@ def interlocutor():
         phone_number="0645592034",
         custom_attributes={"age": "21"},
         remote_id="test-tintin",
+        is_logged=False,
+        used_to_test=True,
     )
 
 
@@ -28,6 +30,8 @@ def data():
         "lastName": None,
         "phoneNumber": "0645592034",
         "customAttributes": {"age": "21"},
+        "isLogged": False,
+        "usedToTest": True,
     }
 
 

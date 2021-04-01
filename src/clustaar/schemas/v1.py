@@ -1,12 +1,16 @@
 import re
-from lupin import Schema, fields as f, validators as v, Mapper, bind
+
+from lupin import Mapper, Schema, bind
+from lupin import fields as f
+from lupin import validators as v
 from lupin.processors import strip
+
 from .constants import *
-from .models import *
-from .validators import ObjectID, IsRegexp
-from .processors import html_sanitize, unicode_normalize
+from .custom_schemas import CustomerSatisfactionChoiceSchema, MatchIntentConditionSchema
 from .fields import RegexpField
-from .custom_schemas import MatchIntentConditionSchema, CustomerSatisfactionChoiceSchema
+from .models import *
+from .processors import html_sanitize, unicode_normalize
+from .validators import IsRegexp, ObjectID
 
 _OBJECT_ID_VALIDATOR = ObjectID()
 
@@ -115,6 +119,14 @@ IS_OFFLINE_CONDITION = Schema(
     {"type": f.Constant("is_offline", read_only=True)}, name="is_offline_condition"
 )
 
+IS_LOGGED_CONDITION = Schema(
+    {"type": f.Constant("is_logged", read_only=True)}, name="is_logged_condition"
+)
+
+IS_NOT_LOGGED_CONDITION = Schema(
+    {"type": f.Constant("is_not_logged", read_only=True)}, name="is_not_logged_condition"
+)
+
 #
 # Targets
 #
@@ -193,6 +205,17 @@ FLOW_CONNECTION_TEAM_PREDICATE = Schema(
     name="flow_connection_team_predicate",
 )
 
+FLOW_CONNECTION_USER_PREDICATE = Schema(
+    {
+        "type": f.Constant("connection_user_predicate", read_only=True),
+        "condition": f.PolymorphicObject(
+            on="type",
+            schemas={"is_logged": IS_LOGGED_CONDITION, "is_not_logged": IS_NOT_LOGGED_CONDITION},
+        ),
+    },
+    name="flow_connection_user_predicate",
+)
+
 FLOW_CONNECTION = Schema(
     {
         "type": f.Constant("flow_connection", read_only=True),
@@ -204,6 +227,7 @@ FLOW_CONNECTION = Schema(
             schemas={
                 "connection_predicate": FLOW_CONNECTION_PREDICATE,
                 "connection_team_predicate": FLOW_CONNECTION_TEAM_PREDICATE,
+                "connection_user_predicate": FLOW_CONNECTION_USER_PREDICATE,
             },
             validators=v.Length(min=1, max=FLOW_CONNECTION_MAX_PREDICATES_COUNT),
         ),
@@ -577,7 +601,8 @@ SEND_SIMPLE_CARDS_ACTIONS = Schema(
     {
         "type": f.Constant(value="send_simple_cards_action", read_only=True),
         "cards": f.List(
-            f.Object(SIMPLE_CARD), validators=v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT)
+            f.Object(SIMPLE_CARD),
+            validators=v.Length(min=1, max=SEND_CARDS_ACTION_MAX_CARDS_COUNT),
         ),
     },
     name="send_simple_cards_action",
@@ -936,6 +961,8 @@ WEBHOOK_INTERLOCUTOR = Schema(
             binding="custom_attributes",
             validators=v.TypedDict(str, str) & v.DictKeysFormat(re.compile(r"^[\w\d]+$")),
         ),
+        "isLogged": f.Bool(binding="is_logged", optional=True, allow_none=True),
+        "usedToTest": f.Bool(binding="used_to_test", optional=True, allow_none=True),
     },
     name="webhook_interlocutor",
 )
@@ -1050,9 +1077,12 @@ def get_mapper(factory=bind):
         IsNumberCondition: IS_NUMBER_CONDITION,
         IsOnlineCondition: IS_ONLINE_CONDITION,
         IsOfflineCondition: IS_OFFLINE_CONDITION,
+        IsLoggedCondition: IS_LOGGED_CONDITION,
+        IsNotLoggedCondition: IS_NOT_LOGGED_CONDITION,
         FlowConnection: FLOW_CONNECTION,
         ConnectionPredicate: FLOW_CONNECTION_PREDICATE,
         ConnectionTeamPredicate: FLOW_CONNECTION_TEAM_PREDICATE,
+        ConnectionUserPredicate: FLOW_CONNECTION_USER_PREDICATE,
         URLLoadedEvent: URL_LOADED_EVENT,
         CustomEvent: CUSTOM_EVENT,
         Message: (INCOMING_MESSAGE, REPLY_TO_ACTION_TO_MESSAGE),
