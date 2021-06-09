@@ -360,6 +360,15 @@ SEND_JS_EVENT_ACTION = Schema(
 )
 
 
+SEND_TRACKING_EVENT_ACTION = Schema(
+    {
+        "type": f.Constant(value="send_tracking_event_action", read_only=True),
+        "payload": f.Dict(optional=True, allow_none=True),
+    },
+    name="send_tracking_event_action",
+)
+
+
 SEND_EMAIL_ACTION = Schema(
     {
         "type": f.Constant(value="send_email_action", read_only=True),
@@ -859,6 +868,7 @@ ACTION_SCHEMAS = {
     "send_email_action": SEND_EMAIL_ACTION,
     "send_text_action": SEND_TEXT_ACTION,
     "send_js_event_action": SEND_JS_EVENT_ACTION,
+    "send_tracking_event_action": SEND_TRACKING_EVENT_ACTION,
     "send_image_action": SEND_IMAGE_ACTION,
     "close_intercom_conversation_action": CLOSE_INTERCOM_CONVERSATION_ACTION,
     "assign_intercom_conversation_action": ASSIGN_INTERCOM_CONVERSATION_ACTION,
@@ -1032,6 +1042,7 @@ def get_mapper(factory=bind):
         SendImageAction: SEND_IMAGE_ACTION,
         SendTextAction: SEND_TEXT_ACTION,
         SendJSEventAction: SEND_JS_EVENT_ACTION,
+        SendTrackingEventAction: SEND_TRACKING_EVENT_ACTION,
         SendEmailAction: SEND_EMAIL_ACTION,
         WaitAction: WAIT_ACTION,
         PauseBotAction: PAUSE_BOT_ACTION,
