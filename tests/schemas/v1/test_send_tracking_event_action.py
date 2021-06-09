@@ -5,7 +5,7 @@ import pytest
 
 @pytest.fixture
 def action():
-    return SendTrackingEventAction( payload={})
+    return SendTrackingEventAction(payload={})
 
 
 @pytest.fixture
