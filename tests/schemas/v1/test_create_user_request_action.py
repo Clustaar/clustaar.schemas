@@ -5,12 +5,17 @@ import pytest
 
 @pytest.fixture
 def action():
-    return CreateUserRequestAction(message="I need help", assignee_id="a1" * 12, group_id="a2"*12)
+    return CreateUserRequestAction(message="I need help", assignee_id="a1" * 12, group_id="a2" * 12)
 
 
 @pytest.fixture
 def data():
-    return {"type": "create_user_request_action", "message": "I need help", "assigneeID": "a1" * 12, "groupID": "a2" * 12}
+    return {
+        "type": "create_user_request_action",
+        "message": "I need help",
+        "assigneeID": "a1" * 12,
+        "groupID": "a2" * 12,
+    }
 
 
 @pytest.fixture
@@ -20,7 +25,6 @@ def malicious_data():
         "message": "<script>void();</script>I need help",
         "assigneeID": "a1" * 12,
         "groupID": "a2" * 12,
-
     }
 
 

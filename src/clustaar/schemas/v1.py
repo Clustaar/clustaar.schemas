@@ -827,9 +827,7 @@ CREATE_USER_REQUEST_ACTION = Schema(
         "assigneeID": f.String(
             optional=True, allow_none=True, binding="assignee_id", pre_load=[strip]
         ),
-        "groupID": f.String(
-            optional=True, allow_none=True, binding="group_id", pre_load=[strip]
-        )
+        "groupID": f.String(optional=True, allow_none=True, binding="group_id", pre_load=[strip]),
     },
     name="create_user_request_action",
 )
