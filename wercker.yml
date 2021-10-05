@@ -1,4 +1,7 @@
-box: python:3.7.4
+box:
+    id: python:3.7.4
+    username: $DOCKERHUB_LOGIN
+    password: $DOCKERHUB_PWD
 build:
     steps:
         - script:
