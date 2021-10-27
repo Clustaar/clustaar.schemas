@@ -59,7 +59,7 @@ CreateZendeskTicketAction = model(
     "ticket_type ticket_priority subject description assignee_id group_id tags user",
 )
 
-CreateUserRequestAction = model("CreateUserRequestAction", "message assignee_id")
+CreateUserRequestAction = model("CreateUserRequestAction", "message assignee_id group_id")
 
 ZendeskUser = model("ZendeskUser", "email name phone_number")
 JumpToAction = model("JumpToAction", "default_target connections")
