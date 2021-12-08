@@ -49,3 +49,35 @@ class TestLoadMalicious:
     def test_returns_an_object(self, malicious_data):
         result = MAPPER.load(malicious_data, "incoming_message")
         assert result.text == "&lt;script&gt;void();&lt;/script&gt;hello"
+
+
+def a_data():
+    return {
+        "type": "message",
+        "text": "<a>example</a> link",
+        "attachments": [{"type": "video", "url": "http://example.com/"}],
+    }
+
+
+def a_data_target(target_value):
+    return {
+        "type": "message",
+        "text": f'<a target="{target_value}">example</a> link',
+        "attachments": [{"type": "video", "url": "http://example.com/"}],
+    }
+
+
+data_list = [(a_data(), a_data())]
+data_list.extend([(a_data_target(t), a_data_target(t)) for t in ("_blank", "_top")])
+data_list.extend([(a_data_target(t), a_data()) for t in ("_self", "_parent")])
+
+
+class TestLoadATag:
+    @pytest.fixture
+    def a_data_fix(self):
+        return a_data()
+
+    @pytest.mark.parametrize("a_data,expected", data_list)
+    def test_returns_an_object(self, a_data, expected):
+        result = MAPPER.load(a_data, "incoming_message")
+        assert result.text == expected["text"]
