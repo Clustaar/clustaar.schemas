@@ -8,7 +8,7 @@ ALLOWED_ATTRIBUTES = bleach.sanitizer.ALLOWED_ATTRIBUTES.copy()
 def a_filter(tag: str, attr: str, value: str) -> bool:
     """
     filter for <a> html tag.
-    Allow "href" and "title" and "_target" for some values
+    Allow "href" and "title" and "target" for some values
     Args:
         tag: html tag : always <a> since used in "a" key of ALLOWED_ATTRIBUTE
         attr: tag attribute
