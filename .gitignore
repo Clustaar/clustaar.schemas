@@ -46,3 +46,6 @@ MANIFEST
 # Test files
 .python-version
 .pytest_cache/
+
+# sed
+*.bak

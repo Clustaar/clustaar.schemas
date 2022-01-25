@@ -853,6 +853,8 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
     name="transfer_iadvize_conversation_action",
 )
 
+# [insert schema from copier below]
+
 
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
@@ -877,6 +879,7 @@ ACTION_SCHEMAS = {
     "create_user_request_action": CREATE_USER_REQUEST_ACTION,
     "transfer_iadvize_conversation_action": TRANSFER_IADVIZE_CONVERSATION_ACTION,
     "close_iadvize_conversation_action": CLOSE_IADVIZE_CONVERSATION_ACTION,
+    # [insert mapping from copier below]
 }
 
 COORDINATES = Schema({"lat": f.Number(), "long": f.Number()}, name="coordinates")
@@ -1097,6 +1100,7 @@ def get_mapper(factory=bind):
         SendWebhookRequestAction: SEND_WEBHOOK_REQUEST_ACTION,
         WebhookRequestField: WEBHOOK_REQUEST_FIELD,
         CreateUserRequestAction: CREATE_USER_REQUEST_ACTION,
+        # [insert object mapping from copier below]
     }
 
     for cls, schemas in mappings.items():
