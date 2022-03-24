@@ -1,5 +1,5 @@
 box:
-    id: python:3.7.4
+    id: python:3.10.2
     username: $DOCKERHUB_LOGIN
     password: $DOCKERHUB_PWD
 build:
