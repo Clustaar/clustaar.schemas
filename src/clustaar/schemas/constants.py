@@ -72,3 +72,14 @@ SEND_WEBHOOK_REQUEST_ACTION_TYPES = frozenset(["custom", "zapier"])
 CREATE_USER_REQUEST_ACTION_MESSAGE_MAX_LENGTH = 1000
 
 ALT_MESSAGE_MAX_LENGTH = 500
+
+SEND_CHOICES_LIST_ACTION_MESSAGE_MAX_LENGTH = 500
+
+
+# to cp in clustaar.schemas src/clustaar/schemas/constants.py# TODO chose a max length for this field
+SECTION_TITLE_MAX_LENGTH = 500
+
+
+# to cp in clustaar.schemas src/clustaar/schemas/constants.py
+# TODO chose a max length for this field
+CHOICE_TITLE_MAX_LENGTH = 500

@@ -856,6 +856,56 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
 # [insert schema from copier below]
 
 
+CHOICE = Schema(
+    {
+        "type": f.Constant("choice", read_only=True),
+        "imageUrl": f.Url(),
+        "title": f.String(
+            validators=v.Length(min=1, max=CHOICE_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+            optional=True,
+            allow_none=True,
+            binding="title",
+        ),
+    },
+    name="choice",
+)
+
+
+# to cp in clustaar.schemas src/clustaar/schemas/v1.py
+SECTION = Schema(
+    {
+        "type": f.Constant("section", read_only=True),
+        "title": f.String(
+            validators=v.Length(min=1, max=SECTION_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+            optional=True,
+            allow_none=True,
+            binding="title",
+        ),
+        "choices": f.List(f.Object(CHOICE)),
+    },
+    name="section",
+)
+
+
+# to cp in clustaar.schemas src/clustaar/schemas/v1.py
+SEND_CHOICES_LIST_ACTION = Schema(
+    {
+        "type": f.Constant("send_choices_list_action", read_only=True),
+        "message": f.String(
+            validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+            optional=True,
+            allow_none=True,
+            binding="message",
+        ),
+        "sections": f.List(f.Object(SECTION)),
+    },
+    name="send_choices_list_action",
+)
+
+
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
     "wait_action": WAIT_ACTION,
@@ -880,6 +930,9 @@ ACTION_SCHEMAS = {
     "transfer_iadvize_conversation_action": TRANSFER_IADVIZE_CONVERSATION_ACTION,
     "close_iadvize_conversation_action": CLOSE_IADVIZE_CONVERSATION_ACTION,
     # [insert mapping from copier below]
+    "choice": CHOICE,
+    "section": SECTION,
+    "send_choices_list_action": SEND_CHOICES_LIST_ACTION,
 }
 
 COORDINATES = Schema({"lat": f.Number(), "long": f.Number()}, name="coordinates")
@@ -1101,6 +1154,9 @@ def get_mapper(factory=bind):
         WebhookRequestField: WEBHOOK_REQUEST_FIELD,
         CreateUserRequestAction: CREATE_USER_REQUEST_ACTION,
         # [insert object mapping from copier below]
+        Choice: CHOICE,
+        Section: SECTION,
+        SendChoicesListAction: SEND_CHOICES_LIST_ACTION,
     }
 
     for cls, schemas in mappings.items():
