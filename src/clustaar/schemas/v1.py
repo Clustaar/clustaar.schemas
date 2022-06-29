@@ -859,7 +859,11 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
 CHOICE = Schema(
     {
         "type": f.Constant("choice", read_only=True),
-        "imageUrl": f.Url(),
+        "imageUrl": f.String(
+            binding="image_url",
+            pre_load=[strip, html_sanitize],
+            validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH) & v.URL(),
+        ),
         "title": f.String(
             validators=v.Length(min=1, max=CHOICE_TITLE_MAX_LENGTH),
             pre_load=[html_sanitize, unicode_normalize],
