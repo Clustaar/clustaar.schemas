@@ -864,7 +864,7 @@ CHOICE = Schema(
             pre_load=[strip, html_sanitize],
             validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH) & v.URL(),
             allow_none=True,
-            optional=True
+            optional=True,
         ),
         "title": f.String(
             validators=v.Length(min=1, max=CHOICE_TITLE_MAX_LENGTH),
@@ -874,7 +874,9 @@ CHOICE = Schema(
             binding="title",
         ),
         "sessionValues": f.Dict(binding="session_values", optional=True, allow_none=True),
-        "action": f.Object(schema=GO_TO_ACTION, binding="callback_action", optional=True, allow_none=True)
+        "action": f.Object(
+            schema=GO_TO_ACTION, binding="callback_action", optional=True, allow_none=True
+        ),
     },
     name="choice",
 )
@@ -892,7 +894,9 @@ SECTION = Schema(
             binding="title",
         ),
         "choices": f.List(f.Object(CHOICE)),
-        "defaultSectionAction": f.Object(schema=GO_TO_ACTION, binding="callback_action", optional=True, allow_none=True)
+        "defaultSectionAction": f.Object(
+            schema=GO_TO_ACTION, binding="callback_action", optional=True, allow_none=True
+        ),
     },
     name="section",
 )
@@ -910,7 +914,7 @@ SEND_CHOICES_LIST_ACTION = Schema(
             binding="message",
         ),
         "sections": f.List(f.Object(SECTION)),
-        "defaultAction": f.Object(schema=GO_TO_ACTION, binding="callback_action")
+        "defaultAction": f.Object(schema=GO_TO_ACTION, binding="callback_action"),
     },
     name="send_choices_list_action",
 )

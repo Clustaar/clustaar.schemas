@@ -13,29 +13,39 @@ def action(section):
     target = StepTarget(step_id="a1" * 12, name="a step")
     callback_action = GoToAction(target=target, session_values={"aa": 1, "bb": 2})
 
-    return SendChoicesListAction(message="hello", sections=[section], callback_action=callback_action)
+    return SendChoicesListAction(
+        message="hello", sections=[section], callback_action=callback_action
+    )
 
 
 @pytest.fixture
 def data(section):
     return {
-        'type': 'send_choices_list_action',
-        'message': 'hello',
-        'sections': [
+        "type": "send_choices_list_action",
+        "message": "hello",
+        "sections": [
             {
-                'type': 'section',
-                'title': 'A',
-                'choices': [
-                    {'type': 'choice', 'imageUrl': 'https://image.com', 'title': 'Amelin', 'sessionValues': None, 'action': None}
-                ], 'defaultSectionAction': None
+                "type": "section",
+                "title": "A",
+                "choices": [
+                    {
+                        "type": "choice",
+                        "imageUrl": "https://image.com",
+                        "title": "Amelin",
+                        "sessionValues": None,
+                        "action": None,
+                    }
+                ],
+                "defaultSectionAction": None,
             }
         ],
-        'defaultAction': {
+        "defaultAction": {
             "type": "go_to_action",
             "target": {"type": "step", "name": "a step", "id": "a1" * 12},
             "sessionValues": {"aa": 1, "bb": 2},
-        }
+        },
     }
+
 
 @pytest.fixture
 def malicious_data():
