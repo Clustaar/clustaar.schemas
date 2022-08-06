@@ -11,11 +11,8 @@ def section():
 @pytest.fixture
 def action(section):
     target = StepTarget(step_id="a1" * 12, name="a step")
-    callback_action = GoToAction(target=target, session_values={"aa": 1, "bb": 2})
 
-    return SendChoicesListAction(
-        message="hello", sections=[section], callback_action=callback_action
-    )
+    return SendChoicesListAction(message="hello", sections=[section], default_target=target)
 
 
 @pytest.fixture
@@ -33,16 +30,14 @@ def data(section):
                         "imageUrl": "https://image.com",
                         "title": "Amelin",
                         "sessionValues": None,
-                        "action": None,
                     }
                 ],
-                "defaultSectionAction": None,
             }
         ],
-        "defaultAction": {
-            "type": "go_to_action",
-            "target": {"type": "step", "name": "a step", "id": "a1" * 12},
-            "sessionValues": {"aa": 1, "bb": 2},
+        "defaultTarget": {
+            "type": "step",
+            "name": "a step",
+            "id": "a1" * 12,
         },
     }
 
@@ -71,6 +66,7 @@ def malicious_data():
 class TestDump:
     def test_returns_a_dict(self, action, data, mapper):
         result = SEND_CHOICES_LIST_ACTION.dump(action, mapper)
+
         assert result == data
 
 
