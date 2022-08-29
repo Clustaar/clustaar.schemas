@@ -4,15 +4,22 @@ import pytest
 
 
 @pytest.fixture
+def go_to_action():
+    target = StepTarget(step_id="a1" * 12, name="a step")
+
+    return GoToAction(target=target)
+
+
+@pytest.fixture
 def section():
     return Section(title="A", choices=[Choice(title="Amelin", image_url="https://image.com")])
 
 
 @pytest.fixture
-def action(section):
+def action(section, go_to_action):
     target = StepTarget(step_id="a1" * 12, name="a step")
 
-    return SendChoicesListAction(message="hello", sections=[section], default_target=target)
+    return SendChoicesListAction(message="hello", sections=[section], action=go_to_action)
 
 
 @pytest.fixture
@@ -34,11 +41,11 @@ def data(section):
                 ],
             }
         ],
-        "defaultTarget": {
-            "type": "step",
-            "name": "a step",
-            "id": "a1" * 12,
-        },
+        "action": {
+            "type": "go_to_action",
+            "target": {"type": "step","name": "a step","id": "a1" * 12},
+            "sessionValues": None
+        }
     }
 
 

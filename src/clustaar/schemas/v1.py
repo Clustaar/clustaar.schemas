@@ -908,12 +908,11 @@ SEND_CHOICES_LIST_ACTION = Schema(
             binding="message",
         ),
         "sections": f.List(f.Object(SECTION)),
-        "defaultTarget": f.PolymorphicObject(
+        "action": f.PolymorphicObject(
             on="type",
-            binding="default_target",
-            allow_none=False,
-            optional=False,
-            schemas={"story": STORY_TARGET, "step": STEP_TARGET},
+            schemas={
+                "go_to_action": GO_TO_ACTION,
+            },
         ),
     },
     name="send_choices_list_action",

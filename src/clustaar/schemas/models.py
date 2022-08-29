@@ -79,7 +79,7 @@ TransferIAdvizeConversationAction = model(
 # Flow connection
 Choice = model("Choice", "image_url title session_values")
 Section = model("Section", "title choices")
-SendChoicesListAction = model("SendChoicesListAction", "message sections default_target")
+SendChoicesListAction = model("SendChoicesListAction", "message sections action")
 MessageGetter = model("MessageGetter")
 SessionValueGetter = model("SessionValueGetter", "key")
 UserAttributeGetter = model("UserAttributeGetter", "key")
