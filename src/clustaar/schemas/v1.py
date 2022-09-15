@@ -887,13 +887,15 @@ SECTION = Schema(
     {
         "type": f.Constant("section", read_only=True),
         "title": f.String(
-            validators=v.Length(min=1, max=SECTION_TITLE_MAX_LENGTH),
+            validators=v.Length(min=0, max=SECTION_TITLE_MAX_LENGTH),
             pre_load=[html_sanitize, unicode_normalize],
             optional=True,
             allow_none=True,
             binding="title",
         ),
-        "choices": f.List(f.Object(CHOICE)),
+        "choices": f.List(
+            f.Object(CHOICE), validators=v.Length(min=1, max=SECTION_CHOICES_MAX_COUNT)
+        ),
     },
     name="section",
 )
@@ -909,7 +911,10 @@ SEND_CHOICES_LIST_ACTION = SendChoicesListActionSchema(
             allow_none=True,
             binding="message",
         ),
-        "sections": f.List(f.Object(SECTION)),
+        "sections": f.List(
+            f.Object(SECTION),
+            validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_SECTIONS_MAX_COUNT),
+        ),
         "action": f.PolymorphicObject(
             on="type",
             schemas={

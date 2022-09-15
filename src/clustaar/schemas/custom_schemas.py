@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from lupin import Mapper, Schema, bind
 from lupin.errors import ValidationError, InvalidDocument
@@ -69,15 +69,20 @@ class SendChoicesListActionSchema(Schema):
             InvalidDocument
 
         """
-        if len(data["sections"]) > 1 and not all(
-            [section["title"] for section in data["sections"]]
-        ):
-            error = ValidationError(
-                'Invalid value, got empty str "" instead of a valid title. If action contains only'
-                "one section empty title is permit",
-                "action.sections.title",
-            )
-
-            raise InvalidDocument([error])
+        path: List[str] = path or []
+        errors: List[ValidationError] = []
 
         super().validate(data, mapper, allow_partial, path)
+
+        if len(data["sections"]) > 1:
+            for index, section in enumerate(data["sections"]):
+                if not section.get("title"):
+                    error = ValidationError(
+                        'Invalid value, got empty str "" instead of a valid title. If action contains only'
+                        " one section empty title is permit",
+                        path + ["sections", str(index), "title"],
+                    )
+
+                    errors.append(error)
+
+            raise InvalidDocument(errors)

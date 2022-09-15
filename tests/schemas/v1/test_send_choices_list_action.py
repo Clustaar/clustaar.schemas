@@ -90,11 +90,11 @@ class TestValidate:
         with pytest.raises(InvalidDocument) as e:
             mapper.validate(data, SEND_CHOICES_LIST_ACTION)
 
+        assert e.value.errors[0].path == ["sections", "1", "title"]
         assert (
             e.value.errors[0].args[0]
-            == 'Invalid value, got empty str "" instead of a valid title. If action contains onlyone section empty title is permit'
+            == 'Invalid value, got empty str "" instead of a valid title. If action contains only one section empty title is permit'
         )
-        assert e.value.errors[0].path == "action.sections.title"
 
 
 class TestLoad:

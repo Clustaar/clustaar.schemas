@@ -74,10 +74,11 @@ CREATE_USER_REQUEST_ACTION_MESSAGE_MAX_LENGTH = 1000
 ALT_MESSAGE_MAX_LENGTH = 500
 
 SEND_CHOICES_LIST_ACTION_MESSAGE_MAX_LENGTH = 500
-
+SEND_CHOICES_LIST_ACTION_SECTIONS_MAX_COUNT = 50
 
 # to cp in clustaar.schemas src/clustaar/schemas/constants.py# TODO chose a max length for this field
 SECTION_TITLE_MAX_LENGTH = 500
+SECTION_CHOICES_MAX_COUNT = 100
 
 
 # to cp in clustaar.schemas src/clustaar/schemas/constants.py
