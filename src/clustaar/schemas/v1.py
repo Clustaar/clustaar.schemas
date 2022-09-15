@@ -6,7 +6,11 @@ from lupin import validators as v
 from lupin.processors import strip
 
 from .constants import *
-from .custom_schemas import CustomerSatisfactionChoiceSchema, MatchIntentConditionSchema
+from .custom_schemas import (
+    CustomerSatisfactionChoiceSchema,
+    MatchIntentConditionSchema,
+    SendChoicesListActionSchema,
+)
 from .fields import RegexpField
 from .models import *
 from .processors import html_sanitize, unicode_normalize
@@ -879,7 +883,6 @@ CHOICE = Schema(
 )
 
 
-# to cp in clustaar.schemas src/clustaar/schemas/v1.py
 SECTION = Schema(
     {
         "type": f.Constant("section", read_only=True),
@@ -896,8 +899,7 @@ SECTION = Schema(
 )
 
 
-# to cp in clustaar.schemas src/clustaar/schemas/v1.py
-SEND_CHOICES_LIST_ACTION = Schema(
+SEND_CHOICES_LIST_ACTION = SendChoicesListActionSchema(
     {
         "type": f.Constant("send_choices_list_action", read_only=True),
         "message": f.String(

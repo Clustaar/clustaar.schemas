@@ -1,5 +1,7 @@
 from clustaar.schemas.v1 import SEND_CHOICES_LIST_ACTION
 from clustaar.schemas.models import StepTarget, GoToAction, Section, Choice, SendChoicesListAction
+from lupin.errors import InvalidDocument
+
 import pytest
 
 
@@ -17,8 +19,6 @@ def section():
 
 @pytest.fixture
 def action(section, go_to_action):
-    target = StepTarget(step_id="a1" * 12, name="a step")
-
     return SendChoicesListAction(message="hello", sections=[section], action=go_to_action)
 
 
@@ -43,9 +43,9 @@ def data(section):
         ],
         "action": {
             "type": "go_to_action",
-            "target": {"type": "step","name": "a step","id": "a1" * 12},
-            "sessionValues": None
-        }
+            "target": {"type": "step", "name": "a step", "id": "a1" * 12},
+            "sessionValues": None,
+        },
     }
 
 
@@ -80,6 +80,21 @@ class TestDump:
 class TestValidate:
     def test_validate_simple_action(self, data, mapper):
         mapper.validate(data, SEND_CHOICES_LIST_ACTION)
+
+    def test_raise_if_multiple_sections_and_empty_title(self, data, mapper):
+        new_section_with_empty_title = data["sections"][0].copy()
+        new_section_with_empty_title["title"] = ""
+
+        data["sections"].append(new_section_with_empty_title)
+
+        with pytest.raises(InvalidDocument) as e:
+            mapper.validate(data, SEND_CHOICES_LIST_ACTION)
+
+        assert (
+            e.value.errors[0].args[0]
+            == 'Invalid value, got empty str "" instead of a valid title. If action contains onlyone section empty title is permit'
+        )
+        assert e.value.errors[0].path == "action.sections.title"
 
 
 class TestLoad:
