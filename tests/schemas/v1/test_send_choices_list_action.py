@@ -81,6 +81,11 @@ class TestValidate:
     def test_validate_simple_action(self, data, mapper):
         mapper.validate(data, SEND_CHOICES_LIST_ACTION)
 
+        new_section = data["sections"][0].copy()
+        data["sections"].append(new_section)
+
+        mapper.validate(data, SEND_CHOICES_LIST_ACTION)
+
     def test_raise_if_multiple_sections_and_empty_title(self, data, mapper):
         new_section_with_empty_title = data["sections"][0].copy()
         new_section_with_empty_title["title"] = ""

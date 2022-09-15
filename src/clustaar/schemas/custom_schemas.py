@@ -84,5 +84,5 @@ class SendChoicesListActionSchema(Schema):
                     )
 
                     errors.append(error)
-
-            raise InvalidDocument(errors)
+            if errors:
+                raise InvalidDocument(errors)
