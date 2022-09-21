@@ -19,7 +19,7 @@ def section():
 
 @pytest.fixture
 def action(section, go_to_action):
-    return SendChoicesListAction(message="hello", sections=[section], action=go_to_action)
+    return SendChoicesListAction(message="hello", placeholder="toto", sections=[section], action=go_to_action)
 
 
 @pytest.fixture
@@ -27,6 +27,7 @@ def data(section):
     return {
         "type": "send_choices_list_action",
         "message": "hello",
+        "placeholder": "toto",
         "sections": [
             {
                 "type": "section",
@@ -54,6 +55,7 @@ def malicious_data():
     return {
         "type": "send_choices_list_action",
         "message": "<script>void();</script>hello",
+        "placeholder": "toto",
         "sections": [
             {
                 "type": "section",
@@ -107,6 +109,7 @@ class TestLoad:
         action = mapper.load(data, SEND_CHOICES_LIST_ACTION)
         assert isinstance(action, SendChoicesListAction)
         assert action.message == "hello"
+        assert action.placeholder == "toto"
         section = action.sections[0]
         assert section.title == "A"
         choice = section.choices[0]
@@ -117,6 +120,7 @@ class TestLoad:
         action = mapper.load(malicious_data, SEND_CHOICES_LIST_ACTION)
         assert isinstance(action, SendChoicesListAction)
         assert action.message == "&lt;script&gt;void();&lt;/script&gt;hello"
+        assert action.placeholder == "toto"
         section = action.sections[0]
         assert section.title == "&lt;script&gt;void();&lt;/script&gt;A"
         choice = section.choices[0]

@@ -911,6 +911,13 @@ SEND_CHOICES_LIST_ACTION = SendChoicesListActionSchema(
             allow_none=True,
             binding="message",
         ),
+        "placeholder": f.String(
+            validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+            optional=False,
+            allow_none=False,
+            binding="placeholder",
+        ),
         "sections": f.List(
             f.Object(SECTION),
             validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_SECTIONS_MAX_COUNT),
