@@ -912,7 +912,7 @@ SEND_CHOICES_LIST_ACTION = SendChoicesListActionSchema(
             binding="message",
         ),
         "placeholder": f.String(
-            validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_MESSAGE_MAX_LENGTH),
+            validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_PLACEHOLDER_MAX_LENGTH),
             pre_load=[html_sanitize, unicode_normalize],
             optional=False,
             allow_none=False,
