@@ -6,7 +6,11 @@ from lupin import validators as v
 from lupin.processors import strip
 
 from .constants import *
-from .custom_schemas import CustomerSatisfactionChoiceSchema, MatchIntentConditionSchema
+from .custom_schemas import (
+    CustomerSatisfactionChoiceSchema,
+    MatchIntentConditionSchema,
+    SendChoicesListActionSchema,
+)
 from .fields import RegexpField
 from .models import *
 from .processors import html_sanitize, unicode_normalize
@@ -856,6 +860,79 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
 # [insert schema from copier below]
 
 
+CHOICE = Schema(
+    {
+        "type": f.Constant("choice", read_only=True),
+        "imageUrl": f.String(
+            binding="image_url",
+            pre_load=[strip, html_sanitize],
+            validators=v.Length(min=1, max=EXTERNAL_URL_MAX_LENGTH) & v.URL(),
+            allow_none=True,
+            optional=True,
+        ),
+        "title": f.String(
+            validators=v.Length(min=1, max=CHOICE_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+            optional=False,
+            allow_none=False,
+            binding="title",
+        ),
+        "sessionValues": f.Dict(binding="session_values", optional=True, allow_none=True),
+    },
+    name="choice",
+)
+
+
+SECTION = Schema(
+    {
+        "type": f.Constant("section", read_only=True),
+        "title": f.String(
+            validators=v.Length(min=0, max=SECTION_TITLE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+            optional=True,
+            allow_none=True,
+            binding="title",
+        ),
+        "choices": f.List(
+            f.Object(CHOICE), validators=v.Length(min=1, max=SECTION_CHOICES_MAX_COUNT)
+        ),
+    },
+    name="section",
+)
+
+
+SEND_CHOICES_LIST_ACTION = SendChoicesListActionSchema(
+    {
+        "type": f.Constant("send_choices_list_action", read_only=True),
+        "message": f.String(
+            validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_MESSAGE_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+            optional=True,
+            allow_none=True,
+            binding="message",
+        ),
+        "placeholder": f.String(
+            validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_PLACEHOLDER_MAX_LENGTH),
+            pre_load=[html_sanitize, unicode_normalize],
+            optional=False,
+            allow_none=False,
+            binding="placeholder",
+        ),
+        "sections": f.List(
+            f.Object(SECTION),
+            validators=v.Length(min=1, max=SEND_CHOICES_LIST_ACTION_SECTIONS_MAX_COUNT),
+        ),
+        "action": f.PolymorphicObject(
+            on="type",
+            schemas={
+                "go_to_action": GO_TO_ACTION,
+            },
+        ),
+    },
+    name="send_choices_list_action",
+)
+
+
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
     "wait_action": WAIT_ACTION,
@@ -880,6 +957,9 @@ ACTION_SCHEMAS = {
     "transfer_iadvize_conversation_action": TRANSFER_IADVIZE_CONVERSATION_ACTION,
     "close_iadvize_conversation_action": CLOSE_IADVIZE_CONVERSATION_ACTION,
     # [insert mapping from copier below]
+    "choice": CHOICE,
+    "section": SECTION,
+    "send_choices_list_action": SEND_CHOICES_LIST_ACTION,
 }
 
 COORDINATES = Schema({"lat": f.Number(), "long": f.Number()}, name="coordinates")
@@ -1101,6 +1181,9 @@ def get_mapper(factory=bind):
         WebhookRequestField: WEBHOOK_REQUEST_FIELD,
         CreateUserRequestAction: CREATE_USER_REQUEST_ACTION,
         # [insert object mapping from copier below]
+        Choice: CHOICE,
+        Section: SECTION,
+        SendChoicesListAction: SEND_CHOICES_LIST_ACTION,
     }
 
     for cls, schemas in mappings.items():

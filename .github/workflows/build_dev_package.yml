@@ -42,7 +42,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install s3pypi==$S3_PYPI_VERSION
           s3pypi --region eu-west-1 --bucket pypi.clustaar.io --secret $CLUSTAAR_PYPI_SECRET
-          echo "clustaar.schemas==$(git describe --tags --abbrev=0) has been published using branch ${GITHUB_REF##*/}"
+          echo "clustaar.schemas==$(git describe --tags --abbrev=0) has been published using branch ${GITHUB_REF##*/}" >> $GITHUB_STEP_SUMMARY
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_CI_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_CI_SECRET }}
