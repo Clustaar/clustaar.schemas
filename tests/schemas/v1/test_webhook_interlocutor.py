@@ -24,6 +24,7 @@ def data():
     return {
         "id": "123",
         "location": {"lat": 1, "long": 2},
+        "externalId": None,
         "userID": "test-tintin",
         "email": "tintin@moulinsart.fr",
         "firstName": "tintin",

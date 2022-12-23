@@ -118,7 +118,7 @@ Step = model("Step", "actions name id user_data")
 Coordinates = model("Coordinates", "lat long")
 Interlocutor = model(
     "Interlocutor",
-    "id remote_id location last_name first_name email custom_attributes phone_number used_to_test is_logged",
+    "id external_id remote_id location last_name first_name email custom_attributes phone_number used_to_test is_logged",
 )
 ConversationSession = model("ConversationSession", "values")
 StepReached = model("StepReached", "step session interlocutor channel input")
