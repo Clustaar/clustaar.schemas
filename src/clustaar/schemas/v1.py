@@ -1017,7 +1017,7 @@ WEBHOOK_INTERLOCUTOR = Schema(
     {
         "id": f.String(),
         "userID": f.String(binding="remote_id"),
-        "externalId": f.String(binding="external_id", allow_none=True, optional=True),
+        "externalID": f.String(binding="external_id", allow_none=True, optional=True),
         "location": f.Object(COORDINATES, allow_none=True),
         "email": f.String(
             allow_none=True,

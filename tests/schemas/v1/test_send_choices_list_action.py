@@ -19,7 +19,9 @@ def section():
 
 @pytest.fixture
 def action(section, go_to_action):
-    return SendChoicesListAction(message="hello", placeholder="toto", sections=[section], action=go_to_action)
+    return SendChoicesListAction(
+        message="hello", placeholder="toto", sections=[section], action=go_to_action
+    )
 
 
 @pytest.fixture

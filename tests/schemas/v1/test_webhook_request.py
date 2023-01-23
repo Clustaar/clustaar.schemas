@@ -73,7 +73,7 @@ def data():
                 "email": "tintin@moulinsart.fr",
                 "firstName": "tintin",
                 "id": "123",
-                "externalId": None,
+                "externalID": None,
                 "lastName": None,
                 "userID": "test-tintin",
                 "location": {"lat": 1.0, "long": 2.4},
