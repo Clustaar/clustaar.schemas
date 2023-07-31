@@ -459,10 +459,7 @@ QUICK_REPLY = Schema(
         ),
         "action": f.PolymorphicObject(
             on="type",
-            schemas={
-                "go_to_action": GO_TO_ACTION,
-                "customer_satisfaction_callback_action": CUSTOMER_SATISFACTION_CALLBACK_ACTION,
-            },
+            schemas=BUTTON_ACTIONS_SCHEMAS
         ),
         "type": f.Constant(value="quick_reply", read_only=True, optional=True),
     },
