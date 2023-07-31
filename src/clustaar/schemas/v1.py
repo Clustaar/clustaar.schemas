@@ -457,10 +457,7 @@ QUICK_REPLY = Schema(
             validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH),
             pre_load=[html_sanitize, unicode_normalize],
         ),
-        "action": f.PolymorphicObject(
-            on="type",
-            schemas=BUTTON_ACTIONS_SCHEMAS
-        ),
+        "action": f.PolymorphicObject(on="type", schemas=BUTTON_ACTIONS_SCHEMAS),
         "type": f.Constant(value="quick_reply", read_only=True, optional=True),
     },
     name="quick_reply",

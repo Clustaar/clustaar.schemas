@@ -5,7 +5,6 @@ import pytest
 
 @pytest.fixture
 def action():
-
     return TransferIAdvizeConversationAction(
         failed_transfer_message="sorry",
         distribution_rule=IAdvizeDistributionRule(id="234", label="Human"),
