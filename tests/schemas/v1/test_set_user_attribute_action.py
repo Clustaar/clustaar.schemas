@@ -6,12 +6,12 @@ import pytest
 
 @pytest.fixture
 def action():
-    return SetUserAttributeAction(key="var1", value="val1")
+    return SetUserAttributeAction(key="var1", value="val1", add=False, is_int=False)
 
 
 @pytest.fixture
 def data():
-    return {"type": "set_user_attribute_action", "key": "var1", "value": "val1"}
+    return {"type": "set_user_attribute_action", "key": "var1", "value": "val1", "add": False, "isInt": False}
 
 
 @pytest.fixture
