@@ -620,7 +620,7 @@ STORE_SESSION_VALUE_ACTION = Schema(
             pre_load=[html_sanitize, unicode_normalize],
         ),
         "add": f.Bool(allow_none=True, optional=True),
-        "isInt": f.Bool(allow_none=True, optional=True, binding="is_int")
+        "isInt": f.Bool(allow_none=True, optional=True, binding="is_int"),
     },
     name="store_session_value_action",
 )
@@ -639,7 +639,7 @@ SET_USER_ATTRIBUTE_ACTION = Schema(
             pre_load=[html_sanitize, unicode_normalize],
         ),
         "add": f.Bool(allow_none=True, optional=True),
-        "isInt": f.Bool(allow_none=True, optional=True, binding="is_int")
+        "isInt": f.Bool(allow_none=True, optional=True, binding="is_int"),
     },
     name="set_user_attribute_action",
 )

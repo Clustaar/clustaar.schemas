@@ -10,7 +10,13 @@ def action():
 
 @pytest.fixture
 def data():
-    return {"type": "store_session_value_action", "key": "var1", "value": "val1", "add": False, "isInt": False}
+    return {
+        "type": "store_session_value_action",
+        "key": "var1",
+        "value": "val1",
+        "add": False,
+        "isInt": False,
+    }
 
 
 class TestDump(object):

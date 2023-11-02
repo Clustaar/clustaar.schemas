@@ -11,7 +11,13 @@ def action():
 
 @pytest.fixture
 def data():
-    return {"type": "set_user_attribute_action", "key": "var1", "value": "val1", "add": False, "isInt": False}
+    return {
+        "type": "set_user_attribute_action",
+        "key": "var1",
+        "value": "val1",
+        "add": False,
+        "isInt": False,
+    }
 
 
 @pytest.fixture
