@@ -51,8 +51,8 @@ Card = model("Card", "title subtitle buttons image_url url alt")
 SimpleCard = model("SimpleCard", "title subtitle buttons image_url")
 SendCardsAction = model("SendCardsAction", "cards")
 SendSimpleCardsAction = model("SendSimpleCardsAction", "cards")
-StoreSessionValueAction = model("StoreSessionValueAction", "key value")
-SetUserAttributeAction = model("SetUserAttributeAction", "key value")
+StoreSessionValueAction = model("StoreSessionValueAction", "key value add is_int")
+SetUserAttributeAction = model("SetUserAttributeAction", "key value add is_int")
 GoogleCustomSearchAction = model("GoogleCustomSearchAction", "query limit custom_engine_id")
 CreateZendeskTicketAction = model(
     "CreateZendeskTicketAction",

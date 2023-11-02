@@ -5,12 +5,18 @@ import pytest
 
 @pytest.fixture
 def action():
-    return StoreSessionValueAction(key="var1", value="val1")
+    return StoreSessionValueAction(key="var1", value="val1", add=False, is_int=False)
 
 
 @pytest.fixture
 def data():
-    return {"type": "store_session_value_action", "key": "var1", "value": "val1"}
+    return {
+        "type": "store_session_value_action",
+        "key": "var1",
+        "value": "val1",
+        "add": False,
+        "isInt": False,
+    }
 
 
 class TestDump(object):

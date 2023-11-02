@@ -619,6 +619,8 @@ STORE_SESSION_VALUE_ACTION = Schema(
             validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH),
             pre_load=[html_sanitize, unicode_normalize],
         ),
+        "add": f.Bool(allow_none=True, optional=True),
+        "isInt": f.Bool(allow_none=True, optional=True, binding="is_int"),
     },
     name="store_session_value_action",
 )
@@ -636,6 +638,8 @@ SET_USER_ATTRIBUTE_ACTION = Schema(
             validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH),
             pre_load=[html_sanitize, unicode_normalize],
         ),
+        "add": f.Bool(allow_none=True, optional=True),
+        "isInt": f.Bool(allow_none=True, optional=True, binding="is_int"),
     },
     name="set_user_attribute_action",
 )
