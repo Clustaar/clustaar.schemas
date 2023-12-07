@@ -787,7 +787,7 @@ CUSTOMER_SATISFACTION_CHOICE = CustomerSatisfactionChoiceSchema(
         ),
         "kind": f.String(validators=v.In(CUSTOMER_SATISFACTION_CHOICE_KINDS)),
         "label": f.String(
-            validators=v.Length(min=1, max=QUICK_REPLY_TITLE_MAX_LENGTH),
+            validators=v.Length(min=0, max=QUICK_REPLY_TITLE_MAX_LENGTH),
             pre_load=[html_sanitize, unicode_normalize],
         ),
         "matchingIntent": f.Object(
