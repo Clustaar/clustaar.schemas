@@ -931,8 +931,7 @@ SEND_CHOICES_LIST_ACTION = SendChoicesListActionSchema(
 )
 
 
-
-AI_TASK_ENGINE = AITaskEngineSchema(
+AI_TASK_ENGINE = Schema(
     {
         "type": f.Constant("ai_task_engine"),
         "name": f.String(),
@@ -942,17 +941,17 @@ AI_TASK_ENGINE = AITaskEngineSchema(
 )
 
 
-AI_TASK_SOURCE = AITaskSourceSchema(
+AI_TASK_SOURCE = Schema(
     {
         "type": f.Constant("ai_task_source"),
-        "dataSourceType": f.String(),
+        "sourceType": f.String(binding="source_type"),
         "name": f.String()
     },
     name="ai_task_source"
 )
 
 
-AI_TASK_BEHAVIOR = AITaskBehaviorSchema(
+AI_TASK_BEHAVIOR = Schema(
     {
         "type": f.Constant("ai_task_behavior"),
         "name": f.String(),
@@ -965,11 +964,11 @@ AI_TASK_BEHAVIOR = AITaskBehaviorSchema(
     name="ai_task_behavior"
 )
 
-SEND_AI_TASK_ACTION = SendAITaskActionSchema(
+SEND_AI_TASK_ACTION = Schema(
     {
         "type": f.Constant("send_ai_task_action", read_only=True),
-        "engine": f.Object(AI_ENGINE),
-        "sources": f.List(f.Object(AI_SOURCE)),
+        "engine": f.Object(AI_TASK_ENGINE),
+        "sources": f.List(f.Object(AI_TASK_SOURCE)),
         "behaviors": f.List(f.Object(AI_TASK_BEHAVIOR)),
         "userAttributes": f.Bool(binding="user_attributes", optional=True)
     },
