@@ -933,27 +933,16 @@ SEND_CHOICES_LIST_ACTION = SendChoicesListActionSchema(
 
 AI_TASK_ENGINE = Schema(
     {
-        "type": f.Constant("ai_task_engine"),
+        "type": f.Constant("ai_task_engine", read_only=True),
         "name": f.String(),
         "opts": f.Dict()
     },
     name="ai_task_engine"
 )
 
-
-AI_TASK_SOURCE = Schema(
-    {
-        "type": f.Constant("ai_task_source"),
-        "sourceType": f.String(binding="source_type"),
-        "name": f.String()
-    },
-    name="ai_task_source"
-)
-
-
 AI_TASK_BEHAVIOR = Schema(
     {
-        "type": f.Constant("ai_task_behavior"),
+        "type": f.Constant("ai_task_behavior", read_only=True),
         "name": f.String(),
         "connections": f.List(
             f.Object(FLOW_CONNECTION),
@@ -968,7 +957,6 @@ SEND_AI_TASK_ACTION = Schema(
     {
         "type": f.Constant("send_ai_task_action", read_only=True),
         "engine": f.Object(AI_TASK_ENGINE),
-        "sources": f.List(f.Object(AI_TASK_SOURCE)),
         "behaviors": f.List(f.Object(AI_TASK_BEHAVIOR)),
         "userAttributes": f.Bool(binding="user_attributes", optional=True)
     },
@@ -1230,7 +1218,6 @@ def get_mapper(factory=bind):
         Section: SECTION,
         SendChoicesListAction: SEND_CHOICES_LIST_ACTION,
         AITaskEngine: AI_TASK_ENGINE,
-        AITaskSource: AI_TASK_SOURCE,
         AITaskBehavior: AI_TASK_BEHAVIOR,
         SendAITaskAction: SEND_AI_TASK_ACTION
     }
