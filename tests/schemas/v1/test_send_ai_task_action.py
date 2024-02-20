@@ -35,10 +35,10 @@ def data():
                         ],
                     }
                 ],
-                "type": "ai_task_behavior"
+                "type": "ai_task_behavior",
             }
         ],
-        "userAttributes": None
+        "userAttributes": None,
     }
 
 
@@ -57,10 +57,7 @@ def action():
     engine = AITaskEngine(name="Rune", opts={})
     behaviors = [AITaskBehavior(name="low", connections=[story_connection])]
 
-    action = SendAITaskAction(
-        engine=engine,
-        behaviors=behaviors
-    )
+    action = SendAITaskAction(engine=engine, behaviors=behaviors)
 
     return action
 
@@ -81,6 +78,7 @@ class TestLoad(object):
         assert isinstance(predicate, ConnectionPredicate)
         assert isinstance(predicate.condition, IsNotSetCondition)
         assert isinstance(predicate.value_getter, MessageGetter)
+
 
 class TestDump(object):
     def test_returns_a_dict(self, data, action, mapper):

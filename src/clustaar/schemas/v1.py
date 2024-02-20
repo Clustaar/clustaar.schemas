@@ -932,12 +932,8 @@ SEND_CHOICES_LIST_ACTION = SendChoicesListActionSchema(
 
 
 AI_TASK_ENGINE = Schema(
-    {
-        "type": f.Constant("ai_task_engine", read_only=True),
-        "name": f.String(),
-        "opts": f.Dict()
-    },
-    name="ai_task_engine"
+    {"type": f.Constant("ai_task_engine", read_only=True), "name": f.String(), "opts": f.Dict()},
+    name="ai_task_engine",
 )
 
 AI_TASK_BEHAVIOR = Schema(
@@ -948,9 +944,8 @@ AI_TASK_BEHAVIOR = Schema(
             f.Object(FLOW_CONNECTION),
             validators=v.Length(min=0, max=JUMP_TO_ACTION_MAX_CONNECTIONS_COUNT),
         ),
-
     },
-    name="ai_task_behavior"
+    name="ai_task_behavior",
 )
 
 SEND_AI_TASK_ACTION = Schema(
@@ -958,9 +953,9 @@ SEND_AI_TASK_ACTION = Schema(
         "type": f.Constant("send_ai_task_action", read_only=True),
         "engine": f.Object(AI_TASK_ENGINE),
         "behaviors": f.List(f.Object(AI_TASK_BEHAVIOR)),
-        "userAttributes": f.Bool(binding="user_attributes", optional=True)
+        "userAttributes": f.Bool(binding="user_attributes", optional=True),
     },
-    name="send_ai_task_action"
+    name="send_ai_task_action",
 )
 
 
@@ -991,7 +986,7 @@ ACTION_SCHEMAS = {
     "choice": CHOICE,
     "section": SECTION,
     "send_choices_list_action": SEND_CHOICES_LIST_ACTION,
-    "send_ai_task_action": SEND_AI_TASK_ACTION
+    "send_ai_task_action": SEND_AI_TASK_ACTION,
 }
 
 COORDINATES = Schema({"lat": f.Number(), "long": f.Number()}, name="coordinates")
@@ -1219,7 +1214,7 @@ def get_mapper(factory=bind):
         SendChoicesListAction: SEND_CHOICES_LIST_ACTION,
         AITaskEngine: AI_TASK_ENGINE,
         AITaskBehavior: AI_TASK_BEHAVIOR,
-        SendAITaskAction: SEND_AI_TASK_ACTION
+        SendAITaskAction: SEND_AI_TASK_ACTION,
     }
 
     for cls, schemas in mappings.items():
