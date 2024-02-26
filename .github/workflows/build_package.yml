@@ -24,6 +24,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    environment:
+      name: pypi
+      url: https://pypi.org/p/clustaar.schemas
+    permissions:
+      id-token: write
     # Run if manual or if Launch Tests was a success
     if: ${{ github.event.workflow_run.conclusion != 'failure' && github.event.workflow_run.conclusion != 'cancelled' }}
     steps:
@@ -45,15 +50,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -U setuptools "pyscaffold<4"
-          python setup.py sdist 
+          python setup.py sdist
           echo "clustaar.schemas==$(git describe --tags --abbrev=0) has been build"
         env:
           CLUSTAAR_PYPI_SECRET: ${{ secrets.CLUSTAAR_PYPI_SECRET }}
           S3_PYPI_VERSION: "0.11.1"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_CI_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_CI_SECRET }}
+
       - name: Publish package
-        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
-        with:
-          user: clustaar
-          password: ${{ secrets.PYPI_CLUSTAAR_PWD }}
+        uses: pypa/gh-action-pypi-publish@release/v1

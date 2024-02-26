@@ -38,6 +38,10 @@ def data():
                 "type": "ai_task_behavior",
             }
         ],
+<<<<<<< HEAD
+=======
+        "defaultTarget": None,
+>>>>>>> develop
         "userAttributes": None,
     }
 
