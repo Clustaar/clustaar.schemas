@@ -76,6 +76,12 @@ TransferIAdvizeConversationAction = model(
     "TransferIAdvizeConversationAction", "failed_transfer_message distribution_rule"
 )
 
+# AI Actions
+
+AITaskEngine = model("AITaskEngine", "name opts")
+AITaskBehavior = model("AITaskBehavior", "name connections")
+SendAITaskAction = model("SendAITaskAction", "engine behaviors default_target user_attributes")
+
 # Flow connection
 Choice = model("Choice", "image_url title session_values")
 Section = model("Section", "title choices")
