@@ -953,6 +953,12 @@ SEND_AI_TASK_ACTION = Schema(
         "type": f.Constant("send_ai_task_action", read_only=True),
         "engine": f.Object(AI_TASK_ENGINE),
         "behaviors": f.List(f.Object(AI_TASK_BEHAVIOR)),
+        "defaultTarget": f.PolymorphicObject(
+            on="type",
+            binding="default_target",
+            allow_none=True,
+            schemas={"story": STORY_TARGET, "step": STEP_TARGET},
+        ),
         "userAttributes": f.Bool(binding="user_attributes", optional=True),
     },
     name="send_ai_task_action",
