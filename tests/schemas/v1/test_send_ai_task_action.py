@@ -52,9 +52,6 @@ def action():
         target=StoryTarget(story_id="a2" * 12, name="a story"),
     )
 
-    # Todo: Maybe add a default target
-    # step_target = StepTarget(step_id="a1" * 12, name="a step")
-
     engine = AITaskEngine(name="Rune", opts={})
     behaviors = [AITaskBehavior(name="low", connections=[story_connection])]
 

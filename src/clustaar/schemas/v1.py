@@ -29,10 +29,8 @@ PREDICATE_SESSION_VALUE_GETTER = Schema(
     {
         "type": f.Constant("session_value", read_only=True),
         "key": f.String(
-            validators=(
-                v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH)
-                & v.Match(re.compile(r"^[\w\d_]+$"))
-            )
+            validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH)
+            & v.Match(re.compile(r"^[\w\d_]+$"))
         ),
     },
     name="predicate_session_value_getter",
@@ -42,10 +40,8 @@ PREDICATE_USER_ATTRIBUTE_GETTER = Schema(
     {
         "type": f.Constant("user_attribute", read_only=True),
         "key": f.String(
-            validators=(
-                v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH)
-                & v.Match(re.compile(r"^[\w\d_]+$"))
-            )
+            validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH)
+            & v.Match(re.compile(r"^[\w\d_]+$"))
         ),
     },
     name="predicate_user_attribute_getter",
@@ -324,7 +320,7 @@ SEND_IMAGE_ACTION = Schema(
         "imageURL": f.String(
             binding="image_url",
             pre_load=[strip, html_sanitize],
-            validators=(v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"https", "http"})),
+            validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"https", "http"}),
         ),
     },
     name="send_image_action",
@@ -372,10 +368,8 @@ SEND_EMAIL_ACTION = Schema(
             pre_load=[strip, html_sanitize],
             optional=True,
             allow_none=True,
-            validators=[
-                v.Length(max=SEND_EMAIL_ACTION_FROM_EMAIL_MAX_LENGTH),
-                v.Match(re.compile(r"^((?!@clustaar\.).)*$", re.IGNORECASE)),
-            ],
+            validators=v.Length(max=SEND_EMAIL_ACTION_FROM_EMAIL_MAX_LENGTH)
+            & v.Match(re.compile(r"^((?!@clustaar\.).)*$", re.IGNORECASE)),
         ),
         "fromName": f.String(
             binding="from_name",
@@ -442,10 +436,8 @@ ASSIGN_INTERCOM_CONVERSATION_ACTION = Schema(
             allow_none=True,
             binding="assignee_id",
             pre_load=[strip],
-            validators=[
-                v.Length(max=ASSIGN_INTERCOM_CONVERSATION_ACTION_ASSIGNEE_ID_MAX_LENGTH),
-                v.Match(re.compile(r"^\d*$")),
-            ],
+            validators=v.Length(max=ASSIGN_INTERCOM_CONVERSATION_ACTION_ASSIGNEE_ID_MAX_LENGTH)
+            & v.Match(re.compile(r"^\d*$")),
         ),
     },
     name="assign_intercom_conversation_action",
@@ -526,10 +518,8 @@ CARD = Schema(
             allow_none=True,
             binding="image_url",
             pre_load=[strip],
-            validators=(
-                v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"http", "https"})
-                | v.Equal("")
-            ),
+            validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"http", "https"})
+            | v.Equal(""),
         ),
         "url": f.String(
             optional=True,
@@ -567,10 +557,8 @@ SIMPLE_CARD = Schema(
             allow_none=True,
             binding="image_url",
             pre_load=[strip],
-            validators=(
-                v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"http", "https"})
-                | v.Equal("")
-            ),
+            validators=v.Length(max=EXTERNAL_URL_MAX_LENGTH) & v.URL(schemes={"http", "https"})
+            | v.Equal(""),
         ),
         "buttons": f.List(
             f.Object(OPEN_URL_BUTTON),
@@ -610,10 +598,8 @@ STORE_SESSION_VALUE_ACTION = Schema(
     {
         "type": f.Constant(value="store_session_value_action", read_only=True),
         "key": f.String(
-            validators=(
-                v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH)
-                & v.Match(re.compile(r"^[\w\d_]+$"))
-            )
+            validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_KEY_MAX_LENGTH)
+            & v.Match(re.compile(r"^[\w\d_]+$"))
         ),
         "value": f.String(
             validators=v.Length(min=1, max=STORE_SESSION_VALUE_ACTION_VALUE_MAX_LENGTH),
@@ -629,10 +615,8 @@ SET_USER_ATTRIBUTE_ACTION = Schema(
     {
         "type": f.Constant(value="set_user_attribute_action", read_only=True),
         "key": f.String(
-            validators=(
-                v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH)
-                & v.Match(re.compile(r"(?i)^(?!(id)$)[\w\d_]+$"))
-            )
+            validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_KEY_MAX_LENGTH)
+            & v.Match(re.compile(r"(?i)^(?!(id)$)[\w\d_]+$"))
         ),
         "value": f.String(
             validators=v.Length(min=1, max=SET_USER_ATTRIBUTE_ACTION_VALUE_MAX_LENGTH),
@@ -662,13 +646,11 @@ WEBHOOK_REQUEST_FIELD = Schema(
     {
         "type": f.Constant(value="webhook_request_field", read_only=True),
         "key": f.String(
-            validators=(
-                v.Length(
-                    min=WEBHOOK_REQUEST_FIELD_KEY_MIN_LENGTH,
-                    max=WEBHOOK_REQUEST_FIELD_KEY_MAX_LENGTH,
-                )
-                & v.Match(re.compile(r"^[\w\d_]+$"))
+            validators=v.Length(
+                min=WEBHOOK_REQUEST_FIELD_KEY_MIN_LENGTH,
+                max=WEBHOOK_REQUEST_FIELD_KEY_MAX_LENGTH,
             )
+            & v.Match(re.compile(r"^[\w\d_]+$"))
         ),
         "value": f.String(
             validators=v.Length(
@@ -720,12 +702,12 @@ CREATE_ZENDESK_TICKET_ACTION = Schema(
         "ticketType": f.String(
             optional=True,
             binding="ticket_type",
-            validators=(v.In(ZENDESK_TICKET_TYPES) | v.Equal("")),
+            validators=v.In(ZENDESK_TICKET_TYPES) | v.Equal(""),
         ),
         "ticketPriority": f.String(
             optional=True,
             binding="ticket_priority",
-            validators=(v.In(ZENDESK_TICKET_PRIORITIES) | v.Equal("")),
+            validators=v.In(ZENDESK_TICKET_PRIORITIES) | v.Equal(""),
         ),
         "subject": f.String(
             optional=True,
@@ -744,19 +726,15 @@ CREATE_ZENDESK_TICKET_ACTION = Schema(
         "groupID": f.String(
             optional=True,
             binding="group_id",
-            validators=[
-                v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH),
-                v.Match(re.compile(r"^\d*$")),
-            ],
+            validators=v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH)
+            & v.Match(re.compile(r"^\d*$")),
         ),
         "assigneeID": f.String(
             optional=True,
             binding="assignee_id",
             pre_load=[strip],
-            validators=[
-                v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH),
-                v.Match(re.compile(r"^\d*$")),
-            ],
+            validators=v.Length(max=ZENDESK_TICKET_ASSIGNEE_ID_MAX_LENGTH)
+            & v.Match(re.compile(r"^\d*$")),
         ),
     },
     name="create_zendesk_ticket_action",
