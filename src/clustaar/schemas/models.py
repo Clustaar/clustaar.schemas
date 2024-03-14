@@ -80,7 +80,9 @@ TransferIAdvizeConversationAction = model(
 
 AITaskEngine = model("AITaskEngine", "name opts")
 AITaskBehavior = model("AITaskBehavior", "name connections")
-SendAITaskAction = model("SendAITaskAction", "engine behaviors default_target user_attributes")
+SendAITaskAction = model(
+    "SendAITaskAction", "engine behaviors select_target default_target user_attributes"
+)
 
 # Flow connection
 Choice = model("Choice", "image_url title session_values")

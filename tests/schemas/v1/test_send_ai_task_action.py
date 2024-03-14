@@ -38,6 +38,7 @@ def data():
                 "type": "ai_task_behavior",
             }
         ],
+        "selectTarget": None,
         "defaultTarget": None,
         "userAttributes": None,
     }

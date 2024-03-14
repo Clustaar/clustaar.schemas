@@ -937,11 +937,16 @@ SEND_AI_TASK_ACTION = Schema(
             allow_none=True,
             schemas={"story": STORY_TARGET, "step": STEP_TARGET},
         ),
+        "selectTarget": f.PolymorphicObject(
+            on="type",
+            binding="select_target",
+            allow_none=True,
+            schemas={"story": STORY_TARGET, "step": STEP_TARGET},
+        ),
         "userAttributes": f.Bool(binding="user_attributes", optional=True),
     },
     name="send_ai_task_action",
 )
-
 
 ACTION_SCHEMAS = {
     "pause_bot_action": PAUSE_BOT_ACTION,
