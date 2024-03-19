@@ -940,10 +940,12 @@ SEND_AI_TASK_ACTION = Schema(
         "selectTarget": f.PolymorphicObject(
             on="type",
             binding="select_target",
+            ignore_if_null=True,
             allow_none=True,
+            optional=True,
             schemas={"story": STORY_TARGET, "step": STEP_TARGET},
         ),
-        "userAttributes": f.Bool(binding="user_attributes", optional=True),
+        "userAttributes": f.Bool(binding="user_attributes", optional=True, default=False),
     },
     name="send_ai_task_action",
 )
