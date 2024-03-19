@@ -277,7 +277,7 @@ LEGACY_REPLY_TO_MESSAGE_ACTION = Schema(
             validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
             pre_load=[html_sanitize],
         ),
-        "attachments": f.List(DOCUMENT_ATTACHMENT, allow_none=True, ignore_if_null=True)
+        "attachments": f.List(f.Object(DOCUMENT_ATTACHMENT), allow_none=True, ignore_if_null=True)
     },
     name="legacy_reply_to_message_action",
 )
