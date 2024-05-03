@@ -262,12 +262,23 @@ CUSTOMER_SATISFACTION_CALLBACK_ACTION = Schema(
     name="customer_satisfaction_callback_action",
 )
 
+DOCUMENT_ATTACHMENT = Schema(
+    {
+        "name": f.String(),
+        "url": f.String(),
+    },
+    name="document_attachment",
+)
+
 LEGACY_REPLY_TO_MESSAGE_ACTION = Schema(
     {
         "type": f.Constant(value="legacy_reply_to_message_action", read_only=True),
         "message": f.String(
             validators=v.Length(min=1, max=SEND_TEXT_ACTION_MESSAGE_MAX_LENGTH),
             pre_load=[html_sanitize],
+        ),
+        "attachments": f.List(
+            f.Object(DOCUMENT_ATTACHMENT), allow_none=True, ignore_if_null=True, optional=True
         ),
     },
     name="legacy_reply_to_message_action",
@@ -1129,6 +1140,7 @@ def get_mapper(factory=bind):
         StepTarget: STEP_TARGET,
         StoryTarget: STORY_TARGET,
         GoToAction: GO_TO_ACTION,
+        DocumentAttachment: DOCUMENT_ATTACHMENT,
         LegacyReplyToMessageAction: LEGACY_REPLY_TO_MESSAGE_ACTION,
         OpenURLAction: OPEN_URL_ACTION,
         ShareAction: SHARE_ACTION,

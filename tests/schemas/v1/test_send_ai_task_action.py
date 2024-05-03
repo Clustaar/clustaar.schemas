@@ -82,6 +82,7 @@ class TestValidate:
     def test_validation(self, data, action, mapper):
         result = mapper.validate(data, SEND_AI_TASK_ACTION)
 
+
 class TestDump(object):
     def test_returns_a_dict(self, data, action, mapper):
         result = mapper.dump(action, SEND_AI_TASK_ACTION)
