@@ -27,7 +27,7 @@ def model(name: str, attr_names: str = ""):
 
 
 # Bot actions
-AskDocumentAcion = model("AskDocumentAction", "name authorized_file_types")
+AskDocumentAction = model("AskDocumentAction", "name authorized_file_types")
 AskLocationAction = model("AskLocationAction", "message callback_action")
 StepTarget = model("StepTarget", "step_id name")
 StoryTarget = model("StoryTarget", "story_id name")
