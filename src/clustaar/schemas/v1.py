@@ -846,6 +846,12 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
 
 # [insert schema from copier below]
 
+ASK_DOCUMENT_ACTION = schema({
+    "type": f.Constant("ask_document_action", read_only=True),
+    "name": f.String(),
+    "authorizedFileTypes": f.List(f.String())
+}, name="ask_document_Action")
+
 
 CHOICE = Schema(
     {
@@ -984,6 +990,7 @@ ACTION_SCHEMAS = {
     "create_user_request_action": CREATE_USER_REQUEST_ACTION,
     "transfer_iadvize_conversation_action": TRANSFER_IADVIZE_CONVERSATION_ACTION,
     "close_iadvize_conversation_action": CLOSE_IADVIZE_CONVERSATION_ACTION,
+    "ask_document_action": ASK_DOCUMENT_ACTION,
     # [insert mapping from copier below]
     "choice": CHOICE,
     "section": SECTION,
