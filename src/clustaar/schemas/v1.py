@@ -846,7 +846,7 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
 
 # [insert schema from copier below]
 
-ASK_DOCUMENT_ACTION = schema(
+ASK_DOCUMENT_ACTION = Schema(
     {
         "type": f.Constant("ask_document_action", read_only=True),
         "name": f.String(),
