@@ -36,6 +36,17 @@ PREDICATE_SESSION_VALUE_GETTER = Schema(
     name="predicate_session_value_getter",
 )
 
+PREDICATE_ATTACHMENT_VALUE_GETTER = Schema(
+    {
+        "type": f.Constant("attachment_value", read_only=True),
+        "key": f.String(
+            validators=v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)
+            & v.Match(re.compile(r"^[\w\d_]+$"))
+        ),
+    },
+    name="predicate_attachment_value_getter",
+)
+
 PREDICATE_USER_ATTRIBUTE_GETTER = Schema(
     {
         "type": f.Constant("user_attribute", read_only=True),
@@ -188,6 +199,7 @@ FLOW_CONNECTION_PREDICATE = Schema(
                 "message": PREDICATE_MESSAGE_GETTER,
                 "session_value": PREDICATE_SESSION_VALUE_GETTER,
                 "user_attribute": PREDICATE_USER_ATTRIBUTE_GETTER,
+                "attachment_value": PREDICATE_ATTACHMENT_VALUE_GETTER,
             },
         ),
     },
@@ -264,7 +276,10 @@ CUSTOMER_SATISFACTION_CALLBACK_ACTION = Schema(
 
 DOCUMENT_ATTACHMENT = Schema(
     {
-        "name": f.String(),
+        "name": f.String(
+            validators=v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)
+            & v.Match(re.compile(r"^[\w\d_]+$"))
+        ),
         "url": f.String(),
     },
     name="document_attachment",
@@ -849,7 +864,10 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
 ASK_DOCUMENT_ACTION = Schema(
     {
         "type": f.Constant(value="ask_document_action", read_only=True),
-        "name": f.String(),
+        "name": f.String(
+            validators=v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)
+            & v.Match(re.compile(r"^[\w\d_]+$"))
+        ),
         "authorizedFileTypes": f.List(f.String()),
     },
     name="ask_document_action",
@@ -1189,6 +1207,7 @@ def get_mapper(factory=bind):
         MessageGetter: PREDICATE_MESSAGE_GETTER,
         SessionValueGetter: PREDICATE_SESSION_VALUE_GETTER,
         UserAttributeGetter: PREDICATE_USER_ATTRIBUTE_GETTER,
+        AttachmentValueGetter: PREDICATE_ATTACHMENT_VALUE_GETTER,
         IsNotSetCondition: IS_NOT_SET_CONDITION,
         IsSetCondition: IS_SET_CONDITION,
         ContainCondition: CONTAIN_CONDITION,
