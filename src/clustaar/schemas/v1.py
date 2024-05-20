@@ -430,6 +430,7 @@ SEND_EMAIL_ACTION = Schema(
             allow_none=True,
             validators=v.Length(max=SEND_EMAIL_ACTION_REPLY_TO_NAME_MAX_LENGTH),
         ),
+        "userAttachments": f.Bool(binding="user_attachments", optional=True, allow_none=True),
     },
     name="send_email_action",
 )
