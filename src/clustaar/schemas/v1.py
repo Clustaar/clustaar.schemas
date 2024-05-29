@@ -862,14 +862,21 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
 
 # [insert schema from copier below]
 
+ASKED_DOCUMENT = Schema(
+    {
+        "type": f.Constant(value="asked_document", read_only=True),
+        "message": f.String(validators=[v.Length(min=0, max=300)]),
+        "name": f.String(validators=[v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)]),
+        "authorizedFileTypes": f.List(f.String()),
+    },
+    name="asked_document",
+)
+
 ASK_DOCUMENT_ACTION = Schema(
     {
         "type": f.Constant(value="ask_document_action", read_only=True),
-        "name": f.String(
-            validators=v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)
-            & v.Match(re.compile(r"^[\w\d_]+$"))
-        ),
-        "authorizedFileTypes": f.List(f.String()),
+        "message": f.String(validators=[v.Length(min=0, max=300)]),
+        "documents": f.List(f.Object(ASKED_DOCUMENT), validators=[v.Length(min=1, max=20)]),
     },
     name="ask_document_action",
 )
@@ -1166,6 +1173,7 @@ def get_mapper(factory=bind):
     mapper = Mapper()
     mappings = {
         AskDocumentAction: ASK_DOCUMENT_ACTION,
+        AskedDocument: ASKED_DOCUMENT,
         AskLocationAction: ASK_LOCATION_ACTION,
         StepTarget: STEP_TARGET,
         StoryTarget: STORY_TARGET,
