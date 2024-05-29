@@ -867,7 +867,7 @@ ASKED_DOCUMENT = Schema(
         "type": f.Constant(value="asked_document", read_only=True),
         "message": f.String(validators=[v.Length(min=0, max=300)]),
         "name": f.String(validators=[v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)]),
-        "authorizedFileTypes": f.List(f.String()),
+        "authorizedFileTypes": f.List(f.String(), binding="authorized_file_types"),
     },
     name="asked_document",
 )
