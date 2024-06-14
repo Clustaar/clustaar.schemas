@@ -36,6 +36,17 @@ PREDICATE_SESSION_VALUE_GETTER = Schema(
     name="predicate_session_value_getter",
 )
 
+PREDICATE_ATTACHMENT_VALUE_GETTER = Schema(
+    {
+        "type": f.Constant("attachment_value", read_only=True),
+        "key": f.String(
+            validators=v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)
+            & v.Match(re.compile(r"^[\w\d_]+$"))
+        ),
+    },
+    name="predicate_attachment_value_getter",
+)
+
 PREDICATE_USER_ATTRIBUTE_GETTER = Schema(
     {
         "type": f.Constant("user_attribute", read_only=True),
@@ -188,6 +199,7 @@ FLOW_CONNECTION_PREDICATE = Schema(
                 "message": PREDICATE_MESSAGE_GETTER,
                 "session_value": PREDICATE_SESSION_VALUE_GETTER,
                 "user_attribute": PREDICATE_USER_ATTRIBUTE_GETTER,
+                "attachment_value": PREDICATE_ATTACHMENT_VALUE_GETTER,
             },
         ),
     },
@@ -264,7 +276,10 @@ CUSTOMER_SATISFACTION_CALLBACK_ACTION = Schema(
 
 DOCUMENT_ATTACHMENT = Schema(
     {
-        "name": f.String(),
+        "name": f.String(
+            validators=v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)
+            & v.Match(re.compile(r"^[\w\d_]+$"))
+        ),
         "url": f.String(),
     },
     name="document_attachment",
@@ -415,6 +430,7 @@ SEND_EMAIL_ACTION = Schema(
             allow_none=True,
             validators=v.Length(max=SEND_EMAIL_ACTION_REPLY_TO_NAME_MAX_LENGTH),
         ),
+        "userAttachments": f.Bool(binding="user_attachments", optional=True, allow_none=True),
     },
     name="send_email_action",
 )
@@ -846,6 +862,25 @@ TRANSFER_IADVIZE_CONVERSATION_ACTION = Schema(
 
 # [insert schema from copier below]
 
+ASKED_DOCUMENT = Schema(
+    {
+        "type": f.Constant(value="asked_document", read_only=True),
+        "message": f.String(validators=[v.Length(min=0, max=300)]),
+        "name": f.String(validators=[v.Length(min=1, max=DOCUMENT_NAME_MAX_LENGTH)]),
+        "authorizedFileTypes": f.List(f.String(), binding="authorized_file_types"),
+    },
+    name="asked_document",
+)
+
+ASK_DOCUMENT_ACTION = Schema(
+    {
+        "type": f.Constant(value="ask_document_action", read_only=True),
+        "message": f.String(validators=[v.Length(min=0, max=300)]),
+        "documents": f.List(f.Object(ASKED_DOCUMENT), validators=[v.Length(min=1, max=20)]),
+    },
+    name="ask_document_action",
+)
+
 
 CHOICE = Schema(
     {
@@ -984,6 +1019,7 @@ ACTION_SCHEMAS = {
     "create_user_request_action": CREATE_USER_REQUEST_ACTION,
     "transfer_iadvize_conversation_action": TRANSFER_IADVIZE_CONVERSATION_ACTION,
     "close_iadvize_conversation_action": CLOSE_IADVIZE_CONVERSATION_ACTION,
+    "ask_document_action": ASK_DOCUMENT_ACTION,
     # [insert mapping from copier below]
     "choice": CHOICE,
     "section": SECTION,
@@ -1136,6 +1172,8 @@ def get_mapper(factory=bind):
     """
     mapper = Mapper()
     mappings = {
+        AskDocumentAction: ASK_DOCUMENT_ACTION,
+        AskedDocument: ASKED_DOCUMENT,
         AskLocationAction: ASK_LOCATION_ACTION,
         StepTarget: STEP_TARGET,
         StoryTarget: STORY_TARGET,
@@ -1178,6 +1216,7 @@ def get_mapper(factory=bind):
         MessageGetter: PREDICATE_MESSAGE_GETTER,
         SessionValueGetter: PREDICATE_SESSION_VALUE_GETTER,
         UserAttributeGetter: PREDICATE_USER_ATTRIBUTE_GETTER,
+        AttachmentValueGetter: PREDICATE_ATTACHMENT_VALUE_GETTER,
         IsNotSetCondition: IS_NOT_SET_CONDITION,
         IsSetCondition: IS_SET_CONDITION,
         ContainCondition: CONTAIN_CONDITION,

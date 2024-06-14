@@ -14,6 +14,7 @@ def action():
         content=":)",
         reply_to_email="john.doe@gmail.com",
         reply_to_name="John Doe",
+        user_attachments=False,
     )
 
 
@@ -28,6 +29,7 @@ def data():
         "content": ":)",
         "replyToEmail": "john.doe@gmail.com",
         "replyToName": "John Doe",
+        "userAttachments": False,
     }
 
 

@@ -27,6 +27,8 @@ def model(name: str, attr_names: str = ""):
 
 
 # Bot actions
+AskDocumentAction = model("AskDocumentAction", "message documents")
+AskedDocument = model("AskedDocument", "message name authorized_file_types")
 AskLocationAction = model("AskLocationAction", "message callback_action")
 StepTarget = model("StepTarget", "step_id name")
 StoryTarget = model("StoryTarget", "story_id name")
@@ -39,7 +41,8 @@ SendImageAction = model("SendImageAction", "image_url alt")
 SendTextAction = model("SendTextAction", "alternatives text")
 SendJSEventAction = model("SendJSEventAction", "event payload")
 SendEmailAction = model(
-    "SendEmailAction", "from_name from_email content subject recipient reply_to_name reply_to_email"
+    "SendEmailAction",
+    "from_name from_email content subject recipient reply_to_name reply_to_email user_attachments",
 )
 WaitAction = model("WaitAction", "duration")
 PauseBotAction = model("PauseBotAction", "")
@@ -91,6 +94,7 @@ Section = model("Section", "title choices")
 SendChoicesListAction = model("SendChoicesListAction", "message placeholder sections action")
 MessageGetter = model("MessageGetter")
 SessionValueGetter = model("SessionValueGetter", "key")
+AttachmentValueGetter = model("AttachmentValueGetter", "key")
 UserAttributeGetter = model("UserAttributeGetter", "key")
 FlowConnection = model("FlowConnection", "target predicates")
 ConnectionPredicate = model("ConnectionPredicate", "value_getter condition")
