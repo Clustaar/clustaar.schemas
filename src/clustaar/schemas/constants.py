@@ -88,3 +88,24 @@ SECTION_CHOICES_MAX_COUNT = 100
 # to cp in clustaar.schemas src/clustaar/schemas/constants.py
 # TODO chose a max length for this field
 CHOICE_TITLE_MAX_LENGTH = 500
+
+
+S3_CONTENT_TYPES = [
+    "application/pdf",  # : PDF
+    "application/zip",  # : Fichiers compressés ZIP
+    "image/",  # All images type
+    "image/jpeg",  # : JPEG
+    "image/png",  # : PNG
+    "image/gif",  # : GIF
+    "image/webp",  # : WebP
+    "image/svg+xml",  # : SVG
+    "audio/",  # All audio type
+    "audio/mpeg",  # : MP3
+    "audio/ogg",  # : Ogg Vorbis
+    "audio/wav",  # : WAV
+    "video",  # All video type
+    "video/mp4",  # : MP4
+    "video/mpeg",  # : MPEG
+    "video/ogg",  # : Ogg Theora
+    "video/webm",  # : WebM
+]
